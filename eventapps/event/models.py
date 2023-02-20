@@ -8,13 +8,15 @@ from django.contrib.auth.models import User
 import datetime
 from django.template.defaultfilters import slugify
 
+
 class CatAgenda(models.Model):
     """ Category agenda model """
 
-    name_category = models.CharField(max_length=200, unique=True, verbose_name='Category Agenda')
-   
+    name_category = models.CharField(
+        max_length=200, unique=True, verbose_name='Category Agenda')
+
     class Meta:
-        #managed = True
+        # managed = True
         verbose_name_plural = ("Category Agenda")
 
     def __str__(self):
@@ -24,12 +26,18 @@ class CatAgenda(models.Model):
 class Agenda(models.Model):
     """ Event model """
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agenda")
-    title = models.CharField(max_length=200, unique=True, verbose_name='Agenda')
-    title_slug = models.SlugField(max_length=255, null=False, unique=True, verbose_name='Title-Slug')
-    catagenda=models.ForeignKey(CatAgenda, on_delete=models.CASCADE, related_name="agenda", verbose_name="Category Agenda")
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="agenda", verbose_name="Institution")
-    attendence = models.ForeignKey(Attendence, on_delete=models.CASCADE, related_name="agenda", verbose_name='Attendant')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="agenda")
+    title = models.CharField(
+        max_length=200, unique=True, verbose_name='Agenda')
+    title_slug = models.SlugField(
+        max_length=255, null=False, unique=True, verbose_name='Title-Slug')
+    catagenda = models.ForeignKey(
+        CatAgenda, on_delete=models.CASCADE, related_name="agenda", verbose_name="Category Agenda")
+    institution = models.ForeignKey(
+        Institution, on_delete=models.CASCADE, related_name="agenda", verbose_name="Institution")
+    attendence = models.ForeignKey(
+        Attendence, on_delete=models.CASCADE, related_name="agenda", verbose_name='Attendant')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255, null=False, blank=True)
@@ -40,13 +48,12 @@ class Agenda(models.Model):
         ('Pending', 'Pending'),
         ('Read', 'Read'),
     )
-    status = models.CharField(max_length=10, choices=STATUS)
+    status = models.CharField(max_length=20, choices=STATUS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
 
     class Meta:
-        #managed = True
+        # managed = True
         verbose_name_plural = ("Agenda")
         ordering = ('-start_time', )
 
@@ -55,20 +62,25 @@ class Agenda(models.Model):
 
     def get_absolute_url(self):
         return reverse("Agenda", kwargs={"title_slug": self.title_slug})
-    
+
     def save(self, *args, **kwargs):  # new
         if not self.title_slug:
             self.title_slug = slugify(self.title)
         return super(Agenda, self).save(*args, **kwargs)
-    
+
 
 class HistAgenda(models.Model):
     """ Event model """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="histagenda")
-    title = models.CharField(max_length=200, unique=True, verbose_name='Agenda')
-    title_slug = models.SlugField(max_length=255, null=False, unique=True, verbose_name='Title-Slug')
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name="histagenda", verbose_name="Institution")
-    attendence = models.ForeignKey(Attendence, on_delete=models.CASCADE, related_name="histagenda", verbose_name='Attendant')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="histagenda")
+    title = models.CharField(
+        max_length=200, unique=True, verbose_name='Agenda')
+    title_slug = models.SlugField(
+        max_length=255, null=False, unique=True, verbose_name='Title-Slug')
+    institution = models.ForeignKey(
+        Institution, on_delete=models.CASCADE, related_name="histagenda", verbose_name="Institution")
+    attendence = models.ForeignKey(
+        Attendence, on_delete=models.CASCADE, related_name="histagenda", verbose_name='Attendant')
     start_time = models.DateTimeField(null=True)
     start_time_new = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True)
@@ -85,11 +97,9 @@ class HistAgenda(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    
 
     class Meta:
-        #managed = True
+        # managed = True
         verbose_name_plural = ("Agenda History ")
         ordering = ('-start_time_new', )
 
@@ -98,12 +108,11 @@ class HistAgenda(models.Model):
 
     def get_absolute_url(self):
         return reverse("Title", kwargs={"title_slug": self.title_slug})
-    
+
     def save(self, *args, **kwargs):  # new
         if not self.title_slug:
             self.title_slug = slugify(self.title)
         return super(HistAgenda, self).save(*args, **kwargs)
-
 
 
 class Yearagenda(models.Model):
@@ -123,9 +132,12 @@ class Yearagenda(models.Model):
 
 class Informative(models.Model):
     """ Event model """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="informative")
-    title = models.CharField(max_length=255, unique=True, verbose_name='Nota Informative')
-    title_slug = models.SlugField(max_length=255, null=False, unique=True, verbose_name='Title-Slug')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="informative")
+    title = models.CharField(max_length=255, unique=True,
+                             verbose_name='Nota Informative')
+    title_slug = models.SlugField(
+        max_length=255, null=False, unique=True, verbose_name='Title-Slug')
     is_active = models.BooleanField(default=True)
     is_done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -141,25 +153,22 @@ class Informative(models.Model):
 
     def get_absolute_url(self):
         return reverse("Informative", kwargs={"title_slug": self.title_slug})
-    
 
-    def save(self, *args, **kwargs):  
+    def save(self, *args, **kwargs):
         if not self.title_slug:
             self.title_slug = slugify(self.title)
         return super(Informative, self).save(*args, **kwargs)
 
+
 class CommentInformative(models.Model):
-    informative = models.ForeignKey(Informative, on_delete=models.CASCADE, related_name='commentinformative')
+    informative = models.ForeignKey(
+        Informative, on_delete=models.CASCADE, related_name='commentinformative')
     comment = models.TextField(verbose_name="Add New Comment")
     created_on = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-   
+
     class Meta:
         ordering = ['created_on']
 
     def __str__(self):
         return self.comment[:60]
-    
-
-
-   
