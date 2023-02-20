@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-ag8flu0f6c0dzcatyax_nftf-9v)amp2eee6#^fo64r4+q-iks
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'agendamento.adn.gov.tl',
                  config('SERVER', default='127.0.0.1')]
 
 
