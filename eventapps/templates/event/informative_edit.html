@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="card-body">
+                        <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                            <div class="row flex-row">
+                                <h5 class="text-light"> Add New Informative Note</h5>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                {{informativeform | crispy}}
+                                {{informativeform.media | safe}}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button class="btn btn-danger text-white"><a href="{%url 'informative_list' %}"
+                                    class="text-white text-decoration-none">Cancel</button>
+                        </form>
+                        <div>
+                        </div>
+                    </div> <!--end card-body-->
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+
+            <!--end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}

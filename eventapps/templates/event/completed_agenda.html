@@ -1,0 +1,216 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+  <div class="col-sm-12">
+    <div class="border-info shadow-lg bg-white">
+      <div class="card-body">
+        <hr />
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <div class="widget-small border border-primary d-flex justify-content-left p-2">
+              <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-primary"
+                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+              <div class="pl-2">
+                <a href="{%url 'completedAgenda_list' %}">
+                  <h5>ALL</h5>
+                  <p><b>{{ agenda_count }}</b></p>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-2">
+            <div class="widget-small border border-info d-flex justify-content-left p-2">
+              <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-info"
+                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+              <div class="pl-2">
+                <a href="{%url 'concludedAgenda_list' %}">
+                  <h5>DONE</h5>
+                  <p><b>{{ concluded_agenda_count }}</b></p>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-2">
+            <div class="widget-small border border-danger d-flex justify-content-left p-2">
+              <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-danger"
+                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+              <div class="pl-2">
+                <a href="{%url 'canceledAgenda_list' %}">
+                  <h5>CANCELED</h5>
+                  <p><b>{{ canceled_agenda_count}}</b></p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-2">
+            <div class="widget-small border border-success d-flex justify-content-left p-2">
+              <i class="icon fa fa-calendar fa-2x pl-2 pr-2 bg-success "
+                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+              <div class="pl-2">
+                <a href="{%url 'runningAgenda_list' %}">
+                  <h5>RUNNING</h5>
+                  <p><b>{{ running_agenda_count }}</b></p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-2">
+            <div class="widget-small border border-warning d-flex justify-content-left p-2">
+              <i class="icon fa fa-calendar fa-2x pl-2 pr-2 bg-warning "
+                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+              <div class="pl-2">
+                <a href="{%url 'upcomingAgenda_list' %}">
+                  <h5>UPCOMING</h5>
+                  <p><b>{{ upcoming_agenda_count }}</b></p>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 pt-3">
+            <div class="row">
+              <div class="card-body">
+                <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                  <div class="row flex-row">
+                    <h5 class="text-light"><i class="fa fa-calendar-check-o" style="font-size:30px"></i> COMPLETED
+                      AGENDA</h5>
+                  </div>
+
+                  <div class="row flex-row-reverse">
+                    {% if user.groups.all.0.name == 'admin' %}
+
+                    <button type="button" class="btn btn-info btn-sm pl-2">
+                      <span class="fa fa-print"></span> Print
+                    </button>
+
+                    <!--
+                    <select class="selectpicker pl-2 pr-2 mr-2">
+                      {% for a in all_year %}
+                      <option>{{a.year}}</option>
+                      {% endfor %}
+                      {% endif %}
+                    </select>-->
+
+                  </div>
+                </div>
+                <hr>
+                <section id='no-more-tables' class="pt-3">
+                  <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th class="text-center">NU.</th>
+                        <th>TITLE</th>
+                        <th class="text-center">START TIME</th>
+                        <th class="text-center">END TIME</th>
+                        <th class="text-center">LOCATION</th>
+                        <th class="text-center">TIME LEFT</th>
+                        <th class="text-center">STATUS</th>
+                        <th>#</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for obj in agenda_list_home %}
+                      {% if obj.is_cancel == False %}
+                      <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+
+                        <td data-title="Title">
+                          <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                            class="float-left">
+                            {{obj.title }}</a>
+                        </td>
+
+                        <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}
+                        </td>
+                        <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
+                        <td>{{ obj.location }} </td>
+
+                        {% if obj.start_time >= current_datetime %}
+                        {% with res=obj.start_time|sub:current_datetime %}
+                        <td class='text-center'> {{res}}
+                          {% endwith %}
+                        </td>
+
+
+                        <td><button style="font-size:14px;" class="bg-warning text-white border w-100">Upcoming</button>
+                        </td>
+                        <td class="text-center"><i class="fa fa-square-o"></i></td>
+                        {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
+
+                          <td class='text-center'>
+                            {% with ah=current_datetime.hour|sub:obj.end_time.hour am=current_datetime.minute|sub:obj.end_time.minute %}
+                            {{ah}}h:
+                            {% if am > 0 %}
+                            {{am}}
+                            {% else %}
+                            {{ am|stringformat:"+d"|slice:"1:" }}
+                            {% endif %}
+                            {% endwith %}
+                          </td>
+
+
+                          <td class='text-center'><button style="font-size:14px;"
+                              class="bg-success text-white border w-100">Running</button>
+                          </td>
+                          <td class='text-center'><i class="fa fa-spinner fa-spin"></i></td>
+                          {% elif obj.end_time < current_datetime %} <td class='text-center'>0h:00
+                            </td>
+                            <td class="text-center">
+                              <button style="font-size:14px;" class="bg-info text-white border w-100">Done </button>
+                            </td>
+                            <td class='text-center'><i class="fa fa-check-square-o"></i>
+                            </td>
+                            {% endif %}
+                            {% else%}
+                            <td data-title="Nu.">{{ forloop.counter }}</td>
+                            <td data-title="Title">
+                              <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                class="float-left">
+                                {{obj.title }}</a>
+                            </td>
+
+                            <td>{{obj.start_time.date|date:"d/m/Y"}}, {{obj.start_time.time}}
+                            </td>
+                            <td>{{ obj.end_time.date|date:"d/m/Y" }}, {{obj.end_time.time}}
+                            </td>
+                            <td>{{ obj.location }} </td>
+                            <td class='text-center'>0h:00</td>
+                            <td data-title="end time">
+                              <button style="font-size:14px;" class="bg-danger text-white border w-100">Canceled
+                              </button>
+                            </td>
+                            <td class="text-center"><i class="fa fa-times-rectangle-o"></i>
+                            </td>
+                            {% endif %}
+
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </section>
+              </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+    <!--end col-->
+  </div>
+  <!--end row-->
+
+  {% endblock %}
+  {% block scripts %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#example').DataTable();
+    });
+  </script>
+  {% endblock %}

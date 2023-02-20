@@ -1,0 +1,75 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+            <div class="card-body">
+
+                <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                    <div class="row flex-row">
+                        <h5 class="text-light"><i class="fa fa-list" style="font-size:18px;"></i> List of Attendant
+                        </h5>
+                    </div>
+                    <div class="row flex-row-reverse">
+
+                        <button type="button" class="btn btn-primary btn-sm ml-2">
+                            <span class="fa fa-plus"></span><a class="text-white" href="{% url 'attendence_add' %}"
+                                role="button">
+                                Add Attendant</a>
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm pl-2">
+                            <span class="fa fa-print"></span> Print
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <section id='no-more-tables'>
+                    <table class="table table-sm" id="example" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>NU.</th>
+                                <th>NAME</th>
+                                <th class="d-flex justify-content-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in attendence_list %}
+
+                            <tr>
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                    {{obj.name_attendence }}
+                                </td>
+                                <td data-title="End Time" class="d-flex justify-content-center">
+                                    <a href="{% url 'attendence_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
+                                        class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                            style='font-size:20px'></i>Edit</a> |
+                                    <a href="{% url 'attendence_delete' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Delete" class="btn btn-sm btn-danger"
+                                        onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
+                                            style='font-size:20px'></i>Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div> <!--end card-body-->
+        </div>
+        <!--end col-->
+
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+{% endblock %}

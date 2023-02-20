@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+
+            <div class="card-body">
+
+                <div class="row flex-row-reverse ">
+                    {% if user.is_authenticated %}
+                    {% if user.groups.all.0.name == 'admin' %}
+                    <button type="button" class="btn btn-primary btn-sm ml-2">
+                        <span class="fa fa-plus"></span><a class="text-white" href="{% url 'agenda_add' %}"
+                            role="button">
+                            Add Agenda</a>
+                    </button>
+                    {% elif user.groups.all.0.name == 'secretaria' %}
+                    <button type="button" class="btn btn-primary btn-sm ml-2">
+                        <span class="fa fa-plus"></span><a class="text-white" href="{% url 'agenda_add' %}"
+                            role="button">
+                            Add Agenda</a>
+                    </button>
+
+                    {% endif %}
+                    {% endif %}
+
+
+                    <button type="button" class="btn btn-info btn-sm pl-2">
+                        <span class="fa fa-print"></span> Print
+                    </button>
+                </div>
+
+                <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                    <div class="row flex-row">
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> List Agenda</h5>
+                    </div>
+
+                </div>
+                <hr>
+                <section id='no-more-tables'>
+                    <table class="table table-sm" id="example" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NU.</th>
+                                <th>AGENDA</th>
+                                <th class="text-center">CATEGORY AGENDA</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in agenda_list %}
+                            {% if obj.is_cancel == False %}
+                            <tr>
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                    <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                        class="float-left">
+                                        {{obj.title }}</a>
+                                </td>
+                                <td class="text-center">
+                                        {{obj.catagenda }}
+                                </td>
+                                {% if obj.start_time >= current_datetime %}
+                                <td class="text-center">Upcoming</td>
+
+                                {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
+                                    <td class="text-center">Running</td>
+
+                                    {% elif obj.end_time < current_datetime %}
+                                    <td class="text-center">
+                                        Done
+                                        </td>
+
+                                        {% else %}
+                                        <td class="text-center">#</td>
+                                        {% endif %}
+                                        {% else %}
+                                        <td class="text-center"{{ forloop.counter }}</td>
+                                        <td data-title="Title">
+                                            <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                                class="float-left">
+                                                {{obj.title }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                                {{obj.catagenda }}
+                                        </td>
+                                        <td class="text-center">Cancel</td>
+                                        {% endif %}
+
+                                        <td data-title="End Time" class="text-center"">
+                                            <a href="{% url 'agenda_edit' pk=obj.id %}" data-toggle="tooltip"
+                                                title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                                    style='font-size:20px'></i> Edit</a>
+
+                                            {% if user.is_authenticated %}
+                                            {% if user.groups.all.0.name == 'admin' %} |
+                                            <a href="{% url 'agenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                                title="Delete" class="btn btn-sm btn-danger"
+                                                onclick="return confirm(' Are you ready to delete?')"><i
+                                                    class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                        </td>
+                                        {% endif %}
+                                        {% endif %}
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div> <!--end card-body-->
+        </div>
+        <!--end col-->
+
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+{% endblock %}

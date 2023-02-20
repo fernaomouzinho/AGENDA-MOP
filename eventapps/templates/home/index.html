@@ -1,0 +1,327 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+  <div class="col-sm-12">
+    <div class="border-info shadow-lg bg-white">
+
+      <hr />
+      <div class="row pt-2">
+        <div class="col-md-6 col-lg-12">
+          <div class="col-sm-12 pb-3">
+            <div class="card border-info shadow-lg rounded">
+              <div class="card-header bg-card"> <i class="icon fa fa-calendar" style="font-size:24px" ;> AGENDA </i>
+              </div>
+              <div class="card-body">
+                <div class="row">
+
+                  <div class="col-md-6 col-lg-4">
+                    <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                      <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-primary"
+                        style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                      <div class="pl-2">
+                        <a href="{%url 'completedAgenda_list' %}">
+                          <h5>ALL</h5>
+                          <p><b>{{ agenda_count }}</b></p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-2">
+                    <div class="widget-small border border-info d-flex justify-content-left p-2">
+                      <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-info"
+                        style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                      <div class="pl-2">
+                        <a href="{%url 'concludedAgenda_list' %}">
+                          <h5>DONE</h5>
+                          <p><b>{{ concluded_agenda_count }}</b></p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-2">
+                    <div class="widget-small border border-danger d-flex justify-content-left p-2">
+                      <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-danger"
+                        style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                      <div class="pl-2">
+                        <a href="{%url 'canceledAgenda_list' %}">
+                          <h5>CANCELED</h5>
+                          <p><b>{{ canceled_agenda_count}}</b></p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-2">
+                    <div class="widget-small border border-success d-flex justify-content-left p-2">
+                      <i class="icon fa fa-calendar fa-2x pl-2 pr-2 bg-success "
+                        style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                      <div class="pl-2">
+                        <a href="{%url 'runningAgenda_list' %}">
+                          <h5>RUNNING</h5>
+                          <p><b>{{ running_agenda_count }}</b></p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-2">
+                    <div class="widget-small border border-warning d-flex justify-content-left p-2">
+                      <i class="icon fa fa-calendar fa-2x pl-2 pr-2 bg-warning "
+                        style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                      <div class="pl-2">
+                        <a href="{%url 'upcomingAgenda_list' %}">
+                          <h5>UPCOMING</h5>
+                          <p><b>{{ upcoming_agenda_count }}</b></p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="col-md-12 col-lg-12 pt-1">
+                    <div class="row">
+                      <div class="card-body">
+                        <div class="card-header bg-default pb-2 d-flex justify-content-between">
+                          <div class="row flex-row">
+                            <h5 class="text-black"><i class="fa fa-list" style="font-size:18px;"></i> List Agenda</h5>
+                          </div>
+                        </div>
+
+                        <section id='no-more-tables' class="pt-3">
+                          <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <th class="text-center">NU.</th>
+                                <th>AGENDA</th>
+                                <th style="text-align:center;">CATEGORY AGENDA</th>
+                                <th style="text-align:center;">AGENDA SET</th>
+                                <th style="text-align:center;">START TIME</th>
+                                <th style="text-align:center;">END TIME</th>
+                                <th style="text-align:center;">LOCATION</th>
+                                <th style="text-align:center;">TIME LEFT</th>
+                                <th style="text-align:center;">STATUS</th>
+                                <th>#</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for obj in agenda_list_home %}
+                              {% if obj.is_cancel == False %}
+                              <tr>
+                                {% if obj.start_time >= current_datetime %}
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                  <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                    class="float-left">
+                                    {{obj.title }}</a>
+                                </td>
+                                <td class="text-center">{{obj.catagenda }}</td>
+                                <td>{{obj.institution }}</td>
+                                <td class="text-center">{{obj.start_time|date:"d/m/Y G:i" }}
+                                  </td>
+                                <td class="text-center">{{ obj.end_time|date:"d/m/Y G:i"}}</td>
+                                <td>{{ obj.location }} </td>
+
+
+                                <td class='text-center'>
+
+                                  {% with a=obj.start_time b=current_datetime %} {{a|sub:b}} {% endwith %}
+
+
+
+                                </td>
+
+
+                                <td><button style="font-size:14px;"
+                                    class="bg-warning text-white border w-100">Upcoming</button></td>
+                                <td><i class="fa fa-square-o"></i></td>
+
+
+                                {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
+                                  <td class="text-center">{{ forloop.counter }}</td>
+                                  <td data-title="Title">
+                                    <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                      class="float-left">
+                                      {{obj.title }}</a>
+                                  </td>
+                                  <td>{{obj.invitedinstitue }}</td>
+                                  <td>{{obj.attendence }}</td>
+                                  <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}</td>
+                                  <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
+                                  <td>{{ obj.location }} </td>
+
+                                  <td class='text-center'>
+                                    {% with ah=current_datetime.hour|sub:obj.end_time.hour am=current_datetime.minute|sub:obj.end_time.minute %}
+                                    {{ah}}h:
+                                    {% if am > 0 %}
+                                    {{am}}
+                                    {% else %}
+                                        {{ am|stringformat:"+d"|slice:"1:" }}
+                                    {% endif %}
+                                    {% endwith %}
+                                  </td>
+
+
+                                  <td><button style="font-size:14px;"
+                                      class="bg-success text-white border w-100">Running</button></td>
+                                  <td><i class="fa fa-spinner fa-spin"></i></td>
+
+                                  {% endif %}
+
+                                  {% endif %}
+
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </section>
+                      </div> <!--end card-body-->
+                    </div>
+                    <!--end col-->
+                  </div>
+
+
+
+
+                </div> <!--end card-body-->
+              </div>
+            </div> <!--end card-->
+          </div> <!--end col-->
+
+
+          <div class="col-sm-12">
+            <div class="card border-info shadow-lg rounded">
+              <div class="card-header bg-card">
+                <i class="icon fa fa-calendar" style="font-size:24px" ;> INFORMATIVE NOTE </i>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 col-lg-3">
+                    <div class="col-md-6 col-lg-12 pb-4">
+                      <div class="widget-small border border-info d-flex justify-content-left p-2">
+                        <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-info"
+                          style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                        <div class="pl-2">
+                          <a href="{%url 'concludedInformative_list' %}">
+                            <h5>EXECUTED</h5>
+                            <p><b>{{ concluded_informative_count }}</b></p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                      <div class="widget-small border border-danger d-flex justify-content-left p-2">
+                        <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-danger"
+                          style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                        <div class="pl-2">
+                          <a href="{%url 'unexecutedInformative_list' %}">
+                            <h5>UNEXECUTED</h5>
+                            <p><b>{{ unexecuted_informative_count}}</b></p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-lg-9">
+                    <div class="row">
+                      <div class="card-body">
+                        <div class="card-header bg-default pb-2 d-flex justify-content-between">
+                          <div class="row flex-row">
+                            <h5 class="text-black"><i class="fa fa-list" style="font-size:18px;"></i> List Informative
+                              Note</h5>
+                          </div>
+                        </div>
+
+                        <section id='no-more-tables' class="pt-3">
+                          <table class="table table-bordered table-sm" id="example2" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <th>NU.</th>
+                                <th>AGENDA</th>
+                                <th style="text-align:center;">STATUS</th>
+                                <th style="text-align:center;">#</th>
+                                <th style="text-align:center;">COMMENT</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for obj in informative_list %}
+                              <tr>
+                                {% if obj.is_done == False %}
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+
+                                  <a href="{% url 'concludedInformative_list_detail' title_slug=obj.title_slug  %}"
+                                    role="button">
+                                    {{obj.title }}</a>
+                                </td>
+                                <td data-title="end time" style="text-align:center;">
+                                  <button style="font-size:14px;" class="bg-danger text-white border w-100">Unexecuted
+                                  </button>
+                                </td>
+                                <td data-title="end time" style="text-align:center;">
+                                  <i class="fa fa-square-o" style="font-size:18px"></i>
+                                </td>
+
+                                <td data-title="Title" style="text-align:center;">
+                                  <button type="button" class="btn btn-primary btn-sm ml-2">
+                                    <span class="fa fa-plus"></span><a class="text-white"
+                                      href="{% url 'commentinformative_add' pk=obj.pk %}" role="button">
+                                      Add</a>
+                                </td>
+                                {% endif %}
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </section>
+                      </div> <!--end card-body-->
+                    </div>
+                    <!--end col-->
+                  </div>
+
+
+
+
+
+
+                </div> <!--end card-body-->
+              </div>
+            </div> <!--end card-->
+          </div> <!--end col-->
+
+        </div>
+
+      </div>
+
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+
+<!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#example').DataTable();
+  });
+</script>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#example2').DataTable();
+  });
+</script>
+<script>
+  setTimeout("location.reload(true);", 5000);
+</script>
+{% endblock %}

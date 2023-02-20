@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+            <div class="card-body">
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-2 pt-4">
+                        <div class="widget-small border border-danger d-flex justify-content-left p-2">
+                            <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-danger"
+                                style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                            <div class="pl-2">
+                                <a href="{%url 'unexecutedInformative_list' %}">
+                                    <h5>UNEXECUTED</h5>
+                                    <p><b>{{ unexecuted_informative_count }}</b></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-6 col-lg-10 pt-1">
+                        <div class="row">
+                            <div class="card-body">
+                                <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                                    <div class="row flex-row">
+                                        <h5 class="text-light"><i class="fa fa-list" style="font-size:18px;"></i>
+                                            List Executed Informative Note</h5>
+                                    </div>
+
+                                    <div class="row flex-row-reverse">
+                                        {% if user.groups.all.0.name == 'admin' %}
+                                        <button type="button" class="btn btn-info btn-sm pl-2">
+                                            <span class="fa fa-print"></span> Print
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <section id='no-more-tables' class="pt-4">
+                                    <table class="table table-sm pt-4" id="example" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>NU.</th>
+                                                <th>TITLE</th>
+                                                <th style="text-align:center;">STATUS</th>
+                                                <th style="text-align:center;">#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in concluded_informative %}
+                                            <tr>
+                                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                                <td data-title="Title">
+                                                    <a href="{% url 'concludedInformative_list_detail' title_slug=obj.title_slug %}"
+                                                        class="float-left">
+                                                        {{obj.title }}</a>
+                                                </td>
+                                                <td data-title="end time" style="text-align:center;">
+                                                    <button style="font-size:14px;"
+                                                        class="bg-info text-white border">Executed </button>
+                                                </td>
+                                                <td data-title="end time" style="text-align:center;">
+                                                    <i class="fa fa-check-square-o" style="font-size:18px"></i>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </section>
+                            </div> <!--end card-body-->
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <!--end card-body-->
+            </div>
+            <!--end card-->
+        </div>
+        <!--end col-->
+    </div>
+    <!--end row-->
+
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+    {% endblock %}

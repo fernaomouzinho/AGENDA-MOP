@@ -1,0 +1,285 @@
+.icon {
+	display: inline-block;
+	margin: 2px;
+	height: 16px;
+	width: 16px;
+	background-color: #ccc;
+}
+
+/* ICONS */
+.icon-road {
+	border:none;
+	border-top:1px dashed rgb(19, 2, 2);
+	color:#fff;
+	background-color:rgb(64,64,64);
+	height:5px;
+	width:70%;
+}
+.icon-n-road {
+	border:none;
+	border-top:1px dashed rgb(184, 40, 40);
+	color:#fff;
+	background-color:rgb(184, 40, 40);
+	height:5px;
+	width:70%;
+}
+.icon-u-road {
+	border:none;
+	border-top:1px dashed rgb(240, 236, 2);
+	color:#fff;
+	background-color:rgb(240, 236, 2);
+	height:4px;
+	width:70%;
+}
+
+.icon-l-road {
+	border:none;
+	border-top:1px dashed rgb(140, 105, 24);
+	color:#fff;
+	background-color:rgb(140, 105, 24);
+	height:4px;
+	width:70%;
+}
+
+.icon-r-road {
+	border:none;
+	border-top:1px dashed rgb(48, 47, 44);
+	color:#fff;
+	background-color:rgb(48, 47, 44);
+	height:4px;
+	width:70%;
+}
+
+
+.icon-line {
+	border:none;
+	border-top:5px dashed rgb(233, 229, 33);
+	color:#fff;
+	background-color:rgb(233, 229, 33);
+	height:5px;
+	width:70%;
+}
+.icon-gabion {
+	border:none;
+	border-top:5px dashed rgb(143, 140, 140);
+	color:#fff;
+	background-color:rgb(143, 140, 140);
+	height:5px;
+	width:70%;
+}
+
+.icon-retaining {
+	border:none;
+	border-top:5px dashed rgb(138, 106, 61);
+	color:#fff;
+	background-color:rgb(138, 106, 61);
+	height:5px;
+	width:70%;
+}
+
+
+.icon-garden {
+	border:none;
+	border-top:5px dashed rgb(49, 231, 131);
+	color:#fff;
+	background-color:rgb(49, 231, 131);
+	height:5px;
+	width:70%;
+}
+.icon-area {
+	border:none;
+	border-top:5px dashed rgb(87, 71, 71);
+	color:#fff;
+	background-color:rgb(204, 204, 255);
+	height:5px;
+	width:70%;
+}
+.icon-building {
+	background: url('../map_icons/school.png') center center no-repeat;
+}
+.icon-school {
+	background: url('../map_icons/school.png') center center no-repeat;
+}
+.icon-hospital {
+	background: url('../map_icons/hospital.png') center center no-repeat;
+}
+.icon-bridge {
+	background: url('../map_icons/bridge.png') center center no-repeat;
+}
+.icon-road {
+	background: url('../map_icons/road.png') center center no-repeat;
+}
+.icon-culvert {
+	background: url('../map_icons/culvert.png') center center no-repeat;
+}
+
+.icon-clinic {
+	background: url('../map_icons/clinic.png') center center no-repeat;
+}
+.icon-laboratory {
+	background: url('../map_icons/laboratory.png') center center no-repeat;
+}
+
+.icon-health-post {
+	background: url('../map_icons/healthpost.png') center center no-repeat;
+}
+
+.icon-health-house {
+	background: url('../map_icons/healthhouse.png') center center no-repeat;
+}
+.icon-a1-drain {
+	border:none;
+	border-top:1px dashed rgb(252, 186, 3);
+	color:#fff;
+	background-color:rgb(252, 186, 3);
+	height:5px;
+	width:70%;
+}
+.icon-a2-drain {
+	border:none;
+	border-top:1px dashed rgb(158, 156, 152);
+	color:#fff;
+	background-color:rgb(158, 156, 152);
+	height:5px;
+	width:70%;
+}
+.icon-a3-drain {
+	border:none;
+	border-top:1px dashed rgb(184, 179, 55);
+	color:#fff;
+	background-color:rgb(184, 179, 55);
+	height:5px;
+	width:70%;
+}
+.icon-a4-drain {
+	border:none;
+	border-top:1px dashed rgb(41, 123, 145);
+	color:#fff;
+	background-color:rgb(41, 123, 145);
+	height:5px;
+	width:70%;
+}
+
+.icon-ret {
+	border:none;
+	border-top:1px dashed rgb(173, 137, 28);
+	color:#fff;
+	background-color:rgb(173, 137, 28);
+	height:5px;
+	width:70%;
+}
+
+.icon-gab {
+	border:none;
+	border-top:1px dashed rgb(158, 156, 152);
+	color:#fff;
+	background-color:rgb(158, 156, 152);
+	height:5px;
+	width:70%;
+}
+
+
+.icon-university {
+	background: url('../map_icons/university.png') center center no-repeat;
+}
+
+.icon-high-school {
+	background: url('../map_icons/secondary.png') center center no-repeat;
+}
+
+.icon-pre-secondary {
+	background: url('../map_icons/presecondary.png') center center no-repeat;
+}
+
+.icon-ensino-basico {
+	background: url('../map_icons/basicschool.png') center center no-repeat;
+}
+
+.icon-pre-escolar {
+	background: url('../map_icons/preschool.png') center center no-repeat;
+}
+
+.icon-park{
+	background: url('../map_icons/park.png') center center no-repeat;
+}
+
+.icon-market{
+	background: url('../map_icons/market.png') center center no-repeat;
+}
+
+.icon-monument{
+	background: url('../map_icons/monument.png') center center no-repeat;
+}
+
+.icon-terminal{
+	background: url('../map_icons/terminal.png') center center no-repeat;
+}
+
+
+.icon-tourism{
+	background: url('../map_icons/tourism.png') center center no-repeat;
+}
+
+.icon-church{
+	background: url('../map_icons/church.png') center center no-repeat;
+}
+
+.icon-police{
+	background: url('../map_icons/police.png') center center no-repeat;
+}
+
+.icon-military{
+	background: url('../map_icons/military.png') center center no-repeat;
+}
+
+
+.icon-bridge2 {
+	background: url('../map_icons/icon-bridge.png') center center no-repeat;
+}
+.icon-box-culvert {
+	background: url('../map_icons/culvert.png') center center no-repeat;
+}
+.icon-pipe-culvert {
+	background: url('../map_icons/pipe_culvert.png') center center no-repeat;
+}
+
+/* MARKERS */
+.leaflet-marker-icon {
+	padding: 2px;
+	text-align: center;
+}
+.icon-new {
+	width: 15px; height: 15px; margin-top: 15%; background: #2454D8; border-color: #000; border-radius: 50%;
+}
+.icon-notstarted {
+	width: 15px; height: 15px; margin-top: 15%; background: #3B3C3F; border-color: #000; border-radius: 50%;
+}
+.icon-ongoing {
+	width: 15px; height: 15px; margin-top: 15%; background: #bcdb0a; border-color: #000; border-radius: 50%;
+}
+.icon-pending {
+	width: 15px; height: 15px; margin-top: 15%; background: #ce1616; border-color: #000; border-radius: 50%;
+}
+.icon-complete {
+	width: 15px; height: 15px; margin-top: 15%; background: #07c948; border-color: #000; border-radius: 50%;
+}
+
+
+.icon-prog0 {
+	width: 15px; height: 15px; margin-top: 15%; background: #FF0000; border-color: #000; border-radius: 50%;
+}
+.icon-prog20 {
+	width: 15px; height: 15px; margin-top: 15%; background: #FF4C00; border-color: #000; border-radius: 50%;
+}
+.icon-prog40 {
+	width: 15px; height: 15px; margin-top: 15%; background: #FF821A; border-color: #000; border-radius: 50%;
+}
+.icon-prog60 {
+	width: 15px; height: 15px; margin-top: 15%; background: #FFD100; border-color: #000; border-radius: 50%;
+}
+.icon-prog80 {
+	width: 15px; height: 15px; margin-top: 15%; background: #B0FB19; border-color: #000; border-radius: 50%;
+}
+.icon-prog100 {
+	width: 15px; height: 15px; margin-top: 15%; background: #47F619; border-color: #000; border-radius: 50%;
+}
