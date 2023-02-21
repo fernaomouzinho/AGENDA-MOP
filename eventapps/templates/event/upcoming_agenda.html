@@ -74,19 +74,20 @@
           <div class="col-md-12 pt-3">
             <div class="row">
               <div class="card-body">
+                <div class="row flex-row-reverse mr-1 mt-1 mb-2">
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
+                  </div>
+                </div>
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
                   <div class="row flex-row">
                     <h5 class="text-light"> <i class="fa fa-calendar-plus-o" style="font-size:30px"></i> UPCOMING AGENDA
                     </h5>
                   </div>
 
-                  <div class="row flex-row-reverse">
-                    {% if user.groups.all.0.name == 'admin' %}
-                    <button type="button" class="btn btn-info btn-sm pl-2">
-                      <span class="fa fa-print"></span> Print
-                    </button>
-                    {% endif %}
-                  </div>
+
                 </div>
                 <hr>
                 <section id='no-more-tables'>
@@ -100,7 +101,7 @@
                         <th class="text-center">START TIME</th>
                         <th class="text-center">END TIME</th>
                         <th class="text-center">LOCATION</th>
-                        
+
                         <th class='text-center'>OBSERVATION</th>
                         <th class="text-center">ACTION</th>
                       </tr>

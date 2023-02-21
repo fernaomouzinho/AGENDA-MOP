@@ -74,27 +74,19 @@
           <div class="col-md-12 pt-3">
             <div class="row">
               <div class="card-body">
+
+                <div class="row flex-row-reverse mr-1 mt-1 mb-2">
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
+                  </div>
+                </div>
+
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
                   <div class="row flex-row">
                     <h5 class="text-light"><i class="fa fa-calendar-check-o" style="font-size:30px"></i> COMPLETED
                       AGENDA</h5>
-                  </div>
-
-                  <div class="row flex-row-reverse">
-                    {% if user.groups.all.0.name == 'admin' %}
-
-                    <button type="button" class="btn btn-info btn-sm pl-2">
-                      <span class="fa fa-print"></span> Print
-                    </button>
-
-                    <!--
-                    <select class="selectpicker pl-2 pr-2 mr-2">
-                      {% for a in all_year %}
-                      <option>{{a.year}}</option>
-                      {% endfor %}
-                      {% endif %}
-                    </select>-->
-
                   </div>
                 </div>
                 <hr>
@@ -151,8 +143,6 @@
                             {% endif %}
                             {% endwith %}
                           </td>
-
-
                           <td class='text-center'><button style="font-size:14px;"
                               class="bg-success text-white border w-100">Running</button>
                           </td>
@@ -173,10 +163,9 @@
                                 {{obj.title }}</a>
                             </td>
 
-                            <td>{{obj.start_time.date|date:"d/m/Y"}}, {{obj.start_time.time}}
+                            <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}
                             </td>
-                            <td>{{ obj.end_time.date|date:"d/m/Y" }}, {{obj.end_time.time}}
-                            </td>
+                            <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
                             <td>{{ obj.location }} </td>
                             <td class='text-center'>0h:00</td>
                             <td data-title="end time">
