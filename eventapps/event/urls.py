@@ -11,12 +11,17 @@ urlpatterns = [
     
     path('concluded-agenda/', views.concludedAgenda_list, name='concludedAgenda_list'),
     path('concluded-agenda/<slug:title_slug>', views.concludedAgenda_list_detail, name='concludedAgenda_list_detail'),
+    path('concluded-agenda/comment/add/<int:pk>', views.commentCoAgenda_add, name='commentCoAgenda_add'),
+   
+    
     
     path('canceled-agenda/', views.canceledAgenda_list, name='canceledAgenda_list'),
     path('canceled-agenda/<slug:title_slug>', views.canceledAgenda_list_detail, name='canceledAgenda_list_detail'),
+    path('canceled-agenda/comment/add/<int:pk>', views.commentCaAgenda_add, name='commentCaAgenda_add'),
    
     path('running-agenda/', views.runningAgenda_list, name='runningAgenda_list'),
-    path('running-agenda/<slug:title_slug>', views.runningAgenda_list_detail, name='runningAgenda_list_detail'),
+    path('running-agenda/<slug:title_slug>', views.runningAgenda_list_detail, name='runningAgenda_list_detail'), 
+    path('running-agenda/comment/add/<int:pk>', views.commentRuAgenda_add, name='commentRuAgenda_add'),
     
     path('upcoming-agenda/', views.upcomingAgenda_list, name='upcomingAgenda_list'),
     path('upcoming-agenda/<slug:title_slug>', views.upcomingAgenda_list_detail, name='upcomingAgenda_list_detail'),
@@ -25,7 +30,7 @@ urlpatterns = [
     path('upcoming-agenda/cancel:?<int:pk>', views.upcomingAgenda_cancel, name='upcomingAgenda_cancel'),
     path('upcoming-agenda-read/', views.upcomingAgenda_read, name='upcomingAgenda_read'),
     path('postpone-agenda/?<int:pk>', views.postponeAgenda_list, name='postponeAgenda_list'),
-    path('comment-agenda/add/<int:pk>', views.commentAgenda_add, name='commentAgenda_add'),
+    #path('comment-agenda/add/<int:pk>', views.commentAgenda_add, name='commentAgenda_add'),
     
 
     path('informative-note/', views.informative_list, name='informative_list'),

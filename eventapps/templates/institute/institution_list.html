@@ -8,8 +8,8 @@
 
 
             <div class="card-body">
-                <div class="row flex-row-reverse ">
-                    <button type="button" class="btn btn-light border border-primary btn-sm mr-3">
+                <div class="row">
+                    <button type="button" class="btn btn-light border border-primary ml-3">
                         <span class="fa fa-plus"></span><a class="text-primary " href="{% url 'institution_add' %}"
                             role="button">
                             Add Institution</a>
@@ -42,15 +42,15 @@
                                 </td>
                                 <td style="text-align:center;">
                                     <a href="{% url 'institution_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
-                                        class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                            style='font-size:20px'></i></a>
+                                        class="btn btn-sm btn-warning"><i class='fa fa-edit' style='font-size:20px'></i>
+                                        Edit</a>
 
                                     |
 
                                     <a href="{% url 'institution_delete' pk=obj.id %}" data-toggle="tooltip"
                                         title="Delete" class="btn btn-sm btn-danger"
                                         onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
-                                            style='font-size:20px'></i></a>
+                                            style='font-size:20px'></i> Delete</a>
                                 </td>
                             </tr>
                             {% endfor %}

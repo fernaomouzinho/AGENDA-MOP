@@ -5,6 +5,7 @@ from .models import Agenda, HistAgenda ,Informative, CommentInformative
 from .form import AgendaForm, PostponedAgendaForm, CommentAgendaForm, InformativeForm, CommentInformativeForm
 from django.contrib.auth.models import User
 from datetime import datetime
+import os
 
 
 # Create your views here.
@@ -116,8 +117,12 @@ def canceledAgenda_list(request):
     return render(request, 'event/canceled_agenda.html', context)
 
 @login_required(login_url="/login/")
-def canceledAgenda_list_detail(request):
+def canceledAgenda_list_detail(request, title_slug):
+    single_agenda = Agenda.objects.get(title_slug=title_slug)
+    all_agenda = Agenda.objects.all()
+
     context = {
+        'single_agenda':single_agenda,'all_agenda':all_agenda,
     }
     return render(request, 'event/canceled_agenda_detail.html', context)
 
@@ -145,7 +150,11 @@ def upcomingAgenda_list(request):
 
 @login_required(login_url="/login/")
 def upcomingAgenda_list_detail(request, title_slug):
+    single_agenda = Agenda.objects.get(title_slug=title_slug)
+    all_agenda = Agenda.objects.all()
+
     context = {
+        'single_agenda':single_agenda,'all_agenda':all_agenda,
     }
     return render(request, 'event/upcoming_agenda_detail.html', context)
 
@@ -202,7 +211,7 @@ def postponeAgenda_list(request, pk):
             sgl_hagenda.save()
 
         messages.success(request, ("Data changed succesfully"))
-        return redirect('agenda_list')
+        return redirect('upcomingAgenda_list')
 
     else:
         userprofile = User.objects.get(id=request.user.id)
@@ -218,9 +227,9 @@ def postponeAgenda_list(request, pk):
     return render(request, 'event/postponed_agenda.html', context)
 
 
-#============================================= Comment Agenda Add ================================================================
+#============================================= Comment Conclude Agenda Add ================================================================
 @login_required(login_url='login')
-def commentAgenda_add(request, pk):
+def commentCoAgenda_add(request, pk):
     if not request.user.is_authenticated :
         return redirect('login')
 
@@ -248,8 +257,14 @@ def commentAgenda_add(request, pk):
             sgl_hagenda.save()
 
             messages.success(request, ("New data is added successfully"))
-        return redirect('agenda_list')
-    
+            a = request.path
+            head_tail = os.path.split(a)
+            v =head_tail[0]
+            print(v)
+
+            if v == "/concluded-agenda/comment/add":
+                return redirect('concludedAgenda_list')
+
     else:
         userprofile = User.objects.get(id=request.user.id)
         single_agenda= Agenda.objects.get(pk=pk)
@@ -262,6 +277,107 @@ def commentAgenda_add(request, pk):
         }
     return render(request, 'event/comment_agenda_add.html', context)
 
+
+#============================================= Comment Canceled Agenda Add ================================================================
+@login_required(login_url='login')
+def commentCaAgenda_add(request, pk):
+    if not request.user.is_authenticated :
+        return redirect('login')
+
+    #single_informative = request.POST.get('informative_id')
+    single_agenda = Agenda.objects.get(id=pk)
+
+    if request.method == "POST":
+        commentagendaform = CommentAgendaForm(request.POST, request.FILES, instance=single_agenda)
+        if commentagendaform.is_valid():
+            commentagendaform = commentagendaform.save(commit=False)
+            commentagendaform.user=request.user
+            commentagendaform.title=single_agenda.title
+            commentagendaform.title_slug=single_agenda.title_slug
+            commentagendaform.institution=single_agenda.institution
+            commentagendaform.attendence=single_agenda.attendence
+            commentagendaform.start_time=single_agenda.start_time
+            commentagendaform.end_time=single_agenda.end_time
+            commentagendaform.single_agenda=single_agenda
+            commentagendaform.save()
+            sgl_agenda = Agenda.objects.get(pk=single_agenda.id)
+            sgl_hagenda = HistAgenda.objects.get(pk=single_agenda.id)
+            sgl_hagenda.start_time_new = sgl_agenda.start_time
+            sgl_hagenda.end_time_new   = sgl_agenda.end_time
+            sgl_hagenda.observation = sgl_agenda.observation
+            sgl_hagenda.save()
+
+            messages.success(request, ("New data is added successfully"))
+            a = request.path
+            head_tail = os.path.split(a)
+            v =head_tail[0]
+            print(v)
+
+            if v == "/canceled-agenda/comment/add":
+                return redirect('canceledAgenda_list')
+            
+    else:
+        userprofile = User.objects.get(id=request.user.id)
+        single_agenda= Agenda.objects.get(pk=pk)
+        commentagendaform = CommentAgendaForm(instance=single_agenda)
+
+        context = {
+            'userprofile':userprofile,
+            'single_agenda':single_agenda,
+            'commentagendaform': commentagendaform,
+        }
+    return render(request, 'event/comment_agenda_add.html', context)
+
+
+#============================================= Comment running Agenda Add ================================================================
+@login_required(login_url='login')
+def commentRuAgenda_add(request, pk):
+    if not request.user.is_authenticated :
+        return redirect('login')
+
+    #single_informative = request.POST.get('informative_id')
+    single_agenda = Agenda.objects.get(id=pk)
+
+    if request.method == "POST":
+        commentagendaform = CommentAgendaForm(request.POST, request.FILES, instance=single_agenda)
+        if commentagendaform.is_valid():
+            commentagendaform = commentagendaform.save(commit=False)
+            commentagendaform.user=request.user
+            commentagendaform.title=single_agenda.title
+            commentagendaform.title_slug=single_agenda.title_slug
+            commentagendaform.institution=single_agenda.institution
+            commentagendaform.attendence=single_agenda.attendence
+            commentagendaform.start_time=single_agenda.start_time
+            commentagendaform.end_time=single_agenda.end_time
+            commentagendaform.single_agenda=single_agenda
+            commentagendaform.save()
+            sgl_agenda = Agenda.objects.get(pk=single_agenda.id)
+            sgl_hagenda = HistAgenda.objects.get(pk=single_agenda.id)
+            sgl_hagenda.start_time_new = sgl_agenda.start_time
+            sgl_hagenda.end_time_new   = sgl_agenda.end_time
+            sgl_hagenda.observation = sgl_agenda.observation
+            sgl_hagenda.save()
+
+            messages.success(request, ("New data is added successfully"))
+            a = request.path
+            head_tail = os.path.split(a)
+            v =head_tail[0]
+            print(v)
+
+            if v == "/running-agenda/comment/add":
+                return redirect('runningAgenda_list')
+            
+    else:
+        userprofile = User.objects.get(id=request.user.id)
+        single_agenda= Agenda.objects.get(pk=pk)
+        commentagendaform = CommentAgendaForm(instance=single_agenda)
+
+        context = {
+            'userprofile':userprofile,
+            'single_agenda':single_agenda,
+            'commentagendaform': commentagendaform,
+        }
+    return render(request, 'event/comment_agenda_add.html', context)
 
 
 

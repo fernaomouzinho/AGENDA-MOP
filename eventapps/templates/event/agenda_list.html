@@ -7,10 +7,11 @@
 
             <div class="card-body">
 
-                <div class="row flex-row-reverse mr-1">
+                <div class="row mr-1 mt-1">
+                  <div class="col-sm-6 pb-1">
                     {% if user.is_authenticated %}
                     {% if user.groups.all.0.name == 'admin' %}
-                    <button type="button" class="btn btn-light border border-primary ml-2">
+                    <button type="button" class="btn btn-light border border-primary">
                         <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'agenda_add' %}"
                             role="button">
                             Add Agenda</a>
@@ -24,14 +25,18 @@
 
                     {% endif %}
                     {% endif %}
-                </div>
 
-                <div class="row flex-row-reverse mr-1 mt-1">
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row flex-row-reverse">
                     <div class="btn-group">
                     <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
                     <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
                     <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
                   </div>
+                  </div>
+                  </div>
+
                 </div>
 
 
@@ -56,9 +61,10 @@
                         </thead>
                         <tbody>
                             {% for obj in agenda_list %}
-                            {% if obj.is_cancel == False %}
                             <tr>
                                 <td data-title="Nu.">{{ forloop.counter }}</td>
+                            {% if obj.is_cancel == False %}
+
                                 <td data-title="Title">
                                     <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
                                         class="float-left">
@@ -73,40 +79,37 @@
                                 {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
                                     <td class="text-center">Running</td>
 
-                                    {% elif obj.end_time < current_datetime %} <td class="text-center">
-                                        Done
-                                        </td>
+                                {% elif obj.end_time < current_datetime %}
+                                <td class="text-center">  Done </td>
+                                {% else %}
+                                <td class="text-center">#</td>
+                                {% endif %}
+                                {% else %}
+                                    <td data-title="Title">
+                                        <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                            class="float-left">
+                                            {{obj.title }}</a>
+                                    </td>
+                                    <td class="text-center">
+                                        {{obj.catagenda }}
+                                    </td>
+                                    <td class="text-center">Cancel</td>
+                                    {% endif %}
 
-                                        {% else %}
-                                        <td class="text-center">#</td>
-                                        {% endif %}
-                                        {% else %}
-                                        <td class="text-center" {{ forloop.counter }}</td>
-                                        <td data-title="Title">
-                                            <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
-                                                class="float-left">
-                                                {{obj.title }}</a>
-                                        </td>
-                                        <td class="text-center">
-                                            {{obj.catagenda }}
-                                        </td>
-                                        <td class="text-center">Cancel</td>
-                                        {% endif %}
+                                    <td data-title="End Time" class="text-center"">
+                                        <a href=" {% url 'agenda_edit' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                            style='font-size:20px'></i> Edit</a>
 
-                                        <td data-title="End Time" class="text-center"">
-                                            <a href=" {% url 'agenda_edit' pk=obj.id %}" data-toggle="tooltip"
-                                            title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                                style='font-size:20px'></i> Edit</a>
-
-                                            {% if user.is_authenticated %}
-                                            {% if user.groups.all.0.name == 'admin' %} |
-                                            <a href="{% url 'agenda_delete' pk=obj.id %}" data-toggle="tooltip"
-                                                title="Delete" class="btn btn-sm btn-danger"
-                                                onclick="return confirm(' Are you ready to delete?')"><i
-                                                    class='fa fa-trash' style='font-size:20px'></i> Delete</a>
-                                        </td>
-                                        {% endif %}
-                                        {% endif %}
+                                        {% if user.is_authenticated %}
+                                        {% if user.groups.all.0.name == 'admin' %} |
+                                        <a href="{% url 'agenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                            title="Delete" class="btn btn-sm btn-danger"
+                                            onclick="return confirm(' Are you ready to delete?')"><i
+                                                class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                    </td>
+                                    {% endif %}
+                                    {% endif %}
 
                             </tr>
                             {% endfor %}

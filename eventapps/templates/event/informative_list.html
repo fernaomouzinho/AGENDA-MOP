@@ -6,20 +6,41 @@
         <div class="border-info shadow-lg bg-white">
             <div class="card-body">
 
+              <div class="row mr-1 mt-1">
+                <div class="col-sm-6 pb-1">
+                  {% if user.is_authenticated %}
+                  {% if user.groups.all.0.name == 'admin' %}
+                  <button type="button" class="btn btn-light border border-primary">
+                      <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
+                          role="button">
+                          Add Informative Note</a>
+                  </button>
+                  {% elif user.groups.all.0.name == 'secretaria' %}
+                  <button type="button" class="btn btn-light border border-primary ml-2">
+                      <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
+                          role="button">
+                            Add Informative Note</a>
+                  </button>
+
+                  {% endif %}
+                  {% endif %}
+
+                </div>
+                <div class="col-sm-6">
+                  <div class="row flex-row-reverse">
+                  <div class="btn-group">
+                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
+                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
+                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
+                </div>
+                </div>
+                </div>
+
+              </div>
+
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
                     <div class="row flex-row">
                         <h5 class="text-light"><i class="fa fa-list" style="font-size:18px;"></i> List Informative Note
-                    </div>
-                    <div class="row flex-row-reverse">
-
-                        <button type="button" class="btn btn-primary btn-sm ml-2">
-                            <span class="fa fa-plus"></span><a class="text-white" href="{% url 'informative_add' %}"
-                                role="button">
-                                Add</a>
-                        </button>
-                        <button type="button" class="btn btn-info btn-sm pl-2">
-                            <span class="fa fa-print"></span> Print
-                        </button>
                     </div>
                 </div>
                 <hr>

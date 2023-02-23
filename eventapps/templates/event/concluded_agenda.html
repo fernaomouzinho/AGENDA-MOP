@@ -74,10 +74,13 @@
             <div class="row">
               <div class="card-body">
                 <div class="row flex-row-reverse mr-1 mt-1 mb-2">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print">
+                        Print</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o">
+                        Exel</button>
+                    <button type="button" class="btn btn-light border border-info"><span
+                        class="fa fa-file-pdf-o"></span> PDF</button>
                   </div>
                 </div>
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
@@ -113,7 +116,7 @@
                         <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
                         <td data-title="end time">{{ obj.location }} </td>
 
-                        {% if obj.observation == None %}
+                        {% if obj.observation == "" %}
                         <td class='text-center'><i class="fa fa-square-o"></i>
                         </td>
                         {% else %}
@@ -122,14 +125,14 @@
                         {% endif %}
 
                         <td data-title="Title" style="text-align:center;">
-                          {% if obj.observation == None %}
+                          {% if obj.observation == "" %}
                           <button type="button" class="btn btn-primary btn-sm ml-2">
                             <span class="fa fa-plus"></span><a class="text-white"
-                              href="{% url 'commentAgenda_add' pk=obj.pk %}" role="button">
+                              href="{% url 'commentCoAgenda_add' pk=obj.pk %}" role="button">
                               Add</a></button>
                           {% else %}
                           <button type="button" class="btn btn-warning btn-sm ml-2">
-                            <a href="{% url 'commentAgenda_add' pk=obj.pk %}" data-toggle="tooltip" title="Edit"><i
+                            <a href="{% url 'commentCoAgenda_add' pk=obj.pk %}" data-toggle="tooltip" title="Edit"><i
                                 class='fa fa-edit' style='font-size:20px'></i>
                               Edit</a>
                           </button>
