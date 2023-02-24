@@ -109,29 +109,31 @@
                       {% if obj.is_cancel == False %}
                       <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
-
+                        {% if obj.start_time > current_datetime %}
                         <td data-title="Title">
-                          <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
-                            class="float-left">
-                            {{obj.title }}</a>
-                        </td>
-
+                          <a href="{% url 'upcomingAgenda_list_detail' title_slug=obj.title_slug %}"
+                            class="float-left">{{obj.title }}</a></td>
                         <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}
                         </td>
                         <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
                         <td>{{ obj.location }} </td>
-
-                        {% if obj.start_time >= current_datetime %}
                         {% with res=obj.start_time|sub:current_datetime %}
                         <td class='text-center'> {{res}}
                           {% endwith %}
                         </td>
-
-
-                        <td><button style="font-size:14px;" class="bg-warning text-white border w-100">Upcoming</button>
-                        </td>
+                        <td><button style="font-size:14px;" class="bg-warning text-white border w-100">Upcoming</button></td>
                         <td class="text-center"><i class="fa fa-square-o"></i></td>
-                        {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
+
+
+                        {% elif obj.start_time < current_datetime and obj.end_time > current_datetime %}
+                        <td data-title="Title">
+                          <a href="{% url 'runningAgenda_list_detail' title_slug=obj.title_slug %}"
+                            class="float-left">
+                            {{obj.title }}</a>
+                        </td>
+                        <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}</td>
+                        <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
+                        <td>{{ obj.location }} </td>
 
                           <td class='text-center'>
                             {% with ah=current_datetime.hour|sub:obj.end_time.hour am=current_datetime.minute|sub:obj.end_time.minute %}
@@ -143,22 +145,33 @@
                             {% endif %}
                             {% endwith %}
                           </td>
-                          <td class='text-center'><button style="font-size:14px;"
-                              class="bg-success text-white border w-100">Running</button>
-                          </td>
+                          <td class='text-center'><button style="font-size:14px;" class="bg-success text-white border w-100">Running</button></td>
                           <td class='text-center'><i class="fa fa-spinner fa-spin"></i></td>
-                          {% elif obj.end_time < current_datetime %} <td class='text-center'>0h:00
-                            </td>
+
+
+                          {% elif obj.end_time < current_datetime %}
+                          <td data-title="Title">
+                            <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                              class="float-left">
+                              {{obj.title }}</a>
+                          </td>
+                          <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}</td>
+                          <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
+                          <td>{{ obj.location }} </td>
+                          <td class='text-center'>0h:00</td>
                             <td class="text-center">
                               <button style="font-size:14px;" class="bg-info text-white border w-100">Done </button>
                             </td>
                             <td class='text-center'><i class="fa fa-check-square-o"></i>
                             </td>
                             {% endif %}
+
+
+
                             {% else%}
-                            <td data-title="Nu.">{{ forloop.counter }}</td>
+                            <td class='text-center'>{{ forloop.counter }}</td>
                             <td data-title="Title">
-                              <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                              <a href="{% url 'canceledAgenda_list_detail' title_slug=obj.title_slug %}"
                                 class="float-left">
                                 {{obj.title }}</a>
                             </td>

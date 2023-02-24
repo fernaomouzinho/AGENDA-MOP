@@ -41,7 +41,7 @@ class Agenda(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255, null=False, blank=True)
-    observation = models.TextField(null=True, blank=True)
+    observation = models.TextField(null=False, blank=True)
     is_cancel = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     STATUS = (

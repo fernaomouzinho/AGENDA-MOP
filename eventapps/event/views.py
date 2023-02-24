@@ -6,6 +6,7 @@ from .form import AgendaForm, PostponedAgendaForm, CommentAgendaForm, Informativ
 from django.contrib.auth.models import User
 from datetime import datetime
 import os
+current_datetime = datetime.now()
 
 
 # Create your views here.
@@ -29,7 +30,16 @@ def agenda_add(request):
         if agendaform.is_valid():
             agendaform = agendaform.save(commit=False)
             agendaform.user=request.user
-            agendaform.status="Pending"
+            if agendaform.start_time >= current_datetime:
+                agendaform.status="Pending"
+
+            elif agendaform.start_time <= current_datetime and agendaform.end_time >= current_datetime:
+                agendaform.status="Read"
+
+            elif agendaform.end_time < current_datetime:
+                agendaform.status="Read"
+            
+
             ha = HistAgenda(user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution,attendence=agendaform.attendence,start_time=agendaform.start_time,start_time_new=agendaform.start_time,end_time=agendaform.end_time,end_time_new=agendaform.end_time,location=agendaform.location,location_new=agendaform.location,observation=agendaform.observation,is_cancel=agendaform.is_cancel,is_active=agendaform.is_active,status=agendaform.status,created_at=agendaform.created_at,updated_at=agendaform.updated_at)
             ha.save()
 
