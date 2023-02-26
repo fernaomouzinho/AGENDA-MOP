@@ -6,6 +6,7 @@
     <div class="col-sm-3">
         {% if user.is_authenticated %}
 
+        {% if user.groups.all.0.name != "gp_dei" %}
         <div class="col-sm-12">
             <div class="border-info shadow-lg bg-white">
 
@@ -103,14 +104,17 @@
         </div>
 
 
+        {% endif %}
+
+
+
         {% if user.groups.all.0.name == "admin" or user.groups.all.0.name == "gp_dei" or user.groups.all.0.name == "gp_adj" %}
         <div class="col-sm-12">
             <div class="border-info shadow-lg bg-white">
                 <div class="card-body">
                     <div class="card-header bg-card mt-2 d-flex justify-content-between">
                         <div class="row flex-row">
-                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Coordinator
-                                request agenda
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Requested Agenda
                             </h5>
                         </div>
 
@@ -119,6 +123,17 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
+                                  <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      ADJ-Waitting List
+                                      {% if request_waitting.count > 0%}
+                                      (<b>{{request_waitting.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
+
+                                  </a>
                                     <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
                                         aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
@@ -174,6 +189,92 @@
             <!--end col-->
         </div>
         {% endif %}
+
+        {% if user.groups.all.0.name == "admin" or user.groups.all.0.name == "gp_dei" or user.groups.all.0.name == "gp_adj" %}
+        <div class="col-sm-12">
+            <div class="border-info shadow-lg bg-white">
+                <div class="card-body">
+                    <div class="card-header bg-card mt-2 d-flex justify-content-between">
+                        <div class="row flex-row">
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Approved Agenda
+                            </h5>
+                        </div>
+
+                    </div>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                  <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      ADJ-Waitting List
+                                      {% if request_waitting.count > 0%}
+                                      (<b>{{request_waitting.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
+
+                                  </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UGA-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UAP-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UCVQ-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UEDC-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                    </a>
+                                </h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+        </div>
+        {% endif %}
+
+
+
+
         {% endif %}
     </div>
 
@@ -197,16 +298,12 @@
                 <div class="row mr-1 mt-1">
                     <div class="col-sm-6 pb-1">
                         {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != 'gp_dei' %}
                         <button type="button" class="btn btn-light border border-primary">
                             <span class="fa fa-plus"></span><a class="text-primary"
                                 href="{% url 'requestedagenda_add' %}" role="button">
                                 Create Agenda</a>
                         </button>
-
-                        {% if user.groups.all.0.name == 'admin' %}
-
-                        {% elif user.groups.all.0.name == 'secretary' %}
-
                         {% endif %}
                         {% endif %}
 
@@ -243,17 +340,25 @@
                             <tr>
                                 <th class="text-center">NU.</th>
                                 <th>AGENDA REQUESTED</th>
+                                <th class="text-center"> REQUESTED FROM</th>
                                 <th class="text-center">DATE REQUESTED</th>
                                 <th class="text-center">STATUS</th>
                                 <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
+
                             {% for obj in request_agenda_list %}
+                            {% if obj.is_approve == False %}
+                            {% if user.groups.all.0.name == 'gp_dei' %}
+                            {% if obj.user == request.user.id or obj.user != request.user.id %}
                             <tr>
-                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td class="text-center">{{ forloop.counter }}</td>
                                 <td data-title="Title">
                                     {{obj.title }}
+                                </td>
+                                <td data-title="Title">
+                                    {{obj.user.username }}
                                 </td>
 
                                 <td class="text-center">
@@ -268,6 +373,13 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-center">
+                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
+                                  <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip" title="Approve"
+                                      class="btn btn-sm btn-success"><span class="	fa fa-thumbs-o-up"></span> Approved</a>
+                                  {% endif %}
+
+                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+
                                 <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
                                     class="btn btn-sm btn-warning"><i class='fa fa-edit'
                                         style='font-size:20px'></i> Edit</a>
@@ -279,10 +391,70 @@
                                             class='fa fa-trash' style='font-size:20px'></i> Delete</a>
                                 </td>
 
+                                  {% endif %}
+
 
 
                             </tr>
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
                             {% endfor %}
+
+                            {% for obj in request_agenda_list_user %}
+                            {% if obj.is_approve == False %}
+                            {% if obj.user != request.user.id %}
+
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                    {{obj.title }}
+                                </td>
+                                <td data-title="Title">
+                                    {{obj.user.username }}
+                                </td>
+
+                                <td class="text-center">
+                                    {{obj.requested_at|date:"d/m/Y G:i" }}
+                                </td>
+
+                                <td class="text-center">
+                                    {% if obj.approve == True %}
+                                    Approved
+                                    {% else %}
+                                    Waitting
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
+                                  <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip" title="Approve"
+                                      class="btn btn-sm btn-success"><span class="	fa fa-thumbs-o-up"></span> Approved</a>
+                                  {% endif %}
+
+                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+
+                                <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
+                                    class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                        style='font-size:20px'></i> Edit</a>
+
+                                        |
+                                    <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Delete" class="btn btn-sm btn-danger"
+                                        onclick="return confirm(' Are you ready to delete?')"><i
+                                            class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                </td>
+
+                                  {% endif %}
+
+
+
+                            </tr>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+
+
+
                         </tbody>
                     </table>
                 </section>

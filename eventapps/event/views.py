@@ -44,7 +44,7 @@ def agenda_add(request):
             elif agendaform.end_time < current_datetime:
                 agendaform.status = "Read"
 
-            ha = HistAgenda(user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution, attendence=agendaform.attendence, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time,
+            ha = HistAgenda(user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time,
                             end_time_new=agendaform.end_time, location=agendaform.location, location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
             ha.save()
 
@@ -512,6 +512,16 @@ def waitting_requestedagenda_list(request):
     context = {
     }
     return render(request, 'event/request_waitting_list.html', context)
+
+# ======================================== Aprove Request Agenda ================================================================
+
+
+@login_required(login_url='login')
+def requestedagenda_approve(request, pk):
+    all_requestedagenda = RequestAgenda.objects.get(id=pk)
+    all_requestedagenda.is_approve = "True"
+    all_requestedagenda.save()
+    return redirect('requestedagenda_list')
 
 
 # ======================================== List All Informative ================================================================

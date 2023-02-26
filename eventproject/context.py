@@ -34,7 +34,8 @@ def menu_home(request):
         is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
     canceled_agenda_count = canceled_agenda.count()
 
-    request_agenda_list = RequestAgenda.objects.all().filter(user=request.user.id)
+    request_agenda_list = RequestAgenda.objects.all()
+    request_agenda_list_user = request_agenda_list.filter(user=request.user.id)
     request_waitting = request_agenda_list.filter(is_approve="False")
     request_approved = request_agenda_list.filter(is_approve="True")
 
@@ -73,6 +74,7 @@ def menu_home(request):
                 request_agenda_list=request_agenda_list,
                 request_waitting=request_waitting,
                 request_approved=request_approved,
+                request_agenda_list_user=request_agenda_list_user,
 
                 informative_list=informative_list,
                 informative_count=informative_count,

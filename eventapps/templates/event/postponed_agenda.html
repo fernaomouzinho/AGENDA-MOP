@@ -58,7 +58,7 @@
                                         <tr>
                                             <th rowspan="2" class="text-center align-middle">NU.</th>
                                             <th rowspan="2" class="align-middle">AGENDA</th>
-                                            <th rowspan="2" class="text-center align-middle">ATTENDANT</th>
+
                                             <th colspan="2" class="text-center">PREVIOUS</th>
                                             <th colspan="2" class="text-center">POSTPONE</th>
                                             <th colspan="2" class="text-center align-middle">LOCATION</th>
@@ -78,7 +78,7 @@
                                         <tr>
                                             <td data-title="Nu." class="text-center">{{ forloop.counter }}</td>
                                             <td data-title="Title">{{ obj.title }}</td>
-                                            <td>{{ obj.attendence }}</td>
+                                          
                                             <td style="font-size:13px;color:rgb(248, 10, 10)">
                                                 {{obj.start_time.date|date:"d/m/Y"}}, {{obj.start_time.time}}</td>
                                             <td style="font-size:13px;color:rgb(248, 10, 10)">
