@@ -116,7 +116,7 @@
                                 href="{% url 'requestedagenda_add' %}" role="button">
                                 Create Agenda</a>
                         </button>
-                        {% elif user.groups.all.0.name == 'secretaria' %}
+                        {% elif user.groups.all.0.name == 'secretary' %}
                         <button type="button" class="btn btn-light border border-primary ml-2">
                             <span class="fa fa-plus"></span><a class="text-primary"
                                 href="{% url 'requestedagenda_add' %}" role="button">
