@@ -10,23 +10,21 @@
                 <div class="row mr-1 mt-1">
                     <div class="col-sm-6 pb-1">
                         {% if user.is_authenticated %}
-                        {% if user.groups.all.0.name == 'admin' %}
                         <button type="button" class="btn btn-light border border-primary">
                             <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'agenda_add' %}"
                                 role="button">
                                 Create Agenda</a>
                         </button>
+
+                        {% if user.groups.all.0.name == 'admin' %}
+
                         {% elif user.groups.all.0.name == 'secretaria' %}
-                        <button type="button" class="btn btn-light border border-primary ml-2">
-                            <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'agenda_add' %}"
-                                role="button">
-                                Create Agenda</a>
-                        </button>
 
                         {% endif %}
                         {% endif %}
 
                     </div>
+
                     <div class="col-sm-6">
                         <div class="row flex-row-reverse">
                             <div class="btn-group">
@@ -39,6 +37,7 @@
                             </div>
                         </div>
                     </div>
+
 
                 </div>
 

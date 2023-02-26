@@ -4,105 +4,192 @@
 <div class="row d-flex justify-content-center ">
 
     <div class="col-sm-3">
-        <div class="border-info shadow-lg bg-white">
+        {% if user.is_authenticated %}
 
-            <div class="card-body">
+        <div class="col-sm-12">
+            <div class="border-info shadow-lg bg-white">
 
+                <div class="card-body">
 
-
-
-
-                <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
-                    <div class="row flex-row">
-                        <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Satatus of Requested
-                            Agenda</h5>
-                    </div>
-
-                </div>
-                <hr>
-
-                <div id="accordion">
-                    <div class="card mb-2">
-                        <div class="card-header " id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                    aria-expanded="true" aria-controls="collapseOne">
-                                    <i class="fa fa-list pr-2" style="font-size:18px;"></i>
-                                    Agenda Approved
-                                    {% if request_approved.count > 0%}
-                                    (<b>{{request_approved.count}}</b>)
-                                    {% else %}
-                                    (<b>0</b>)
-                                    {% endif %}
-
-                                    <i class="fa fa-chevron-down pl-1" style="font-size:14px"></i>
-                                </button>
-                            </h5>
+                    <div class="card-header bg-card pb-2  d-flex justify-content-between">
+                        <div class="row flex-row">
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Status of
+                                Requested
+                                Agenda</h5>
                         </div>
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                            data-parent="#accordion">
-                            <div class="card-body">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                style="font-size:20px"></i> All (<b>0</b>)</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                style="font-size:20px"></i> Upcomming
-                                            (<b>0</b>)</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                style="font-size:20px"></i> Running
-                                            (<b>0</b>)</a>
-                                    </li>
+                    </div>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                style="font-size:20px"></i> Canceled
-                                            (<b>0</b>)</a>
-                                    </li>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header " id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">
+                                        <i class="fa fa-list pr-2" style="font-size:18px;"></i>
+                                        Agenda Approved
+                                        {% if request_approved.count > 0%}
+                                        (<b>{{request_approved.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
 
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                style="font-size:20px"></i> Done
-                                            (<b>0</b>)</a>
-                                    </li>
+                                        <i class="fa fa-chevron-down pl-1" style="font-size:14px"></i>
+                                    </button>
+                                </h5>
+                            </div>
 
-                                </ul>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                    style="font-size:20px"></i> All (<b>0</b>)</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                    style="font-size:20px"></i> Upcomming
+                                                (<b>0</b>)</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                    style="font-size:20px"></i> Running
+                                                (<b>0</b>)</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                    style="font-size:20px"></i> Canceled
+                                                (<b>0</b>)</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                    style="font-size:20px"></i> Done
+                                                (<b>0</b>)</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header" id="headingTwo">
-                            <h5 class="mb-0">
-                                <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
-                                    aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                        style="font-size:18px;"></i>
-                                    Waitting List
-                                    {% if request_waitting.count > 0%}
-                                    (<b>{{request_waitting.count}}</b>)
-                                    {% else %}
-                                    (<b>0</b>)
-                                    {% endif %}
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
 
-                                </a>
+                                    </a>
 
-                            </h5>
+                                </h5>
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
 
-            </div> <!--end card-body-->
         </div>
-        <!--end col-->
 
+
+        {% if user.groups.all.0.name == "admin" or user.groups.all.0.name == "gp_dei" or user.groups.all.0.name == "gp_adj" %}
+        <div class="col-sm-12">
+            <div class="border-info shadow-lg bg-white">
+                <div class="card-body">
+                    <div class="card-header bg-card mt-2 d-flex justify-content-between">
+                        <div class="row flex-row">
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Coordinator
+                                request agenda
+                            </h5>
+                        </div>
+
+                    </div>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UGA-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UAP-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UCVQ-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UEDC-Waitting List
+                                        {% if request_waitting.count > 0%}
+                                        (<b>{{request_waitting.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                    </a>
+                                </h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+        </div>
+        {% endif %}
+        {% endif %}
     </div>
+
+
+
     <div class="col-sm-9">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} p-2 fade show">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ message }}
+      </div>
+
+
+      {% endfor %}
+      {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
@@ -110,18 +197,15 @@
                 <div class="row mr-1 mt-1">
                     <div class="col-sm-6 pb-1">
                         {% if user.is_authenticated %}
-                        {% if user.groups.all.0.name == 'admin' %}
                         <button type="button" class="btn btn-light border border-primary">
                             <span class="fa fa-plus"></span><a class="text-primary"
                                 href="{% url 'requestedagenda_add' %}" role="button">
                                 Create Agenda</a>
                         </button>
+
+                        {% if user.groups.all.0.name == 'admin' %}
+
                         {% elif user.groups.all.0.name == 'secretary' %}
-                        <button type="button" class="btn btn-light border border-primary ml-2">
-                            <span class="fa fa-plus"></span><a class="text-primary"
-                                href="{% url 'requestedagenda_add' %}" role="button">
-                                Create Agenda</a>
-                        </button>
 
                         {% endif %}
                         {% endif %}
@@ -146,8 +230,9 @@
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
                     <div class="row flex-row">
-                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> List of Reqeuest
-                            Agenda</h5>
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> List of requests
+                            for
+                            agenda</h5>
                     </div>
 
                 </div>
@@ -160,6 +245,7 @@
                                 <th>AGENDA REQUESTED</th>
                                 <th class="text-center">DATE REQUESTED</th>
                                 <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,6 +267,19 @@
                                     Waitting
                                     {% endif %}
                                 </td>
+                                <td class="text-center">
+                                <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
+                                    class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                        style='font-size:20px'></i> Edit</a>
+
+                                        |
+                                    <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Delete" class="btn btn-sm btn-danger"
+                                        onclick="return confirm(' Are you ready to delete?')"><i
+                                            class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                </td>
+
+
 
                             </tr>
                             {% endfor %}
@@ -194,6 +293,7 @@
     </div>
     <!--end col-->
 </div>
+
 <!--end row-->
 
 {% endblock %}

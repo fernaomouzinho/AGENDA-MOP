@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Agenda, HistAgenda, Informative, CommentInformative
+from .models import Agenda, RequestAgenda, HistAgenda, Informative, CommentInformative
 from .form import AgendaForm, PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
 from django.contrib.auth.models import User
 from eventapps.authentication.models import User
@@ -425,8 +425,8 @@ def commentRuAgenda_add(request, pk):
         }
     return render(request, 'event/comment_agenda_add.html', context)
 
-# ======================================== List Request Agenda ================================================================
 
+# ======================================== List Request Agenda ================================================================
 
 @login_required(login_url="/login/")
 def requestedagenda_list(request):
@@ -434,9 +434,9 @@ def requestedagenda_list(request):
     context = {
     }
     return render(request, 'event/request_list.html', context)
+
+
 # ============================================= Request Agenda Add ================================================================
-
-
 @login_required(login_url='login')
 def requestedagenda_add(request):
     if not request.user.is_authenticated:
@@ -463,7 +463,47 @@ def requestedagenda_add(request):
         }
     return render(request, 'event/request_add.html', context)
 
-# ======================================== List Request Agenda ================================================================
+
+# ============================================= Requeste Agenda Edit ================================================================
+
+@login_required(login_url='login')
+def requestedagenda_edit(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == "POST":
+        single_requestedagenda = RequestAgenda.objects.get(pk=pk)
+        requestedagendaform = RequestedAgendaForm(
+            request.POST, request.FILES, instance=single_requestedagenda)
+        if requestedagendaform.is_valid():
+            requestedagendaform.save()
+        messages.success(request, ("Date is updated"))
+        return redirect('requestedagenda_list')
+
+    else:
+        userprofile = User.objects.get(id=request.user.id)
+        single_requestedagenda = RequestAgenda.objects.get(pk=pk)
+        requestedagendaform = RequestedAgendaForm(
+            instance=single_requestedagenda)
+
+        context = {
+            'userprofile': userprofile,
+            'single_requestedagenda': single_requestedagenda,
+            'requestedagendaform': requestedagendaform,
+        }
+        return render(request, 'event/request_edit.html', context)
+
+# ======================================== Delete Requesting Agenda ================================================================
+
+
+@login_required(login_url='login')
+def requestedagenda_delete(request, pk):
+    single_requestedagenda = RequestAgenda.objects.get(id=pk)
+    single_requestedagenda.delete()
+    messages.success(request, ("Delete successfully"))
+    return redirect('requestedagenda_list')
+
+# ======================================== Waitting Requesting Agenda ================================================================
 
 
 @login_required(login_url="/login/")
@@ -472,6 +512,8 @@ def waitting_requestedagenda_list(request):
     context = {
     }
     return render(request, 'event/request_waitting_list.html', context)
+
+
 # ======================================== List All Informative ================================================================
 
 

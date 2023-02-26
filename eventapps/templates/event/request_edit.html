@@ -1,0 +1,49 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row d-flex justify-content-center">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="card-body">
+                        <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                            <div class="row flex-row">
+                                <h5 class="text-light"><i class='fa fa-edit' style='font-size:20px'></i> Edit request
+                                    for agenda
+                                </h5>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                {{requestedagendaform | crispy}}
+                                {{requestedagendaform.media | safe}}
+                                <button type="submit" class="btn btn-primary pull-right ml-2">Submit</button>
+                                <button class="btn btn-danger text-white pull-right"><a href="{%url 'agenda_list' %}"
+                                        class="text-white text-decoration-none">Cancel</button>
+                            </div>
+
+                        </form>
+                        <div>
+                        </div>
+                    </div> <!--end card-body-->
+                </div>
+                <!--end col-->
+            </div>
+
+
+            <!--end row-->
+
+            <!--end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}
