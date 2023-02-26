@@ -6,37 +6,40 @@
         <div class="border-info shadow-lg bg-white">
             <div class="card-body">
 
-              <div class="row mr-1 mt-1">
-                <div class="col-sm-6 pb-1">
-                  {% if user.is_authenticated %}
-                  {% if user.groups.all.0.name == 'admin' %}
-                  <button type="button" class="btn btn-light border border-primary">
-                      <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
-                          role="button">
-                          Add Informative Note</a>
-                  </button>
-                  {% elif user.groups.all.0.name == 'secretaria' %}
-                  <button type="button" class="btn btn-light border border-primary ml-2">
-                      <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
-                          role="button">
-                            Add Informative Note</a>
-                  </button>
+                <div class="row mr-1 mt-1">
+                    <div class="col-sm-6 pb-1">
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name == 'admin' %}
+                        <button type="button" class="btn btn-light border border-primary">
+                            <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
+                                role="button">
+                                Add Informative Note</a>
+                        </button>
+                        {% elif user.groups.all.0.name == 'secretaria' %}
+                        <button type="button" class="btn btn-light border border-primary ml-2">
+                            <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
+                                role="button">
+                                Add Informative Note</a>
+                        </button>
 
-                  {% endif %}
-                  {% endif %}
+                        {% endif %}
+                        {% endif %}
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row flex-row-reverse">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-print"> Print</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-excel-o"> Exel</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-pdf-o"></span> PDF</button>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                <div class="col-sm-6">
-                  <div class="row flex-row-reverse">
-                  <div class="btn-group">
-                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
-                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
-                  <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
-                </div>
-                </div>
-                </div>
-
-              </div>
 
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
                     <div class="row flex-row">
@@ -45,32 +48,49 @@
                 </div>
                 <hr>
                 <section id='no-more-tables'>
-                    <table class="table table-sm" id="example" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>NU.</th>
+                                <th class="text-center">NU.</th>
                                 <th>TITLE</th>
+                                <th class="text-center">DATE CREATED</th>
+                                <th class="text-center">STATUS</th>
                                 <th class="d-flex justify-content-center">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for obj in informative_list %}
                             <tr>
-                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td class="text-center">{{ forloop.counter }}</td>
                                 <td data-title="Title">
-                                    <a href="{% url 'concludedInformative_list_detail' title_slug=obj.title_slug %}"
+                                    <a href="{% url 'executedInformative_list_detail' title_slug=obj.title_slug %}"
                                         class="float-left">
                                         {{obj.title }}</a>
                                 </td>
 
+                                <td class="text-center">
+                                    {{obj.created_at|date:"d/m/Y G:i" }}
+                                </td>
+
+                                <td class="text-center">
+
+                                    {% if obj.is_done %}
+                                    Executed
+                                    {% else %}
+                                    Unexecuted
+                                    {% endif %}
+
+                                </td>
+
+
                                 <td data-title="End Time" class="d-flex justify-content-center">
                                     <a href="{% url 'informative_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
                                         class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                            style='font-size:20px'></i>Edit</a> |
+                                            style='font-size:20px'></i> Edit</a> |
                                     <a href="{% url 'informative_delete' pk=obj.id %}" data-toggle="tooltip"
                                         title="Delete" class="btn btn-sm btn-danger"
                                         onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
-                                            style='font-size:20px'></i>Delete</a>
+                                            style='font-size:20px'></i> Delete</a>
                                 </td>
                             </tr>
                             {% endfor %}

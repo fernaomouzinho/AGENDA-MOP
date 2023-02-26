@@ -3,7 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from eventapps.institute.models import Institution, Attendence
-from django.contrib.auth.models import User
+from eventapps.authentication.models import User
+
 
 import datetime
 from django.template.defaultfilters import slugify
@@ -29,15 +30,13 @@ class Agenda(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="agenda")
     title = models.CharField(
-        max_length=200, unique=True, verbose_name='Agenda')
+        max_length=255, unique=True, verbose_name='Agenda')
     title_slug = models.SlugField(
         max_length=255, null=False, unique=True, verbose_name='Title-Slug')
     catagenda = models.ForeignKey(
         CatAgenda, on_delete=models.CASCADE, related_name="agenda", verbose_name="Category Agenda")
     institution = models.ForeignKey(
         Institution, on_delete=models.CASCADE, related_name="agenda", verbose_name="Institution")
-    attendence = models.ForeignKey(
-        Attendence, on_delete=models.CASCADE, related_name="agenda", verbose_name='Attendant')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255, null=False, blank=True)
@@ -79,8 +78,6 @@ class HistAgenda(models.Model):
         max_length=255, null=False, unique=True, verbose_name='Title-Slug')
     institution = models.ForeignKey(
         Institution, on_delete=models.CASCADE, related_name="histagenda", verbose_name="Institution")
-    attendence = models.ForeignKey(
-        Attendence, on_delete=models.CASCADE, related_name="histagenda", verbose_name='Attendant')
     start_time = models.DateTimeField(null=True)
     start_time_new = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True)
@@ -115,6 +112,31 @@ class HistAgenda(models.Model):
         return super(HistAgenda, self).save(*args, **kwargs)
 
 
+class RequestAgenda(models.Model):
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="requestagenda")
+    title = models.CharField(
+        max_length=255, unique=True, verbose_name='Request Agenda:')
+    title_slug = models.SlugField(
+        max_length=255, null=False, unique=True, verbose_name='Title-Slug')
+    is_approve = models.BooleanField(default=False)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # managed = False
+        verbose_name_plural = ("Request Agenda")
+
+    def get_absolute_url(self):
+        return reverse("Title", kwargs={"title_slug": self.title_slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.title_slug:
+            self.title_slug = slugify(self.title)
+        return super(RequestAgenda, self).save(*args, **kwargs)
+
+
 class Yearagenda(models.Model):
     YEAR_CHOICES = [(r, r) for r in range(2022, datetime.date.today().year+1)]
     year = models.IntegerField(
@@ -140,6 +162,7 @@ class Informative(models.Model):
         max_length=255, null=False, unique=True, verbose_name='Title-Slug')
     is_active = models.BooleanField(default=True)
     is_done = models.BooleanField(default=False)
+    is_comment = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -161,9 +184,14 @@ class Informative(models.Model):
 
 
 class CommentInformative(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="commentInformative")
     informative = models.ForeignKey(
         Informative, on_delete=models.CASCADE, related_name='commentinformative')
-    comment = models.TextField(verbose_name="Add New Comment")
+    problems = models.TextField(
+        null=False, blank=True, verbose_name="Problems:")
+    results = models.TextField(
+        null=False, blank=True, verbose_name="Results:")
     created_on = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
@@ -171,4 +199,4 @@ class CommentInformative(models.Model):
         ordering = ['created_on']
 
     def __str__(self):
-        return self.comment[:60]
+        return self.results[:60]

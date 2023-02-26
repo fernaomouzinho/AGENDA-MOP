@@ -1,0 +1,163 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+            <div class="card-body">
+                <hr />
+
+                <div class="row">
+
+                    <div class="col-md-6 col-lg-2 pt-4">
+
+                        <div class="col-md-6 col-lg-12">
+                            <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                                <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-primary"
+                                    style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                                <div class="pl-2">
+                                    <a href="{%url 'completedInformative_list' %}">
+                                        <h5>ALL</h5>
+                                        <p><b>{{ informative_count }}</b></p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 col-lg-12 pb-4 pt-4">
+                            <div class="widget-small border border-info d-flex justify-content-left p-2">
+                                <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-info"
+                                    style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                                <div class="pl-2">
+                                    <a href="{%url 'executedInformative_list' %}">
+                                        <h5>EXECUTED</h5>
+                                        <p><b>{{ executed_informative_count }}</b></p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 col-lg-12">
+                            <div class="widget-small border border-danger d-flex justify-content-left p-2">
+                                <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-danger"
+                                    style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                                <div class="pl-2">
+                                    <a href="{%url 'unexecutedInformative_list' %}">
+                                        <h5>UNEXECUTED</h5>
+                                        <p><b>{{ unexecuted_informative_count }}</b></p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-6 col-lg-10 pt-1">
+                        <div class="row">
+                            <div class="card-body">
+                                <div class="row flex-row-reverse mr-1 mt-1 mb-2">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light border border-info"><span
+                                                class="fa fa-print">
+                                                Print</button>
+                                        <button type="button" class="btn btn-light border border-info"><span
+                                                class="fa fa-file-excel-o">
+                                                Exel</button>
+                                        <button type="button" class="btn btn-light border border-info"><span
+                                                class="fa fa-file-pdf-o"></span>
+                                            PDF</button>
+                                    </div>
+                                </div>
+                                <div class="card-header bg-card pb-2 d-flex justify-content-between">
+                                    <div class="row flex-row">
+                                        <h5 class="text-light"><i class="fa fa-list" style="font-size:18px;"></i>
+                                            List of executed informative notes</h5>
+                                    </div>
+
+
+                                </div>
+
+                                <section id='no-more-tables' class="pt-4">
+                                    <table class="table table-bordered table-sm pt-4" id="example" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NU.</th>
+                                                <th>TITLE</th>
+                                                <th class="text-center">DATE CREATED</th>
+                                                <th class="text-center">DATE EXECUTED</th>
+                                                <th class="text-center">OBSERVATION</th>
+                                                <th style="text-align:center;">COMMENT</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in executed_informative %}
+                                            <tr>
+                                                <td class="text-center">{{ forloop.counter }}</td>
+                                                <td data-title="Title">
+                                                    <a href="{% url 'executedInformative_list_detail' title_slug=obj.title_slug %}"
+                                                        class="float-left">
+                                                        {{obj.title }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{obj.created_at|date:"d/m/Y G:i" }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{obj.updated_at|date:"d/m/Y G:i" }}
+                                                </td>
+
+                                                {% if obj.is_comment == True %}
+                                                <td class="text-center">
+                                                    <i class="fa fa-check-square-o" style="font-size:18px"></i>
+                                                </td>
+                                                <td data-title="Title" style="text-align:center;">
+                                                  <button type="button" class="btn btn-warning btn-sm ml-2">
+                                                    <a href="{% url 'commentExInformative_edit' pk=obj.pk %}" data-toggle="tooltip" title="Edit"><i
+                                                        class='fa fa-edit' style='font-size:20px'></i>
+                                                      Edit</a>
+                                                  </button>
+                                                  </td>
+                                                  {% else %}
+                                                  <td class="text-center">
+                                                      <i class="fa fa-square-o" style="font-size:18px"></i>
+                                                  </td>
+                                                    <td data-title="Title" style="text-align:center;">
+                                                  <button type="button" class="btn btn-primary btn-sm ml-2">
+                                                    <span class="fa fa-plus"></span><a class="text-white"
+                                                      href="{% url 'commentExInformative_add' pk=obj.pk %}" role="button">
+                                                      Add</a></button>
+
+                                                </td>
+                                                {% endif %}
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </section>
+                            </div> <!--end card-body-->
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <!--end card-body-->
+            </div>
+            <!--end card-->
+        </div>
+        <!--end col-->
+    </div>
+    <!--end row-->
+
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+    {% endblock %}

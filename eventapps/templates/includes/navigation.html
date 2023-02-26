@@ -10,7 +10,7 @@
         {% if user.is_authenticated %}
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
-
+                {% if pending_upcoming.count != 0 %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'upcomingAgenda_read' %}">
                         <i class='fa fa-bell' style='font-size:20px; color:rgb(255, 187, 0)'></i>
                         {% if pending_upcoming.count != 0 %}
@@ -18,6 +18,13 @@
                         {% endif %}
                     </a>
                 </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-bell' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                    </a>
+                </li>
+                {% endif %}
+
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">DASHBOARD <i
                             class="fa fa-home"></i></a>
                 </li>
@@ -39,6 +46,14 @@
                         <a class="dropdown-item" href="{% url 'informative_list' %}"><i class="fa fa-calendar"
                                 aria-hidden="true"></i> Informative
                             Note</a>
+
+                        <a class="dropdown-item" href="{% url 'requestedagenda_list' %}"><i class="fa fa-calendar"
+                                aria-hidden="true"></i>
+                            Request Agenda</a>
+
+                        <a class="dropdown-item" href="{% url 'requestedagenda_list' %}"><i class="fa fa-calendar"
+                                aria-hidden="true"></i>
+                            Requested Agenda</a>
                     </div>
                 </li>
 
@@ -68,6 +83,10 @@
                                 aria-hidden="true"></i>
                             Informative
                             Note</a>
+
+                        <a class="dropdown-item" href="{% url 'requestagenda_list' %}"><i class="fa fa-calendar"
+                                aria-hidden="true"></i>
+                            Request Agenda</a>
                     </div>
                 </li>
 

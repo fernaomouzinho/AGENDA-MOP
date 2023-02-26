@@ -189,8 +189,6 @@
               </div>
             </div> <!--end card-->
           </div> <!--end col-->
-
-
           <div class="col-sm-12">
             <div class="card border-info shadow-lg rounded">
               <div class="card-header bg-card">
@@ -199,14 +197,27 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-6 col-lg-3">
-                    <div class="col-md-6 col-lg-12 pb-4">
+                    <div class="col-md-6 col-lg-12">
+                      <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                        <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-primary"
+                          style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                        <div class="pl-2">
+                          <a href="{%url 'completedInformative_list' %}">
+                            <h5>ALL</h5>
+                            <p><b>{{ informative_count }}</b></p>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-12 pb-4 pt-4">
                       <div class="widget-small border border-info d-flex justify-content-left p-2">
                         <i class="icon fa fa fa-calendar fa-2x pl-2 pr-2 bg-info"
                           style="font-size:38px;color:rgb(255, 255, 255)"></i>
                         <div class="pl-2">
-                          <a href="{%url 'concludedInformative_list' %}">
+                          <a href="{%url 'executedInformative_list' %}">
                             <h5>EXECUTED</h5>
-                            <p><b>{{ concluded_informative_count }}</b></p>
+                            <p><b>{{ executed_informative_count }}</b></p>
                           </a>
                         </div>
                       </div>
@@ -239,38 +250,49 @@
                           <table class="table table-bordered table-sm" id="example2" width="100%" cellspacing="0">
                             <thead>
                               <tr>
-                                <th>NU.</th>
-                                <th>AGENDA</th>
-                                <th style="text-align:center;">STATUS</th>
-                                <th style="text-align:center;">#</th>
-                                <th style="text-align:center;">COMMENT</th>
+                                <th class="text-center">NU.</th>
+                                <th>TITLE</th>
+                                <th class="text-center">DATE CREATED</th>
+                                <th class="text-center">TIME PASSED</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">EXECUTE</th>
+
                               </tr>
                             </thead>
                             <tbody>
                               {% for obj in informative_list %}
+
                               <tr>
                                 {% if obj.is_done == False %}
-                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td class="text-center">{{ forloop.counter }}</td>
                                 <td data-title="Title">
+                                  <a href="{% url 'executedInformative_list_detail' title_slug=obj.title_slug %}">
+                                        {{obj.title }}</a>
+                                </td>
 
-                                  <a href="{% url 'concludedInformative_list_detail' title_slug=obj.title_slug  %}"
-                                    role="button">
-                                    {{obj.title }}</a>
+                                <td class="text-center">
+                                    {{obj.created_at|date:"d/m/Y G:i" }}
                                 </td>
-                                <td data-title="end time" style="text-align:center;">
-                                  <button style="font-size:14px;" class="bg-danger text-white border w-100">Unexecuted
+                                <td class='text-center'>
+                                  {% with ah=current_datetime|sub:obj.created_at  %}
+                                    {{ah}}
+                                  {% endwith %}
+                                </td>
+
+                                <td class="text-center">
+                                  <button style="font-size:14px;" class="bg-danger text-white border">Unexecuted
                                   </button>
-                                </td>
-                                <td data-title="end time" style="text-align:center;">
-                                  <i class="fa fa-square-o" style="font-size:18px"></i>
                                 </td>
 
                                 <td data-title="Title" style="text-align:center;">
-                                  <button type="button" class="btn btn-primary btn-sm ml-2">
-                                    <span class="fa fa-plus"></span><a class="text-white"
-                                      href="{% url 'commentinformative_add' pk=obj.pk %}" role="button">
-                                      Add</a>
+                                  <button type="button" class="btn btn-success btn-sm ml-2">
+                                    <span class="	fa fa-thumbs-o-up"></span><a class="text-white"
+                                      href="{% url 'executeInformative_change' pk=obj.pk %}" role="button">
+                                      OK</a>
                                 </td>
+
+
+
                                 {% endif %}
                               </tr>
                               {% endfor %}

@@ -2,40 +2,58 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+
 <div class="row d-flex justify-content-center ">
     <div class="col-sm-12">
-        <div class="border-info shadow-lg bg-white">
+        <div class=" shadow-lg bg-white">
             <div class="card-body">
 
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class=" shadow-lg rounded">
+                            <div class="card-header bg-card">
+                                <i class="icon fa fa-calendar" style="font-size:24px" ;> EDIT INFORMATIVE NOTE
+                                </i>
+                            </div>
                             <div class="card-body">
+                                <div class="row">
 
-                                <h3 class="text-black"> {{ single_informative.title }}</h3>
+                                    <div class="col-md-12 col-lg-12">
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <form method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-sm-7 col-lg-7 pt-4 pb-4"
+                                                            style="background-color:rgb(237, 246, 247)">
+                                                            <h6>Title Note :</h6>
 
-                                <!-- COMMENT 1 - END -->
+                                                            <p> {{ single_informative.title }}</p>
+                                                            <hr />
+                                                            {{commentinformativeform | crispy}}
+                                                            {{commentinformativeform.media | safe}}
+                                                            <button type="submit"
+                                                                class="btn btn-primary pull-right ml-2">Submit</button>
+                                                            <button class="btn btn-danger text-white pull-right"><a
+                                                                    href="{%url 'executedInformative_list' %}"
+                                                                    class="text-white text-decoration-none">Cancel</button>
+                                                        </div>
+                                                    </div>
 
 
-                                <form method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-sm-12 col-lg-12">
-                                            {{commentinformativeform | crispy}}
-                                            {{commentinformativeform.media | safe}}
+                                                </form>
+
+                                            </div> <!--end card-body-->
                                         </div>
+                                        <!--end col-->
                                     </div>
-                                    <button type="submit" class="btn btn-primary pull-right ml-2">Submit</button>
-                                    <button class="btn btn-danger text-white pull-right"><a
-                                            href="{%url 'concludedInformative_list' %}"
-                                            class="text-white text-decoration-none">Cancel</button>
-
-                                </form>
-                            </div> <!--end card-body-->
-                        </div>
-                        <!--end col-->
+                                </div> <!--end card-body-->
+                            </div>
+                        </div> <!--end card-->
                     </div>
-                    <!--end row-->
+
+
                 </div>
                 <!--end card-body-->
             </div>
@@ -43,13 +61,13 @@
         </div>
         <!--end col-->
     </div>
-    <!--end row-->
+</div>
 
-    {% endblock %}
-    {% block scripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#example').DataTable();
-        });
-    </script>
-    {% endblock %}
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+{% endblock %}

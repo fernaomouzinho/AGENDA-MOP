@@ -1,0 +1,190 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+
+    <div class="col-sm-3">
+        <div class="border-info shadow-lg bg-white">
+
+            <div class="card-body">
+
+
+
+
+
+                <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
+                    <div class="row flex-row">
+                        <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Satatus of Requested
+                            Agenda</h5>
+                    </div>
+
+                </div>
+                <hr>
+
+                <div id="accordion">
+                    <div class="card mb-2">
+                        <div class="card-header " id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    <i class="fa fa-list pr-2" style="font-size:18px;"></i>
+                                    Agenda Approved
+                                    {% if request_approved.count > 0%}
+                                    (<b>{{request_approved.count}}</b>)
+                                    {% else %}
+                                    (<b>0</b>)
+                                    {% endif %}
+
+                                    <i class="fa fa-chevron-down pl-1" style="font-size:14px"></i>
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                style="font-size:20px"></i> All (<b>0</b>)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                style="font-size:20px"></i> Upcomming
+                                            (<b>0</b>)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                style="font-size:20px"></i> Running
+                                            (<b>0</b>)</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                style="font-size:20px"></i> Canceled
+                                            (<b>0</b>)</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
+                                                style="font-size:20px"></i> Done
+                                            (<b>0</b>)</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                    aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                        style="font-size:18px;"></i>
+                                    Waitting List
+                                    {% if request_waitting.count > 0%}
+                                    (<b>{{request_waitting.count}}</b>)
+                                    {% else %}
+                                    (<b>0</b>)
+                                    {% endif %}
+
+                                </button>
+                            </h5>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div> <!--end card-body-->
+        </div>
+        <!--end col-->
+
+    </div>
+
+    <div class="col-sm-9">
+        <div class="border-info shadow-lg bg-white">
+
+            <div class="card-body">
+
+                <div class="row mr-1 mt-1">
+
+                    <div class="col-sm-12">
+                        <div class="row flex-row-reverse">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-print">
+                                        Print</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-excel-o"> Exel</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-pdf-o"></span> PDF</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
+                    <div class="row flex-row">
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> List waitting approve
+                            reqeuest
+                            Agenda</h5>
+                    </div>
+
+                </div>
+                <hr>
+                <section id='no-more-tables'>
+                    <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NU.</th>
+                                <th>AGENDA REQUESTED</th>
+                                <th class="text-center">DATE REQUESTED</th>
+                                <th class="text-center">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in request_agenda_list %}
+                            <tr>
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                    {{obj.title }}
+                                </td>
+
+                                <td class="text-center">
+                                    {{obj.requested_at|date:"d/m/Y G:i" }}
+                                </td>
+
+                                <td class="text-center">
+                                    {% if obj.approve == True %}
+                                    Approved
+                                    {% else %}
+                                    Waitting
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div> <!--end card-body-->
+        </div>
+        <!--end col-->
+
+    </div>
+
+
+
+    {% endblock %}
+
+    {% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+    {% endblock %}

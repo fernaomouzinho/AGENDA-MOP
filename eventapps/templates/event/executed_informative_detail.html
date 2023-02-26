@@ -1,0 +1,102 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12">
+        <div class="border-info shadow-lg bg-white">
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="card border-info shadow-lg rounded">
+                            <div class="card-header bg-card">
+                                <i class="icon fa fa-calendar" style="font-size:24px" ;> DETAIL INFORMATIVE NOTE </i>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-12 col-lg-12">
+                                        <div class="row">
+                                            <div class="card-body">
+
+                                                <section id='no-more-tables' class="pt-3">
+
+                                                    <table class="table table-bordered table-sm" id="example2"
+                                                        width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:120px">TITLE NOTE</th>
+                                                                <th style="width:2px" class="text-center align-middle">:
+                                                                </th>
+                                                                <th class="w-85 align-middle">
+                                                                    {{single_informative.title | safe}}</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width:130px">DATE CREATED</th>
+                                                                <th style="width:2px" class="text-center align-middle">:
+                                                                </th>
+                                                                <th class="w-85 align-middle">
+                                                                    {{single_informative.created_at|date:"d/m/Y G:i"}}
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+
+
+                                                    </table>
+                                                    <table class="table table-bordered table-sm" id="example2"
+                                                        width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:150px">DATE EXECUTED</th>
+                                                                <th class="text-center">PROBLEMS</th>
+                                                                <th class="text-center">RESULTS</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {% for obj in multiple_comment%}
+
+                                                            <tr>
+                                                                <td>
+                                                                    {{obj.created_on|date:"d/m/Y G:i" }}
+                                                                </td>
+                                                                <td data-title="Title">
+                                                                    {{obj.problems }}
+                                                                </td>
+                                                                <td data-title="Title">
+                                                                    {{obj.results }}
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </section>
+
+                                                <button class="btn btn-danger text-white pull-right">
+                                                    <a href="{%url 'executedInformative_list' %}"
+                                                        class="text-white text-decoration-none">Back</a></button>
+                                            </div> <!--end card-body-->
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                </div> <!--end card-body-->
+                            </div>
+                        </div> <!--end card-->
+                    </div>
+
+
+                </div>
+                <!--end card-body-->
+            </div>
+            <!--end card-->
+        </div>
+        <!--end col-->
+    </div>
+</div>
+<!--end row-->
+
+{% endblock %}

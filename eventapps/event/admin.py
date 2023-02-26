@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import CatAgenda, Agenda, HistAgenda, Yearagenda, Informative, CommentInformative
+from .models import CatAgenda, Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
 
 
 class CatAgendaAdmin(admin.ModelAdmin):
@@ -34,6 +34,14 @@ class YearAgendaAdmin(admin.ModelAdmin):
 admin.site.register(Yearagenda, YearAgendaAdmin)
 
 
+class RequestedAgendaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'title', 'requested_at', 'is_approve']
+    prepopulated_fields = {"title": ("title_slug",)}  # new
+
+
+admin.site.register(RequestAgenda, RequestedAgendaAdmin)
+
+
 class InformativeAdmin(admin.ModelAdmin):
     list_display = ['id',  'title']
     prepopulated_fields = {"title": ("title_slug",)}  # new
@@ -43,7 +51,8 @@ admin.site.register(Informative, InformativeAdmin)
 
 
 class CommentInformativeAdmin(admin.ModelAdmin):
-    list_display = ['id',  'informative', 'comment', 'created_on', 'is_active']
+    list_display = ['id',  'informative', 'problems',
+                    'results', 'created_on', 'is_active']
 
 
 admin.site.register(CommentInformative, CommentInformativeAdmin)

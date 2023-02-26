@@ -1,4 +1,4 @@
-from eventapps.event.models import Agenda,HistAgenda, Yearagenda, Informative
+from eventapps.event.models import Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
 from eventapps.institute.models import Institution, Attendence
 from datetime import datetime
 from django.db.models import Count
@@ -9,33 +9,46 @@ def menu_home(request):
     attendence_list = Attendence.objects.all()
 
     agenda_list = Agenda.objects.filter(is_active=True, status='Read')
-    histori_agenda_list=HistAgenda.objects.filter(is_active=True)
+    histori_agenda_list = HistAgenda.objects.filter(is_active=True)
     agenda_list_home = agenda_list.order_by('is_cancel', '-start_time')
     agenda_count = agenda_list.count()
     all_year = Yearagenda.objects.filter(is_active=True)
-    count_agenda_in_year = agenda_list.values('start_time__year').order_by('start_time__year').annotate(count=Count('start_time__year'))
+    count_agenda_in_year = agenda_list.values('start_time__year').order_by(
+        'start_time__year').annotate(count=Count('start_time__year'))
 
-    concluded_agenda = Agenda.objects.filter(is_active=True,status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")
-    concluded_agenda_count=concluded_agenda.count()
+    concluded_agenda = Agenda.objects.filter(
+        is_active=True, status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")
+    concluded_agenda_count = concluded_agenda.count()
 
-    running_agenda = Agenda.objects.filter(is_active=True, status='Read', start_time__lte=datetime.now(), end_time__gte=datetime.now()).order_by("start_time")
+    running_agenda = Agenda.objects.filter(is_active=True, status='Read', start_time__lte=datetime.now(
+    ), end_time__gte=datetime.now()).order_by("start_time")
     running_agenda_count = running_agenda.count()
 
-    upcoming_agenda = Agenda.objects.filter(is_active=True, is_cancel=False, status='Read', start_time__gte=datetime.now()).order_by("start_time")
+    upcoming_agenda = Agenda.objects.filter(
+        is_active=True, is_cancel=False, status='Read', start_time__gte=datetime.now()).order_by("start_time")
     upcoming_agenda_count = upcoming_agenda.count()
-    pending_upcoming = Agenda.objects.filter(is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
+    pending_upcoming = Agenda.objects.filter(
+        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
 
-
-    canceled_agenda = Agenda.objects.filter(is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
+    canceled_agenda = Agenda.objects.filter(
+        is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
     canceled_agenda_count = canceled_agenda.count()
+
+    request_agenda_list = RequestAgenda.objects.all().filter(user=request.user.id)
+    request_waitting = request_agenda_list.filter(is_approve="False")
+    request_approved = request_agenda_list.filter(is_approve="True")
 
     informative_list = Informative.objects.filter(is_active=True)
     informative_count = informative_list.count()
 
-    concluded_informative =  Informative.objects.filter(is_active=True, is_done=True)
-    concluded_informative_count = concluded_informative.count()
+    executed_informative = Informative.objects.filter(
+        is_active=True, is_done=True)
+    executed_informative_count = executed_informative.count()
+    comment_informative = CommentInformative.objects.all()
 
-    unexecuted_informative = Informative.objects.filter(is_active=True, is_done=False)
+    unexecuted_informative = Informative.objects.filter(
+        is_active=True, is_done=False)
+
     unexecuted_informative_count = unexecuted_informative.count()
     current_datetime = datetime.now()
 
@@ -57,10 +70,15 @@ def menu_home(request):
                 pending_upcoming=pending_upcoming,
                 canceled_agenda=canceled_agenda,
                 canceled_agenda_count=canceled_agenda_count,
+                request_agenda_list=request_agenda_list,
+                request_waitting=request_waitting,
+                request_approved=request_approved,
+
                 informative_list=informative_list,
                 informative_count=informative_count,
-                concluded_informative=concluded_informative,
-                concluded_informative_count=concluded_informative_count,
+                executed_informative=executed_informative,
+                executed_informative_count=executed_informative_count,
+                comment_informative=comment_informative,
                 unexecuted_informative=unexecuted_informative,
                 unexecuted_informative_count=unexecuted_informative_count,
                 current_datetime=current_datetime,

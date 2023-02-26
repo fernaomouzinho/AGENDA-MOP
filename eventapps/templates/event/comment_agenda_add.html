@@ -18,24 +18,45 @@
                         <div class="row">
                             <div class="card-body">
 
-                                <h3 class="text-black"> {{ single_agenda.title }}</h3>
 
                                 <!-- COMMENT 1 - END -->
 
 
                                 <form method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-sm-12 col-lg-12">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-sm-7 col-lg-7 bg-default pb-4">
+                                            <p>Agenda</p>
+                                            <input type="text" class="mb-3" value="{{single_agenda.title }}" />
+
                                             {{commentagendaform | crispy}}
                                             {{commentagendaform.media | safe}}
+
+
+                                            <button type="submit"
+                                                class="btn btn-primary pull-right ml-2">Submit</button>
+
+                                            {% if v == "/concluded-agenda/comment/add" %}
+                                            <button class="btn btn-danger text-white pull-right">
+                                                <a href="{%url 'concludedAgenda_list' %}"
+                                                    class="text-white text-decoration-none">Cancel</a></button>
+                                            {% elif v == "/canceled-agenda/comment/add" %}
+                                            <button class="btn btn-danger text-white pull-right">
+                                                <a href="{%url 'canceledAgenda_list' %}"
+                                                    class="text-white text-decoration-none">Cancel</a></button>
+                                            {% elif v == "/running-agenda/comment/add" %}
+                                            <button class="btn btn-danger text-white pull-right">
+                                                <a href="{%url 'runningAgenda_list' %}"
+                                                    class="text-white text-decoration-none">Cancel</a>
+                                            </button>
+                                            {% endif %}
+
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary pull-right ml-2">Submit</button>
 
-                                    <button class="btn btn-danger text-white pull-right"><a
-                                            href="{%url 'concludedAgenda_list' %}"
-                                            class="text-white text-decoration-none">Cancel</button>
+
+
+
 
                                 </form>
                             </div> <!--end card-body-->
