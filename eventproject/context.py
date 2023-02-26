@@ -35,7 +35,8 @@ def menu_home(request):
     canceled_agenda_count = canceled_agenda.count()
 
     request_agenda_list = RequestAgenda.objects.all()
-    request_agenda_list_user = request_agenda_list.filter(user=request.user.id)
+    request_agenda_list_user = request_agenda_list.filter(
+        user=request.user.id)
     request_waitting = request_agenda_list.filter(is_approve="False")
     count_wait_adj = request_waitting.filter(user__is_adj='True').count()
     count_wait_uga = request_waitting.filter(user__is_uga='True').count()

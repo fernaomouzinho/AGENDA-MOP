@@ -531,6 +531,14 @@ def waitting_requestedagenda_list(request):
 def requestedagenda_approve(request, pk):
     all_requestedagenda = RequestAgenda.objects.get(id=pk)
     all_requestedagenda.is_approve = "True"
+
+    inst = 'Agencia Dezenvolvimento Nacional (ADN, I.P)'
+    loc = 'Salaun ADN'
+
+    # ha = Agenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, institution=1,  start_time=datetime.now(), end_time=datetime.now(),
+    #             location="loc",  observation="", is_cancel="False", is_active="True", status="Pending", created_at=datetime.now(), updated_at=datetime.now())
+    # ha.save()
+
     all_requestedagenda.save()
     return redirect('requestedagenda_list')
 
@@ -749,7 +757,6 @@ def commentExInformative_edit(request, pk):
         a = request.path
         head_tail = os.path.split(a)
         v = head_tail[0]
-        print("le")
 
         context = {
             'userprofile': userprofile,

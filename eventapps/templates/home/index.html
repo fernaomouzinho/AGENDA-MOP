@@ -189,6 +189,8 @@
               </div>
             </div> <!--end card-->
           </div> <!--end col-->
+
+          {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei' %}
           <div class="col-sm-12">
             <div class="card border-info shadow-lg rounded">
               <div class="card-header bg-card">
@@ -312,6 +314,8 @@
               </div>
             </div> <!--end card-->
           </div> <!--end col-->
+          {% endif %}
+
 
         </div>
 

@@ -365,7 +365,7 @@
                         <tbody>
 
                             {% for obj in request_agenda_list %}
-                            {% if obj.is_approve == False %}
+                            {% if obj.is_approve == False and obj.status == 'Read' %}
                             {% if user.groups.all.0.name == 'gp_dei' %}
                             {% if obj.user == request.user.id or obj.user != request.user.id %}
                             <tr>
@@ -418,7 +418,7 @@
                             {% endfor %}
 
                             {% for obj in request_agenda_list_user %}
-                            {% if obj.is_approve == False %}
+                            {% if obj.is_approve == False and obj.status == 'Read'%}
                             {% if obj.user != request.user.id %}
 
                             <tr>

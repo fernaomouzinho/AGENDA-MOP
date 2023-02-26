@@ -9,7 +9,7 @@
 
             <div class="card-body">
                 <hr />
-                <div class="row d-flex justify-content-end pr-3">
+                <div class="row d-flex justify-content-end">
                     <button type="button" class="btn btn-light border border-primary">
                         <span class="fa fa-plus"></span><a class="text-primary " href="{% url 'institution_add' %}"
                             role="button">
@@ -26,10 +26,10 @@
                 </div>
                 <hr>
                 <section id='no-more-tables'>
-                    <table class="table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                    <table class="table table-sm" id="example" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center">NU.</th>
+                                <th>NU.</th>
                                 <th>NAME</th>
                                 <th style="text-align:center;">ACTION</th>
                             </tr>
@@ -38,7 +38,7 @@
                             {% for obj in institution_list %}
 
                             <tr>
-                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
                                 <td data-title="Title">
                                     {{obj.name_institution }}
                                 </td>
