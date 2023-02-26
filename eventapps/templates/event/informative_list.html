@@ -6,26 +6,26 @@
         <div class="border-info shadow-lg bg-white">
             <div class="card-body">
 
+                <hr />
                 <div class="row mr-1 mt-1">
-                    <div class="col-sm-6 pb-1">
-                        {% if user.is_authenticated %}
-                        {% if user.groups.all.0.name == 'admin' %}
+
+                    <div class="col-sm-6 pb-2">
+
+
+
+
                         <button type="button" class="btn btn-light border border-primary">
                             <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
                                 role="button">
-                                Add Informative Note</a>
-                        </button>
-                        {% elif user.groups.all.0.name == 'secretaria' %}
-                        <button type="button" class="btn btn-light border border-primary ml-2">
-                            <span class="fa fa-plus"></span><a class="text-primary" href="{% url 'informative_add' %}"
-                                role="button">
-                                Add Informative Note</a>
+                                Create Note</a>
                         </button>
 
-                        {% endif %}
-                        {% endif %}
+
+
+
 
                     </div>
+
                     <div class="col-sm-6">
                         <div class="row flex-row-reverse">
                             <div class="btn-group">
@@ -40,6 +40,7 @@
                     </div>
 
                 </div>
+                <hr />
 
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
                     <div class="row flex-row">
@@ -85,8 +86,8 @@
 
                                 <td data-title="End Time" class="d-flex justify-content-center">
                                     <a href="{% url 'informative_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
-                                        class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                            style='font-size:20px'></i> Edit</a> |
+                                        class="btn btn-sm btn-warning"><i class='fa fa-edit' style='font-size:20px'></i>
+                                        Edit</a> |
                                     <a href="{% url 'informative_delete' pk=obj.id %}" data-toggle="tooltip"
                                         title="Delete" class="btn btn-sm btn-danger"
                                         onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'

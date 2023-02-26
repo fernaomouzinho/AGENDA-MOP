@@ -39,7 +39,7 @@ class RequestedAgendaForm(forms.ModelForm):
 
     class Meta:
         model = RequestAgenda
-        exclude = ('user', 'title_slug', 'is_approve')
+        exclude = ('user', 'title_slug', 'is_approve', 'status')
 
 
 class InformativeForm(forms.ModelForm):

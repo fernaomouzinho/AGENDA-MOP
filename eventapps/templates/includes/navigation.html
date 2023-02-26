@@ -11,6 +11,25 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
 
+                {% if user.groups.all.0.name == 'gp_dei' %}
+
+                <!-- =============================== Start Request Agenda ===============================-->
+                {% if pending_request.count != 0 %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'requestedagenda_read' %}">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                        {% if pending_request.count != 0 %}
+                        <span class="ag">{{ pending_request.count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% endif %}
+
                 <!-- =============================== Start Notification ===============================-->
                 {% if pending_upcoming.count != 0 %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'upcomingAgenda_read' %}">
@@ -36,18 +55,18 @@
                 </li>
                 <!-- ========================= End Darshboard =============================-->
 
-
+                <!-- ========================== Start Report ===============================-->
+                <li class="nav-item"><a class="nav-link" href="#">REPORT </a>
+                </li>
+                <!-- ========================= End Darshboard =============================-->
 
 
                 <!-- ========================== Start Admin Navigation ===============================-->
                 {% if user.groups.all.0.name == 'admin' %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'institution_list' %}">REPORT</a>
-                </li>
 
                 <li class="nav-item"><a class="nav-link" href="{% url 'institution_list' %}">INSTITUTION</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'attendence_list' %}">ATTENDENCE</a>
-                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">EVENT</a>
@@ -84,7 +103,6 @@
                                 aria-hidden="true"></i>
                             Informative
                             Note</a>
-
                         <a class="dropdown-item" href="{% url 'requestedagenda_list' %}"><i class="fa fa-calendar"
                                 aria-hidden="true"></i>
                             Request Agenda</a>

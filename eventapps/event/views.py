@@ -76,7 +76,7 @@ def agenda_edit(request, pk):
             request.POST, request.FILES, instance=single_agenda)
         if agendaform.is_valid():
             agendaform.save()
-        messages.success(request, ("Dadus  hadia ona"))
+        messages.success(request, ("Data is updated"))
         return redirect('agenda_list')
 
     else:
@@ -447,6 +447,7 @@ def requestedagenda_add(request):
         if requestedagendaform.is_valid():
             requestedagendaform = requestedagendaform.save(commit=False)
             requestedagendaform.user = request.user
+            requestedagendaform.status = "Pending"
             requestedagendaform.save()
 
             messages.success(request, ("New data is added successfully"))
@@ -501,6 +502,18 @@ def requestedagenda_delete(request, pk):
     single_requestedagenda = RequestAgenda.objects.get(id=pk)
     single_requestedagenda.delete()
     messages.success(request, ("Delete successfully"))
+    return redirect('requestedagenda_list')
+
+# ========================================  Requesting Agenda Read ================================================================
+
+
+@login_required(login_url='login')
+def requestedagenda_read(request):
+    all_requestedagenda = RequestAgenda.objects.all()
+    for a in all_requestedagenda:
+        if a.status == 'Pending':
+            a.status = "Read"
+            a.save()
     return redirect('requestedagenda_list')
 
 # ======================================== Waitting Requesting Agenda ================================================================

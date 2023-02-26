@@ -57,6 +57,8 @@ urlpatterns = [
          name='requestedagenda_delete'),
     path('request-agenda/approve/<int:pk>', views.requestedagenda_approve,
          name='requestedagenda_approve'),
+    path('request-agenda/read/', views.requestedagenda_read,
+         name='requestedagenda_read'),
 
 
 

@@ -123,6 +123,11 @@ class RequestAgenda(models.Model):
     is_approve = models.BooleanField(default=False)
     requested_at = models.DateTimeField(auto_now_add=True)
     approved_at = models.DateTimeField(auto_now=True)
+    STATUS = (
+        ('Pending', 'Pending'),
+        ('Read', 'Read'),
+    )
+    status = models.CharField(max_length=10, choices=STATUS)
 
     class Meta:
         # managed = False

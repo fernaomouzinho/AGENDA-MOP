@@ -52,6 +52,9 @@ def menu_home(request):
     count_aprv_ucvq = request_approved.filter(user__is_ucvq='True').count()
     count_aprv_uedc = request_approved.filter(user__is_uedc='True').count()
 
+    pending_request = RequestAgenda.objects.filter(
+        status='Pending').order_by("requested_at")
+
     informative_list = Informative.objects.filter(is_active=True)
     informative_count = informative_list.count()
 
@@ -100,6 +103,8 @@ def menu_home(request):
                 count_aprv_uap=count_aprv_uap,
                 count_aprv_ucvq=count_aprv_ucvq,
                 count_aprv_uedc=count_aprv_uedc,
+
+                pending_request=pending_request,
 
 
 

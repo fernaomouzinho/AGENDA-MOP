@@ -158,17 +158,7 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
-                                  <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
-                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                          style="font-size:18px;"></i>
-                                      ADJ-Waitting List
-                                      {% if count_wait_adj > 0%}
-                                      (<b>{{count_wait_adj}}</b>)
-                                      {% else %}
-                                      (<b>0</b>)
-                                      {% endif %}
-
-                                  </a>
+                                
                                     <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
                                         aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
@@ -225,7 +215,7 @@
         </div>
         {% endif %}
 
-        {% if user.groups.all.0.name == "admin" or user.groups.all.0.name == "gp_dei" or user.groups.all.0.name == "gp_adj" %}
+        {% if user.groups.all.0.name == "admin" or user.groups.all.0.name == "gp_dei"%}
         <div class="col-sm-12">
             <div class="border-info shadow-lg bg-white">
                 <div class="card-body">
@@ -240,6 +230,7 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
+
                                   <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
                                       aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                           style="font-size:18px;"></i>
@@ -251,6 +242,8 @@
                                       {% endif %}
 
                                   </a>
+
+
                                     <a href="{%url 'waitting_requestedagenda_list' %}" class="btn btn-link"
                                         aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
@@ -306,6 +299,10 @@
             <!--end col-->
         </div>
         {% endif %}
+
+
+
+
         {% endif %}
     </div>
 
@@ -325,9 +322,9 @@
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
-
-                <div class="row mr-1 mt-1">
-                    <div class="col-sm-6 pb-1">
+  <hr/>
+                <div class="row flex-row-reverse mt-1">
+                    <div class="col-sm-12 d-flex justify-content-end pb-1">
                         {% if user.is_authenticated %}
                         {% if user.groups.all.0.name != 'gp_dei' %}
                         <button type="button" class="btn btn-light border border-primary">
@@ -339,20 +336,8 @@
                         {% endif %}
 
                     </div>
-                    <div class="col-sm-6">
-                        <div class="row flex-row-reverse">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-light border border-info"><span
-                                        class="fa fa-print"> Print</button>
-                                <button type="button" class="btn btn-light border border-info"><span
-                                        class="fa fa-file-excel-o"> Exel</button>
-                                <button type="button" class="btn btn-light border border-info"><span
-                                        class="fa fa-file-pdf-o"></span> PDF</button>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+                <hr/>
 
 
 
