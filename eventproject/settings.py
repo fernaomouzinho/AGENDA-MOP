@@ -101,7 +101,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'adngovtl_agenda',
-        'USER': 'eventdb',
+        'USER': 'agendauser',
         'PASSWORD': 'adn*&###3',
         'HOST': 'localhost',
         'PORT': '3306',
