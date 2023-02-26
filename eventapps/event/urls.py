@@ -51,7 +51,7 @@ urlpatterns = [
          name='requestedagenda_list'),
     path('request-agenda/add/', views.requestedagenda_add,
          name='requestedagenda_add'),
-    path('request-agenda/edit:$<str:pk>', views.requestedagenda_edit,
+    path('request-agenda/edit:?<int:pk>', views.requestedagenda_edit,
          name='requestedagenda_edit'),
     path('request-agenda/delete:?<int:pk>', views.requestedagenda_delete,
          name='requestedagenda_delete'),

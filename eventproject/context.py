@@ -37,7 +37,20 @@ def menu_home(request):
     request_agenda_list = RequestAgenda.objects.all()
     request_agenda_list_user = request_agenda_list.filter(user=request.user.id)
     request_waitting = request_agenda_list.filter(is_approve="False")
+    count_wait_adj = request_waitting.filter(user__is_adj='True').count()
+    count_wait_uga = request_waitting.filter(user__is_uga='True').count()
+    count_wait_uap = request_waitting.filter(user__is_uap='True').count()
+
+    count_wait_ucvq = request_waitting.filter(user__is_ucvq='True').count()
+    count_wait_uedc = request_waitting.filter(user__is_uedc='True').count()
+
     request_approved = request_agenda_list.filter(is_approve="True")
+    count_aprv_adj = request_approved.filter(user__is_adj='True').count()
+    count_aprv_uga = request_approved.filter(user__is_uga='True').count()
+    count_aprv_uap = request_approved.filter(user__is_uap='True').count()
+
+    count_aprv_ucvq = request_approved.filter(user__is_ucvq='True').count()
+    count_aprv_uedc = request_approved.filter(user__is_uedc='True').count()
 
     informative_list = Informative.objects.filter(is_active=True)
     informative_count = informative_list.count()
@@ -71,10 +84,25 @@ def menu_home(request):
                 pending_upcoming=pending_upcoming,
                 canceled_agenda=canceled_agenda,
                 canceled_agenda_count=canceled_agenda_count,
+
                 request_agenda_list=request_agenda_list,
                 request_waitting=request_waitting,
+                count_wait_adj=count_wait_adj,
+                count_wait_uga=count_wait_uga,
+                count_wait_uap=count_wait_uap,
+                count_wait_ucvq=count_wait_ucvq,
+                count_wait_uedc=count_wait_uedc,
+
                 request_approved=request_approved,
                 request_agenda_list_user=request_agenda_list_user,
+                count_aprv_adj=count_aprv_adj,
+                count_aprv_uga=count_aprv_uga,
+                count_aprv_uap=count_aprv_uap,
+                count_aprv_ucvq=count_aprv_ucvq,
+                count_aprv_uedc=count_aprv_uedc,
+
+
+
 
                 informative_list=informative_list,
                 informative_count=informative_count,
