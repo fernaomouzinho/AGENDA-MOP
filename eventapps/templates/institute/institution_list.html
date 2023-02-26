@@ -26,10 +26,10 @@
                 </div>
                 <hr>
                 <section id='no-more-tables'>
-                    <table class="table table-sm" id="example" width="100%" cellspacing="0">
+                    <table class="table-bordered table-sm" id="example" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>NU.</th>
+                                <th class="text-center">NU.</th>
                                 <th>NAME</th>
                                 <th style="text-align:center;">ACTION</th>
                             </tr>
@@ -38,7 +38,7 @@
                             {% for obj in institution_list %}
 
                             <tr>
-                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td class="text-center">{{ forloop.counter }}</td>
                                 <td data-title="Title">
                                     {{obj.name_institution }}
                                 </td>
