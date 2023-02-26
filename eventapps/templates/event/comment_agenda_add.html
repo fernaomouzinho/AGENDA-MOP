@@ -27,7 +27,8 @@
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-sm-7 col-lg-7 bg-default pb-4">
                                             <p>Agenda</p>
-                                            <input type="text" class="mb-3" value="{{single_agenda.title }}" />
+                                            
+                                             <input type="text" class="form-control mb-3"  value="{{single_agenda.title }}" name="pwd">
 
                                             {{commentagendaform | crispy}}
                                             {{commentagendaform.media | safe}}

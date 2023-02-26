@@ -276,7 +276,6 @@ def commentCoAgenda_add(request, pk):
             commentagendaform.title = single_agenda.title
             commentagendaform.title_slug = single_agenda.title_slug
             commentagendaform.institution = single_agenda.institution
-            commentagendaform.attendence = single_agenda.attendence
             commentagendaform.start_time = single_agenda.start_time
             commentagendaform.end_time = single_agenda.end_time
             commentagendaform.single_agenda = single_agenda
@@ -332,7 +331,6 @@ def commentCaAgenda_add(request, pk):
             commentagendaform.title = single_agenda.title
             commentagendaform.title_slug = single_agenda.title_slug
             commentagendaform.institution = single_agenda.institution
-            commentagendaform.attendence = single_agenda.attendence
             commentagendaform.start_time = single_agenda.start_time
             commentagendaform.end_time = single_agenda.end_time
             commentagendaform.single_agenda = single_agenda
