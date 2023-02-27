@@ -44,8 +44,8 @@ def agenda_add(request):
             elif agendaform.end_time < current_datetime:
                 agendaform.status = "Read"
 
-            ha = HistAgenda(user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time,
-                            end_time_new=agendaform.end_time, location=agendaform.location, location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
+            ha = HistAgenda(user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time, end_time_new=agendaform.end_time,
+                            location=agendaform.location, location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
             ha.save()
 
             agendaform.save()
@@ -530,11 +530,16 @@ def waitting_requestedagenda_list(request):
 @login_required(login_url='login')
 def requestedagenda_approve(request, pk):
     all_requestedagenda = RequestAgenda.objects.get(id=pk)
-    # all_requestedagenda.is_active = "True"
+    all_requestedagenda.is_active = "True"
 
-    ha = Agenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, catagenda=all_requestedagenda.catagenda, institution=all_requestedagenda.institution,  start_time=all_requestedagenda.start_time,
-                end_time=all_requestedagenda.end_time, location=all_requestedagenda.location, observation="", is_cancel="", is_active=all_requestedagenda.is_active, status=all_requestedagenda.status, created_at=all_requestedagenda.created_at, updated_at=all_requestedagenda.updated_at)
+    a = Agenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, catagenda=all_requestedagenda.catagenda, institution=all_requestedagenda.institution,  start_time=all_requestedagenda.start_time,
+               end_time=all_requestedagenda.end_time, location=all_requestedagenda.location, observation="", is_cancel="False", is_active=all_requestedagenda.is_active, status="Pending", created_at=all_requestedagenda.created_at, updated_at=all_requestedagenda.updated_at)
+    a.save()
+
+    ha = HistAgenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, catagenda=all_requestedagenda.catagenda, institution=all_requestedagenda.institution,  start_time=all_requestedagenda.start_time,
+                    end_time=all_requestedagenda.end_time, location=all_requestedagenda.location, observation="", is_cancel="False", is_active=all_requestedagenda.is_active, status="Pending", created_at=all_requestedagenda.created_at, updated_at=all_requestedagenda.updated_at)
     ha.save()
+
     all_requestedagenda.save()
 
     return redirect('requestedagenda_list')

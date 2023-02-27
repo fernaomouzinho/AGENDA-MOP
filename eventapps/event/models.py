@@ -65,7 +65,7 @@ class Agenda(models.Model):
     def save(self, *args, **kwargs):  # new
         if not self.title_slug:
             self.title_slug = slugify(self.title)
-        return super(RequestAgenda, self).save(*args, **kwargs)
+        return super(Agenda, self).save(*args, **kwargs)
 
 
 class HistAgenda(models.Model):
@@ -73,11 +73,13 @@ class HistAgenda(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="histagenda")
     title = models.CharField(
-        max_length=200, unique=True, verbose_name='Agenda')
+        max_length=255, unique=True, verbose_name='Agenda')
     title_slug = models.SlugField(
         max_length=255, null=False, unique=True, verbose_name='Title-Slug')
-    institution = models.ForeignKey(
-        Institution, on_delete=models.CASCADE, related_name="histagenda", verbose_name="Institution")
+    catagenda = models.CharField(
+        max_length=25, null=True, verbose_name="Category Agenda")
+    institution = models.CharField(
+        max_length=255, null=True, verbose_name="Agenda Set")
     start_time = models.DateTimeField(null=True)
     start_time_new = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True)
