@@ -35,7 +35,7 @@ admin.site.register(Yearagenda, YearAgendaAdmin)
 
 
 class RequestedAgendaAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'title', 'requested_at', 'is_approve']
+    list_display = ['id', 'user', 'title']
     prepopulated_fields = {"title": ("title_slug",)}  # new
 
 

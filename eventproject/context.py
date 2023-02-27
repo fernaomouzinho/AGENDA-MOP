@@ -37,7 +37,7 @@ def menu_home(request):
     request_agenda_list = RequestAgenda.objects.all()
     request_agenda_list_user = request_agenda_list.filter(
         user=request.user.id)
-    request_waitting = request_agenda_list.filter(is_approve="False")
+    request_waitting = request_agenda_list.filter(is_active="False")
     count_wait_adj = request_waitting.filter(user__is_adj='True').count()
     count_wait_uga = request_waitting.filter(user__is_uga='True').count()
     count_wait_uap = request_waitting.filter(user__is_uap='True').count()
@@ -45,7 +45,7 @@ def menu_home(request):
     count_wait_ucvq = request_waitting.filter(user__is_ucvq='True').count()
     count_wait_uedc = request_waitting.filter(user__is_uedc='True').count()
 
-    request_approved = request_agenda_list.filter(is_approve="True")
+    request_approved = request_agenda_list.filter(is_active="True")
     count_aprv_adj = request_approved.filter(user__is_adj='True').count()
     count_aprv_uga = request_approved.filter(user__is_uga='True').count()
     count_aprv_uap = request_approved.filter(user__is_uap='True').count()
@@ -54,7 +54,7 @@ def menu_home(request):
     count_aprv_uedc = request_approved.filter(user__is_uedc='True').count()
 
     pending_request = RequestAgenda.objects.filter(
-        status='Pending').order_by("requested_at")
+        status='Pending').order_by("created_at")
 
     informative_list = Informative.objects.filter(is_active=True)
     informative_count = informative_list.count()

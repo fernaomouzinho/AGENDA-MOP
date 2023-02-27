@@ -364,7 +364,7 @@
                         <tbody>
 
                             {% for obj in request_agenda_list %}
-                            {% if obj.is_approve == False and obj.status == 'Read' %}
+                            {% if obj.is_active == False and obj.status == "Read" %}
                             {% if user.groups.all.0.name == 'gp_dei' %}
                             {% if obj.user == request.user.id or obj.user != request.user.id %}
                             <tr>
@@ -377,11 +377,11 @@
                                 </td>
 
                                 <td class="text-center">
-                                    {{obj.requested_at|date:"d/m/Y G:i" }}
+                                    {{obj.created_at|date:"d/m/Y G:i" }}
                                 </td>
 
                                 <td class="text-center">
-                                    {% if obj.approve == True %}
+                                    {% if obj.active == True %}
                                     Approved
                                     {% else %}
                                     Waitting
@@ -417,7 +417,7 @@
                             {% endfor %}
 
                             {% for obj in request_agenda_list_user %}
-                            {% if obj.is_approve == False and obj.status == 'Read'%}
+                            {% if obj.is_active == False%}
                             {% if obj.user != request.user.id %}
 
                             <tr>
@@ -430,11 +430,11 @@
                                 </td>
 
                                 <td class="text-center">
-                                    {{obj.requested_at|date:"d/m/Y G:i" }}
+                                    {{obj.created_at|date:"d/m/Y G:i" }}
                                 </td>
 
                                 <td class="text-center">
-                                    {% if obj.approve == True %}
+                                    {% if obj.active == True %}
                                     Approved
                                     {% else %}
                                     Waitting

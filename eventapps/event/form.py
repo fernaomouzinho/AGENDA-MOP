@@ -39,7 +39,13 @@ class RequestedAgendaForm(forms.ModelForm):
 
     class Meta:
         model = RequestAgenda
-        exclude = ('user', 'title_slug', 'is_approve', 'status')
+        exclude = ('user', 'title_slug',
+                   'is_active', 'status', 'observation')
+        widgets = {
+            "start_time": DateTimePickerInput(),
+            "end_time": DateTimePickerInput(range_from="start_time"),
+
+        }
 
 
 class InformativeForm(forms.ModelForm):

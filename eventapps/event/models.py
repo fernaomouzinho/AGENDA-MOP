@@ -65,7 +65,7 @@ class Agenda(models.Model):
     def save(self, *args, **kwargs):  # new
         if not self.title_slug:
             self.title_slug = slugify(self.title)
-        return super(Agenda, self).save(*args, **kwargs)
+        return super(RequestAgenda, self).save(*args, **kwargs)
 
 
 class HistAgenda(models.Model):
@@ -120,18 +120,29 @@ class RequestAgenda(models.Model):
         max_length=255, unique=True, verbose_name='Request Agenda:')
     title_slug = models.SlugField(
         max_length=255, null=False, unique=True, verbose_name='Title-Slug')
-    is_approve = models.BooleanField(default=False)
-    requested_at = models.DateTimeField(auto_now_add=True)
-    approved_at = models.DateTimeField(auto_now=True)
+    catagenda = models.ForeignKey(
+        CatAgenda, on_delete=models.CASCADE, related_name="requestagenda", verbose_name="Category Agenda:", null=True)
+    institution = models.ForeignKey(
+        Institution, on_delete=models.CASCADE, related_name="requestagenda", verbose_name="Institution:", null=True)
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
+    location = models.CharField(max_length=255, null=False, blank=True)
+    is_active = models.BooleanField(default=False)
     STATUS = (
         ('Pending', 'Pending'),
         ('Read', 'Read'),
     )
-    status = models.CharField(max_length=10, choices=STATUS)
+    status = models.CharField(max_length=20, choices=STATUS, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        # managed = False
-        verbose_name_plural = ("Request Agenda")
+        # managed = True
+        verbose_name_plural = ("Request Agenda ")
+        ordering = ('-created_at', )
+
+    def __str__(self):
+        return str(self.title)
 
     def get_absolute_url(self):
         return reverse("Title", kwargs={"title_slug": self.title_slug})
