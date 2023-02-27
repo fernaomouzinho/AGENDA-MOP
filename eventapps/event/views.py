@@ -530,11 +530,11 @@ def waitting_requestedagenda_list(request):
 @login_required(login_url='login')
 def requestedagenda_approve(request, pk):
     all_requestedagenda = RequestAgenda.objects.get(id=pk)
-    all_requestedagenda.is_active = "True"
+    # all_requestedagenda.is_active = "True"
 
-    # ha = Agenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, catagenda=all_requestedagenda.catagenda, institution=all_requestedagenda.institution,  start_time=all_requestedagenda.start_time,
-    #             end_time=all_requestedagenda.end_time, location=all_requestedagenda.location, observation="", is_cancel="", is_active=all_requestedagenda.is_active, status=all_requestedagenda.status, created_at=all_requestedagenda.created_at, updated_at=all_requestedagenda.updated_at)
-    # ha.save()
+    ha = Agenda(user=all_requestedagenda.user, title=all_requestedagenda.title, title_slug=all_requestedagenda.title_slug, catagenda=all_requestedagenda.catagenda, institution=all_requestedagenda.institution,  start_time=all_requestedagenda.start_time,
+                end_time=all_requestedagenda.end_time, location=all_requestedagenda.location, observation="", is_cancel="", is_active=all_requestedagenda.is_active, status=all_requestedagenda.status, created_at=all_requestedagenda.created_at, updated_at=all_requestedagenda.updated_at)
+    ha.save()
     all_requestedagenda.save()
 
     return redirect('requestedagenda_list')
