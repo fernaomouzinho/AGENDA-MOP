@@ -70,6 +70,7 @@ class Agenda(models.Model):
 
 class HistAgenda(models.Model):
     """ Event model """
+    id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="histagenda")
     title = models.CharField(

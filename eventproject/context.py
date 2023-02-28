@@ -32,7 +32,7 @@ def menu_home(request):
     pending_upcoming = Agenda.objects.filter(
         is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
     approved_upcoming = Agenda.objects.filter(
-        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now(), user=request.user).order_by("start_time")
+        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now(), user=request.user.id).order_by("start_time")
 
     canceled_agenda = Agenda.objects.filter(
         is_active=True, status='Read', is_cancel=True).order_by('-updated_at')

@@ -75,7 +75,8 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="exampleFormControlTextarea1">OBSERVATION</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled></textarea>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                          disabled>{{ single_agenda.observation }}</textarea>
                       </div>
                     </div>
                   </div>
@@ -83,7 +84,7 @@
                 </form>
                 <hr>
 
-<!--
+                <!--
                 {% if single_agenda.catagenda.name_category == "Internal" %}
 
                 <div class="card-header pb-2">
