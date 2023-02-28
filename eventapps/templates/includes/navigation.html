@@ -15,6 +15,33 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav ml-auto">
 
+                {% if user.groups.all.0.name == 'gp_cord' %}
+
+                <!-- =============================== Start Request Agenda ===============================-->
+                {% if approved_upcoming.count != 0 %}
+
+
+                <li class="nav-item"><a class="nav-link" href="{% url 'requestedagenda_read' %}">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 255, 255)'></i>
+                        <span class="ag">{{ approved_upcoming.count }}</span>
+
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 255, 255)'></i>
+                    </a>
+                </li>
+
+
+                {% endif %}
+
+
+
+                {% endif %}
+
+
+
                 {% if user.groups.all.0.name == 'gp_dei' %}
 
                 <!-- =============================== Start Request Agenda ===============================-->
@@ -277,7 +304,7 @@
                     <div class="dropdown-menu" aria-labelledby="profile">
                         <div class="dropdown-divider"></div>
 
-                        <a class="dropdown-item" href="#"><i class='fa fa-cog'></i> User
+                        <a class="dropdown-item" href="{% url 'register' %}"><i class='fa fa-cog'></i> User
                             Configuration</a>
                         <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
                     </div>

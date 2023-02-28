@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Institution, Attendence
+from .models import Institution, Attendence, unitADN, DepartmentADN
 
 # Register your models here.
 
 admin.site.register(Institution)
-admin.site.register(Attendence)
+admin.site.register(unitADN)
+admin.site.register(DepartmentADN)

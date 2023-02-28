@@ -1,5 +1,5 @@
 from eventapps.event.models import Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
-from eventapps.institute.models import Institution, Attendence
+from eventapps.institute.models import Institution, Attendence, unitADN, DepartmentADN
 from datetime import datetime
 from django.db.models import Count
 
@@ -7,6 +7,8 @@ from django.db.models import Count
 def menu_home(request):
     institution_list = Institution.objects.all().order_by("name_institution")
     attendence_list = Attendence.objects.all()
+    unit_list = unitADN.objects.all()
+    dep_list = DepartmentADN.objects.all()
 
     agenda_list = Agenda.objects.filter(is_active=True, status='Read')
     histori_agenda_list = HistAgenda.objects.filter(is_active=True)
@@ -29,6 +31,8 @@ def menu_home(request):
     upcoming_agenda_count = upcoming_agenda.count()
     pending_upcoming = Agenda.objects.filter(
         is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
+    approved_upcoming = Agenda.objects.filter(
+        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now(), user=request.user).order_by("start_time")
 
     canceled_agenda = Agenda.objects.filter(
         is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
@@ -38,20 +42,20 @@ def menu_home(request):
     request_agenda_list_user = request_agenda_list.filter(
         user=request.user.id)
     request_waitting = request_agenda_list.filter(is_active="False")
-    count_wait_adj = request_waitting.filter(user__is_adj='True').count()
-    count_wait_uga = request_waitting.filter(user__is_uga='True').count()
-    count_wait_uap = request_waitting.filter(user__is_uap='True').count()
 
-    count_wait_ucvq = request_waitting.filter(user__is_ucvq='True').count()
-    count_wait_uedc = request_waitting.filter(user__is_uedc='True').count()
+    count_wait_adj = request_waitting.filter(user__is_adj='True')
+    count_wait_uga = request_waitting.filter(user__is_uga='True')
+    count_wait_uap = request_waitting.filter(user__is_uap='True')
+    count_wait_ucvq = request_waitting.filter(user__is_ucvq='True')
+    count_wait_uedc = request_waitting.filter(user__is_uedc='True')
 
     request_approved = request_agenda_list.filter(is_active="True")
-    count_aprv_adj = request_approved.filter(user__is_adj='True').count()
-    count_aprv_uga = request_approved.filter(user__is_uga='True').count()
-    count_aprv_uap = request_approved.filter(user__is_uap='True').count()
 
-    count_aprv_ucvq = request_approved.filter(user__is_ucvq='True').count()
-    count_aprv_uedc = request_approved.filter(user__is_uedc='True').count()
+    count_aprv_adj = request_approved.filter(user__is_adj='True')
+    count_aprv_uga = request_approved.filter(user__is_uga='True')
+    count_aprv_uap = request_approved.filter(user__is_uap='True')
+    count_aprv_ucvq = request_approved.filter(user__is_ucvq='True')
+    count_aprv_uedc = request_approved.filter(user__is_uedc='True')
 
     pending_request = RequestAgenda.objects.filter(
         status='Pending').order_by("created_at")
@@ -72,6 +76,9 @@ def menu_home(request):
 
     return dict(institution_list=institution_list,
                 attendence_list=attendence_list,
+                unit_list=unit_list,
+                dep_list=dep_list,
+
                 agenda_list=agenda_list,
                 histori_agenda_list=histori_agenda_list,
                 agenda_list_home=agenda_list_home,
@@ -86,6 +93,7 @@ def menu_home(request):
                 upcoming_agenda=upcoming_agenda,
                 upcoming_agenda_count=upcoming_agenda_count,
                 pending_upcoming=pending_upcoming,
+                approved_upcoming=approved_upcoming,
                 canceled_agenda=canceled_agenda,
                 canceled_agenda_count=canceled_agenda_count,
 

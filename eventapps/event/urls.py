@@ -62,15 +62,21 @@ urlpatterns = [
          name='requestedagenda_edit'),
     path('request-agenda/delete:?<int:pk>', views.requestedagenda_delete,
          name='requestedagenda_delete'),
+    path('request-agenda/waitting/<int:pk>', views.waitting_requestedagenda_list,
+         name='waitting_requestedagenda_list'),
     path('request-agenda/approve/<int:pk>', views.requestedagenda_approve,
          name='requestedagenda_approve'),
     path('request-agenda/read/', views.requestedagenda_read,
          name='requestedagenda_read'),
 
-
-
-    path('request-agenda/waitting/list/', views.waitting_requestedagenda_list,
-         name='waitting_requestedagenda_list'),
+    path('request-agenda/waitting/uga/', views.waitting_requestedagendauga_list,
+         name='waitting_requestedagendauga_list'),
+    path('request-agenda/waitting/uap/', views.waitting_requestedagendauap_list,
+         name='waitting_requestedagendauap_list'),
+    path('request-agenda/waitting/ucvq/', views.waitting_requestedagendaucvq_list,
+         name='waitting_requestedagendaucvq_list'),
+    path('request-agenda/waitting/uedc/', views.waitting_requestedagendauedc_list,
+         name='waitting_requestedagendauedc_list'),
 
 
 

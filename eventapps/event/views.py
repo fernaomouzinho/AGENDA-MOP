@@ -586,11 +586,40 @@ def requestedagenda_read(request):
 
 
 @login_required(login_url="/login/")
-def waitting_requestedagenda_list(request):
+def waitting_requestedagenda_list(request, pk):
 
     context = {
     }
     return render(request, 'event/request_waitting_list.html', context)
+
+
+@login_required(login_url="/login/")
+def waitting_requestedagendauga_list(request):
+    context = {
+    }
+    return render(request, 'event/waitting/request_waittinguga_list.html', context)
+
+
+@login_required(login_url="/login/")
+def waitting_requestedagendauap_list(request):
+    context = {
+    }
+    return render(request, 'event/waitting/request_waittinguap_list.html', context)
+
+
+@login_required(login_url="/login/")
+def waitting_requestedagendaucvq_list(request):
+    context = {
+    }
+    return render(request, 'event/waitting/request_waittingucvq_list.html', context)
+
+
+@login_required(login_url="/login/")
+def waitting_requestedagendauedc_list(request):
+    context = {
+    }
+    return render(request, 'event/waitting/request_waittinguedc_list.html', context)
+
 
 # ======================================== Aprove Request Agenda ================================================================
 

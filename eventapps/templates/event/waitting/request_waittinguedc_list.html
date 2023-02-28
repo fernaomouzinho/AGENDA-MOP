@@ -1,0 +1,253 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+
+    <div class="col-sm-3">
+
+        <div class="col-sm-12">
+            <div class="border-info shadow-lg bg-white">
+                <div class="card-body">
+                    <div class="card-header bg-card d-flex justify-content-between">
+                        <div class="row flex-row">
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Requested
+                                Agenda
+                            </h5>
+                        </div>
+
+                    </div>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <a href="{% url 'waitting_requestedagendauga_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UGA-Waitting List
+                                        {% if count_wait_uga.count > 0%}
+                                        (<b>{{count_wait_uga.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{% url 'waitting_requestedagendauap_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UAP-Waitting List
+                                        {% if count_wait_uap.count > 0%}
+                                        (<b>{{count_wait_uap.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{% url 'waitting_requestedagendaucvq_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UCVQ-Waitting List
+                                        {% if count_wait_ucvq.count > 0%}
+                                        (<b>{{count_wait_ucvq.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="{% url 'waitting_requestedagendauedc_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UEDC-Waitting List
+                                        {% if count_wait_uedc.count > 0%}
+                                        (<b>{{count_wait_uedc.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                    </a>
+                                </h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+        </div>
+
+
+
+        <div class="col-sm-12">
+            <div class="border-info shadow-lg bg-white">
+                <div class="card-body">
+                    <div class="card-header bg-card mt-2 d-flex justify-content-between">
+                        <div class="row flex-row">
+                            <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Approved
+                                Agenda
+                            </h5>
+                        </div>
+
+                    </div>
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        ADJ-Approve List
+                                        {% if count_aprv_adj.count > 0 %}
+                                        (<b>{{count_aprv_adj.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+
+
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UGA-Approve List
+                                        {% if count_aprv_uga.count > 0%}
+                                        (<b>{{count_aprv_uga.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UAP-Approve List
+                                        {% if count_aprv_uap.count > 0 %}
+                                        (<b>{{count_aprv_uap.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UCVQ-Approve List
+                                        {% if count_aprv_ucvq.count > 0 %}
+                                        (<b>{{count_aprv_ucvq.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+
+                                    </a>
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        UEDC-Approve List
+                                        {% if count_aprv_uedc.count > 0%}
+                                        (<b>{{count_aprv_uedc.count}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                    </a>
+                                </h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+        </div>
+
+        <!--end col-->
+
+    </div>
+
+    <div class="col-sm-9">
+        <div class="border-info shadow-lg bg-white">
+
+            <div class="card-body">
+
+                <div class="row mr-1 mt-1">
+
+                    <div class="col-sm-12">
+                        <div class="row flex-row-reverse">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-print">
+                                        Print</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-excel-o"> Exel</button>
+                                <button type="button" class="btn btn-light border border-info"><span
+                                        class="fa fa-file-pdf-o"></span> PDF</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
+                    <div class="row flex-row">
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i>UEDC: List waitting
+                            approve
+                            request
+                            Agenda</h5>
+                    </div>
+
+                </div>
+                <hr>
+                <section id='no-more-tables'>
+                    <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NU.</th>
+                                <th>AGENDA REQUESTED</th>
+                                <th class="text-center">DATE REQUESTED</th>
+                                <th class="text-center">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in count_wait_uedc %}
+                            <tr>
+                                <td data-title="Nu.">{{ forloop.counter }}</td>
+                                <td data-title="Title">
+                                    {{obj.title }}
+                                </td>
+
+                                <td class="text-center">
+                                    {{obj.created_at|date:"d/m/Y G:i" }}
+                                </td>
+
+                                <td class="text-center">
+                                    {% if obj.approve == True %}
+                                    Approved
+                                    {% else %}
+                                    Waitting
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </div> <!--end card-body-->
+        </div>
+        <!--end col-->
+
+    </div>
+
+
+
+    {% endblock %}
+
+    {% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+    {% endblock %}

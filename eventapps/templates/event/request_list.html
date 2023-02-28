@@ -43,10 +43,7 @@
                                 data-parent="#accordion">
                                 <div class="card-body">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
-                                                    style="font-size:20px"></i> All (<b>0</b>)</a>
-                                        </li>
+
                                         <li class="nav-item">
                                             <a class="nav-link active" href="#"> <i class="fa fa-angle-double-right"
                                                     style="font-size:20px"></i> Upcoming
@@ -78,54 +75,54 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         Waitting List
 
-                                          {% if request.user.username == 'adjadn' %}
-                                          {% if count_wait_adj > 0%}
-                                          (<b>{{count_wait_adj}}</b>)
-                                          {% else %}
-                                          (<b>0</b>)
-                                          {% endif %}
-                                          {% endif %}
+                                        {% if request.user.username == 'adjadn' %}
+                                        {% if count_wait_adj > 0%}
+                                        (<b>{{count_wait_adj}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                        {% endif %}
 
-                                          {% if request.user.username == 'ugaadn' %}
-                                          {% if count_wait_adj > 0%}
-                                          (<b>{{count_wait_adj}}</b>)
-                                          {% else %}
-                                          (<b>0</b>)
-                                          {% endif %}
-                                          {% endif %}
+                                        {% if request.user.username == 'ugaadn' %}
+                                        {% if count_wait_adj > 0%}
+                                        (<b>{{count_wait_adj}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                        {% endif %}
 
-                                          {% if request.user.username == 'uapadn' %}
-                                          {% if count_wait_uap > 0%}
-                                          (<b>{{count_wait_uap}}</b>)
-                                          {% else %}
-                                          (<b>0</b>)
-                                          {% endif %}
-                                          {% endif %}
+                                        {% if request.user.username == 'uapadn' %}
+                                        {% if count_wait_uap > 0%}
+                                        (<b>{{count_wait_uap}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                        {% endif %}
 
-                                          {% if request.user.username == 'ucvqadn' %}
-                                          {% if count_wait_ucvq > 0%}
-                                          (<b>{{count_wait_ucvq}}</b>)
-                                          {% else %}
-                                          (<b>0</b>)
-                                          {% endif %}
-                                          {% endif %}
+                                        {% if request.user.username == 'ucvqadn' %}
+                                        {% if count_wait_ucvq > 0%}
+                                        (<b>{{count_wait_ucvq}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                        {% endif %}
 
-                                          {% if request.user.username == 'uedcadn' %}
-                                          {% if count_wait_uedc > 0%}
-                                          (<b>{{count_wait_uedc}}</b>)
-                                          {% else %}
-                                          (<b>0</b>)
-                                          {% endif %}
-                                          {% endif %}
+                                        {% if request.user.username == 'uedcadn' %}
+                                        {% if count_wait_uedc > 0%}
+                                        (<b>{{count_wait_uedc}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
+                                        {% endif %}
 
 
                                     </a>
-
                                 </h5>
                             </div>
 
@@ -157,46 +154,45 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
-
-                                    <a href="#" class="btn btn-link"
+                                    <a href="{% url 'waitting_requestedagendauga_list' %}" class="btn btn-link"
                                         aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UGA-Waitting List
-                                        {% if count_wait_uga > 0%}
-                                        (<b>{{count_wait_uga}}</b>)
+                                        {% if count_wait_uga.count > 0%}
+                                        (<b>{{count_wait_uga.count}}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendauap_list' %}" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UAP-Waitting List
-                                        {% if count_wait_uap > 0%}
-                                        (<b>{{count_wait_uap}}</b>)
+                                        {% if count_wait_uap.count > 0%}
+                                        (<b>{{count_wait_uap.count}}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendaucvq_list' %}" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UCVQ-Waitting List
-                                        {% if count_wait_ucvq > 0%}
-                                        (<b>{{count_wait_ucvq}}</b>)
+                                        {% if count_wait_ucvq.count > 0%}
+                                        (<b>{{count_wait_ucvq.count}}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendauedc_list' %}" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UEDC-Waitting List
-                                        {% if count_wait_uedc > 0%}
-                                        (<b>{{count_wait_uedc}}</b>)
+                                        {% if count_wait_uedc.count > 0%}
+                                        (<b>{{count_wait_uedc.count}}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
@@ -230,21 +226,21 @@
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
 
-                                  <a href="#" class="btn btn-link"
-                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                          style="font-size:18px;"></i>
-                                      ADJ-Approve List
-                                      {% if count_aprv_adj > 0 %}
-                                      (<b>{{count_aprv_adj}}</b>)
-                                      {% else %}
-                                      (<b>0</b>)
-                                      {% endif %}
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                            style="font-size:18px;"></i>
+                                        ADJ-Approve List
+                                        {% if count_aprv_adj > 0 %}
+                                        (<b>{{count_aprv_adj}}</b>)
+                                        {% else %}
+                                        (<b>0</b>)
+                                        {% endif %}
 
-                                  </a>
+                                    </a>
 
 
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UGA-Approve List
                                         {% if count_aprv_uga > 0%}
@@ -254,8 +250,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UAP-Approve List
                                         {% if count_aprv_uap > 0 %}
@@ -265,8 +261,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UCVQ-Approve List
                                         {% if count_aprv_ucvq > 0 %}
@@ -276,8 +272,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link"
-                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="#" class="btn btn-link" aria-expanded="false"
+                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UEDC-Approve List
                                         {% if count_aprv_uedc > 0%}
@@ -308,20 +304,20 @@
 
 
     <div class="col-sm-9">
-      {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} p-2 fade show">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          {{ message }}
-      </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} p-2 fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
 
 
-      {% endfor %}
-      {% endif %}
+        {% endfor %}
+        {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
-  <hr/>
+                <hr />
                 <div class="row flex-row-reverse mt-1">
                     <div class="col-sm-12 d-flex justify-content-end pb-1">
                         {% if user.is_authenticated %}
@@ -336,7 +332,7 @@
 
                     </div>
                 </div>
-                <hr/>
+                <hr />
 
 
 
@@ -388,25 +384,26 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-center">
-                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
-                                  <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip" title="Approve"
-                                      class="btn btn-sm btn-success"><span class="	fa fa-thumbs-o-up"></span> Approved</a>
-                                  {% endif %}
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
+                                    <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Approve" class="btn btn-sm btn-success"><span
+                                            class="	fa fa-thumbs-o-up"></span> Approved</a>
+                                    {% endif %}
 
-                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
 
-                                <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
-                                    class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                        style='font-size:20px'></i> Edit</a>
+                                    <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                            style='font-size:20px'></i> Edit</a>
 
-                                        |
+                                    |
                                     <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
                                         title="Delete" class="btn btn-sm btn-danger"
-                                        onclick="return confirm(' Are you ready to delete?')"><i
-                                            class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                        onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
+                                            style='font-size:20px'></i> Delete</a>
                                 </td>
 
-                                  {% endif %}
+                                {% endif %}
 
 
 
@@ -441,25 +438,27 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-center">
-                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
-                                  <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip" title="Approve"
-                                      class="btn btn-sm btn-success"><span class="	fa fa-thumbs-o-up"></span> Approved</a>
-                                  {% endif %}
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
+                                    <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Approve" class="btn btn-sm btn-success"><span
+                                            class="	fa fa-thumbs-o-up"></span> Approved</a>
+                                    {% endif %}
 
-                                  {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
 
-                                <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip" title="Edit"
-                                    class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                        style='font-size:20px'></i> Edit</a>
 
-                                        |
+                                    <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                            style='font-size:20px'></i> Edit</a>
+
+                                    |
                                     <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
                                         title="Delete" class="btn btn-sm btn-danger"
-                                        onclick="return confirm(' Are you ready to delete?')"><i
-                                            class='fa fa-trash' style='font-size:20px'></i> Delete</a>
+                                        onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
+                                            style='font-size:20px'></i> Delete</a>
                                 </td>
 
-                                  {% endif %}
+                                {% endif %}
 
 
 
