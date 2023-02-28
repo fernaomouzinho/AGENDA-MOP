@@ -6,7 +6,7 @@
     <div class="col-sm-12">
         <div class="border-info shadow-lg bg-white">
             <div class="row">
-                <div class="col-md-3" style="background-color:rgb(221, 247, 251)">
+                <div class="col-md-3" style="background-color:rgb(237, 246, 247)">
                     <div class="row">
                         <div class="card-body">
                             <div class="card-header bg-card pb-2 d-flex justify-content-between">
@@ -79,17 +79,15 @@
                                             <td data-title="Nu." class="text-center">{{ forloop.counter }}</td>
                                             <td data-title="Title">{{ obj.title }}</td>
 
-                                            <td style="font-size:13px;color:rgb(248, 10, 10)">
+                                            <td style="font-size:13px;color:rgb(248, 10, 10)" class="text-center">
                                                 {{obj.start_time.date|date:"d/m/Y"}}, {{obj.start_time.time}}</td>
-                                            <td style="font-size:13px;color:rgb(248, 10, 10)">
-                                                {{obj.end_time.date|date:"d/m/Y" }}, {{obj.end_time.time}}</td>
-                                            <td style="font-size:14px; color:rgb(60, 198, 5)">
-                                                {{obj.start_time_new.date|date:"d/m/Y"}},
-                                                {{obj.start_time_new.time}}
+                                            <td style="font-size:13px;color:rgb(248, 10, 10)" class="text-center">
+                                                {{obj.end_time.date|date:"d/m/Y"}}, {{obj.end_time.time}}</td>
+                                            <td style="font-size:14px; color:rgb(60, 198, 5)" class="text-center">
+                                                {{obj.start_time_new.date|date:"d/m/Y"}},{{obj.start_time_new.time}}
                                             </td>
-                                            <td style="font-size:14px; color:rgb(60, 198, 5)">
-                                                {{obj.end_time_new.date|date:"d/m/Y" }},
-                                                {{obj.end_time_new.time}}</td>
+                                            <td style="font-size:14px; color:rgb(60, 198, 5)" class="text-center">
+                                                {{obj.end_time_new.date|date:"d/m/Y"}},{{obj.end_time_new.time}}</td>
                                             <td>{{ obj.location }}</td>
                                             <td>{{ obj.location }}</td>
 

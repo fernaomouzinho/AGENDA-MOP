@@ -101,8 +101,6 @@
                         <th class="text-center">START TIME</th>
                         <th class="text-center">END TIME</th>
                         <th class="text-center">LOCATION</th>
-
-                        <th class='text-center'>OBSERVATION</th>
                         <th class="text-center">ACTION</th>
                       </tr>
                     </thead>
@@ -119,7 +117,6 @@
                         <td style="text-align:center;">{{obj.institution}}</td>
                         <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}</td>
                         <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
-                        <td class="text-justify">{{ obj.location }} </td>
                         <td class="text-justify">{{ obj.location }} </td>
                         <td class="text-center">
                           <a href="{% url 'postponeAgenda_list' pk=obj.id %}" data-toggle="tooltip" title="Postpone"
