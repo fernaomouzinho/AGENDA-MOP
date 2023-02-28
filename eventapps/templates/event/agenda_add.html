@@ -12,7 +12,9 @@
                     <div class="card-body">
                         <div class="card-header bg-card p-3 d-flex justify-content-between">
                             <div class="row flex-row pl-2">
-                                <h5 class="text-light"><i class="fa fa-plus" style="font-size:18px"></i> Add New Agenda
+                                <h5 class="text-light"><i class="fa fa-plus" style="font-size:18px"></i> Add new agenda
+                                    >> <a href="{%url 'agenda_list' %}" style="color:aquamarine;"
+                                        class=" text-decoration-none">List of agenda</a>
                                 </h5>
                             </div>
                         </div>
@@ -29,7 +31,7 @@
                                 style="background-color:rgb(195, 234, 218)">
 
                                 <button class="btn btn-danger text-white mr-2"><a href="{%url 'agenda_list' %}"
-                                        class="text-white text-decoration-none">Cancel</button>
+                                        class="text-white text-decoration-none">Cancel</a></button>
                                 <button type="submit" class="btn btn-primary  ">Save</button>
                             </div>
                     </div>

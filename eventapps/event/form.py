@@ -1,6 +1,12 @@
 from django import forms
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
-from .models import Agenda, RequestAgenda, Informative, CommentInformative
+from .models import CatAgenda, Agenda, RequestAgenda, Informative, CommentInformative
+
+
+class CategoryAgendaForm(forms.ModelForm):
+    class Meta:
+        model = CatAgenda
+        exclude = ('id',)
 
 
 class AgendaForm(forms.ModelForm):

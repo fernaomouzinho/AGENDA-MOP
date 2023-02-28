@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Agenda, RequestAgenda, HistAgenda, Informative, CommentInformative
-from .form import AgendaForm, PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
+from .models import CatAgenda, Agenda, RequestAgenda, HistAgenda, Informative, CommentInformative
+from .form import CategoryAgendaForm, AgendaForm, PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
 from django.contrib.auth.models import User
 from eventapps.authentication.models import User
 from datetime import datetime
@@ -12,6 +12,74 @@ current_datetime = datetime.now()
 
 
 # Create your views here.
+# ======================================== Category Agenda Add ================================================================
+@login_required(login_url="/login/")
+def categoryagenda_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    catagendalist = CatAgenda.objects.all()
+
+    if request.method == "POST":
+        categoryagendaform = CategoryAgendaForm(request.POST)
+        if categoryagendaform.is_valid():
+            categoryagendaform.save()
+
+            messages.success(request, ("New data is added"))
+        return redirect('categoryagenda_list')
+
+    else:
+        userprofile = User.objects.get(id=request.user.id)
+        categoryagendaform = CategoryAgendaForm()
+        context = {
+            'userprofile': userprofile,
+            'categoryagendaform': categoryagendaform,
+            'catagendalist': catagendalist,
+        }
+    return render(request, 'event/category_agenda_list.html', context)
+
+
+# ============================================= Category Agenda Edit ================================================================
+
+
+@login_required(login_url='login')
+def categoryagenda_edit(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    catagendalist = CatAgenda.objects.all()
+
+    if request.method == "POST":
+        single_categoryagenda = CatAgenda.objects.get(pk=pk)
+        categoryagendaform = CategoryAgendaForm(
+            request.POST, request.FILES, instance=single_categoryagenda)
+        if categoryagendaform.is_valid():
+            categoryagendaform.save()
+        messages.success(request, ("Data is updated"))
+        return redirect('categoryagenda_list')
+
+    else:
+        userprofile = User.objects.get(id=request.user.id)
+        single_categoryagenda = CatAgenda.objects.get(pk=pk)
+        categoryagendaform = CategoryAgendaForm(instance=single_categoryagenda)
+
+        context = {
+            'userprofile': userprofile,
+            'single_categoryagenda': single_categoryagenda,
+            'catagendalist': catagendalist,
+            'categoryagendaform': categoryagendaform,
+        }
+        return render(request, 'event/category_agenda_edit.html', context)
+
+# ============================================= Category Agenda Delete ================================================================
+
+
+@login_required(login_url='login')
+def categoryagenda_delete(request, pk):
+    single_categoryagenda = CatAgenda.objects.get(id=pk)
+    single_categoryagenda.delete()
+    messages.success(request, ("Delete successfully"))
+    return redirect('categoryagenda_list')
 
 
 # ======================================== List All Agenda ================================================================

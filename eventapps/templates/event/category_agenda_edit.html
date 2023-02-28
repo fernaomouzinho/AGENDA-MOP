@@ -1,0 +1,111 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row d-flex justify-content-center ">
+    <div class="col-sm-12 ">
+        <div class="border-info shadow-lg bg-white d-flex justify-content-center">
+
+
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="card-body">
+                        <div class="card-header bg-card p-3 d-flex justify-content-between">
+                            <div class="row flex-row pl-2">
+                                <h5 class="text-light"><i class="fa fa-plus" style="font-size:18px"></i> Add new
+                                    category agenda
+
+                                </h5>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                {{categoryagendaform | crispy}}
+                                {{categoryagendaform.media | safe}}
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end p-3"
+                                style="background-color:rgb(195, 234, 218)">
+                                <button type="submit" class="btn btn-primary  ">Save</button>
+                            </div>
+                    </div>
+
+                    </form>
+                    <div>
+                    </div>
+                </div> <!--end card-body-->
+            </div>
+
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="card-body">
+                        <div class="card-header bg-card p-3 d-flex justify-content-between">
+                            <div class="row flex-row pl-2">
+                                <h5 class="text-light"><i class="fa fa-list" style="font-size:18px;"></i> List
+                                    category agenda
+                                </h5>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <section id='no-more-tables'>
+                            <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">NU.</th>
+                                        <th class="text-center">CATEGORY AGENDA</th>
+                                        <th class="text-center">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for obj in catagendalist %}
+                                    <tr>
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        <td data-title="Title">
+                                            {{obj.name_category }}
+                                        </td>
+
+                                        <td data-title="End Time" class="text-center">
+                                            <a href=" {% url 'categoryagenda_edit' pk=obj.id
+                                            %}" data-toggle="tooltip" title="Edit" class="btn btn-sm btn-warning"><i
+                                                    class='fa fa-edit' style='font-size:20px'></i> Edit</a>
+
+
+                                            <a href="{% url 'categoryagenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                                title="Delete" class="btn btn-sm btn-danger"
+                                                onclick="return confirm(' Are you ready to delete?')"><i
+                                                    class='fa fa-trash' style='font-size:20px'></i>
+                                                Delete</a>
+                                        </td>
+
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </section>
+
+
+                    </div>
+
+                    </form>
+                    <div>
+                    </div>
+                </div> <!--end card-body-->
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+
+        <!--end card-body-->
+    </div>
+    <!--end card-->
+</div>
+<!--end col-->
+</div>
+<!--end row-->
+
+{% endblock %}

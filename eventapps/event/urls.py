@@ -2,6 +2,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+
+    path('category-agenda/', views.categoryagenda_list,
+         name='categoryagenda_list'),
+    path('category-agenda/edit=?<int:pk>',
+         views.categoryagenda_edit, name='categoryagenda_edit'),
+    path('category-agenda/delete=?<int:pk>',
+         views.categoryagenda_delete, name='categoryagenda_delete'),
     path('agenda/', views.agenda_list, name='agenda_list'),
     path('agenda/add/', views.agenda_add, name='agenda_add'),
     path('agenda/edit=?<int:pk>', views.agenda_edit, name='agenda_edit'),
