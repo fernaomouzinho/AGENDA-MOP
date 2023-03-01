@@ -96,7 +96,12 @@
                         <th class="text-center">END TIME</th>
                         <th class="text-center">LOCATION</th>
                         <th class='text-center'>OBSERVATION</th>
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <th class="text-center">COMMENT</th>
+                        <th class="text-center" colspan="2">TIME CONTROL</th>
+                        {% endif %}{% endif %}
+
                       </tr>
                     </thead>
                     <tbody>
@@ -120,6 +125,9 @@
                         </td>
                         {% endif %}
 
+
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <td data-title="Title" style="text-align:center;">
                           {% if obj.observation == "" %}
                           <button type="button" class="btn btn-primary btn-sm ml-2">
@@ -132,9 +140,36 @@
                                 class='fa fa-edit' style='font-size:20px'></i>
                               Edit</a>
                           </button>
+                        </td>
+                        {% endif %}
+
+                        <td class="text-center" style="text-align:center;">
+                          <form action="{% url 'runningagenda_stop' pk=obj.id %}" method="POST"
+                            enctype="multipart/form-data" id="indexForm" class="form-horizontal form-bordered">
+                            {% csrf_token %}
+                            <div class="col-sm-12">
+                              <div class="row d-flex justify-content-center">
+                                <input type="text" name="minute" maxlength="2" min="0" max="60" step="1"
+                                  pattern="[0-9]{4}" style="width:70px" class="form-control form-control-sm" />
+
+                                <button type="button"
+                                  class="btn border border-primary bg-light btn-sm ml-2">Change</button>
+                              </div>
+                            </div>
+                          </form>
+                        </td>
+
+                        <td data-title="Title" style="text-align:center;">
+                          <button type="button" class="btn btn-danger btn-sm ml-2">
+                            <span class="fa fa-plus"></span><a class="text-white"
+                              href="{% url 'runningagenda_stop' pk=obj.pk %}" role="button">
+                              Stop</a></button>
+                        </td>
+                        {% endif %}
+                        {% endif %}
 
 
-                          {% endif %}
+
                       </tr>
                       {% endfor %}
                     </tbody>

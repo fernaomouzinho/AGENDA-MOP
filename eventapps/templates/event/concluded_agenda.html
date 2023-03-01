@@ -75,8 +75,10 @@
               <div class="card-body">
                 <div class="row flex-row-reverse mr-1 mt-1 mb-2">
                   <div class="btn-group">
-                    <a href="{%url 'download_Concluded_Agenda_CSV' %}" class="btn btn-light border border-info"><span class="fa fa-print"> PRINT</a>
-                    <a href="{%url 'download_Concluded_Agenda_CSV' %}" class="btn btn-light border border-info"><span class="fa fa-file-excel-o">
+                    <a href="{%url 'download_Concluded_Agenda_CSV' %}" class="btn btn-light border border-info"><span
+                        class="fa fa-print"> PRINT</a>
+                    <a href="{%url 'download_Concluded_Agenda_CSV' %}" class="btn btn-light border border-info"><span
+                        class="fa fa-file-excel-o">
                         EXL</a>
                     <a href="{%url 'download_Concluded_Agenda_CSV' %}" class="btn btn-light border border-info"><span
                         class="fa fa-file-pdf-o"></span> PDF</a>
@@ -99,7 +101,11 @@
                         <th class='text-center'>END TIME</th>
                         <th class='text-center'>LOCATION</th>
                         <th class='text-center'>OBSERVATION</th>
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <th class='text-center'>COMMENT</th>
+                        {% endif %}
+                        {% endif %}
                       </tr>
                     </thead>
                     <tbody>
@@ -122,6 +128,8 @@
                         <td class='text-center'><i class="fa fa-check-square-o"></i>
                         </td>
                         {% endif %}
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
 
                         <td data-title="Title" style="text-align:center;">
                           {% if obj.observation == "" %}
@@ -135,6 +143,8 @@
                                 class='fa fa-edit' style='font-size:20px'></i>
                               Edit</a>
                           </button>
+                          {% endif %}
+                          {% endif %}
 
 
                           {% endif %}

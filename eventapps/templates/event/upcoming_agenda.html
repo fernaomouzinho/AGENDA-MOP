@@ -75,10 +75,13 @@
             <div class="row">
               <div class="card-body">
                 <div class="row flex-row-reverse mr-1 mt-1 mb-2">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</button>
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o"> Exel</button>
-                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-pdf-o"></span> PDF</button>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-print">
+                        Print</button>
+                    <button type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o">
+                        Exel</button>
+                    <button type="button" class="btn btn-light border border-info"><span
+                        class="fa fa-file-pdf-o"></span> PDF</button>
                   </div>
                 </div>
                 <div class="card-header bg-card pb-2 d-flex justify-content-between">
@@ -101,7 +104,11 @@
                         <th class="text-center">START TIME</th>
                         <th class="text-center">END TIME</th>
                         <th class="text-center">LOCATION</th>
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <th class="text-center">ACTION</th>
+                        {% endif %}
+                        {% endif %}
                       </tr>
                     </thead>
                     <tbody>
@@ -109,8 +116,7 @@
                       <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
                         <td data-title="Title">
-                          <a href="{% url 'upcomingAgenda_list_detail' title_slug=obj.title_slug %}"
-                            class="float-left">
+                          <a href="{% url 'upcomingAgenda_list_detail' title_slug=obj.title_slug %}" class="float-left">
                             {{obj.title }}</a>
                         </td>
                         <td style="text-align:center;">{{obj.catagenda}}</td>
@@ -118,6 +124,8 @@
                         <td style="text-align:center;">{{obj.start_time|date:"d/m/Y G:i" }}</td>
                         <td style="text-align:center;">{{ obj.end_time|date:"d/m/Y G:i" }}</td>
                         <td class="text-justify">{{ obj.location }} </td>
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <td class="text-center">
                           <a href="{% url 'postponeAgenda_list' pk=obj.id %}" data-toggle="tooltip" title="Postpone"
                             class="btn btn-sm btn-warning"><i class='fa fa-edit' style='font-size:20px'></i>Postpone</a>
@@ -126,6 +134,8 @@
                             class="btn btn-sm btn-danger" onclick="return confirm(' Are you ready to cancel?')"><i
                               class="fa fa-window-close" style='font-size:20px' aria-hidden="true"></i> Cancel</a>
                         </td>
+                        {% endif %}
+                        {% endif %}
                       </tr>
                       {% endfor %}
                     </tbody>

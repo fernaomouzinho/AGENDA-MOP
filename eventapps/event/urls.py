@@ -38,6 +38,11 @@ urlpatterns = [
          views.runningAgenda_list_detail, name='runningAgenda_list_detail'),
     path('running-agenda/comment/add/<int:pk>',
          views.commentRuAgenda_add, name='commentRuAgenda_add'),
+    path('running-agenda/change/time/<int:pk>',
+         views.runningagenda_change, name='runningagenda_change'),
+    path('running-agenda/stop/time/<int:pk>',
+         views.runningagenda_stop, name='runningagenda_stop'),
+
 
     path('upcoming-agenda/', views.upcomingAgenda_list,
          name='upcomingAgenda_list'),

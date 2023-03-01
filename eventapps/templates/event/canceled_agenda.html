@@ -104,7 +104,12 @@
                         <th class="text-center">END TIME</th>
                         <th class="text-center">CANCEL TIME</th>
                         <th class='text-center'>OBSERVATION</th>
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
                         <th class="text-center">COMMENT</th>
+                        {% endif %}
+                        {% endif %}
+
                       </tr>
                     </thead>
                     <tbody>
@@ -129,6 +134,9 @@
                         </td>
                         {% endif %}
 
+                        {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_cord" %}
+
                         <td data-title="Title" style="text-align:center;">
                           {% if obj.observation == "" %}
                           <button type="button" class="btn btn-primary btn-sm ml-2">
@@ -141,6 +149,9 @@
                                 class='fa fa-edit' style='font-size:20px'></i>
                               Edit</a>
                           </button>
+                          {% endif %}
+                          {% endif %}
+
 
 
                           {% endif %}

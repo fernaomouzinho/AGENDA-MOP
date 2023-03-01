@@ -234,6 +234,26 @@ def runningAgenda_list_detail(request, title_slug):
     }
     return render(request, 'event/running_agenda_detail.html', context)
 
+
+@login_required(login_url='login')
+def runningagenda_change(request, pk):
+    ag = Agenda.objects.get(id=pk)
+    if request.method == 'POST':
+        minute = request.POST.get('minute')
+
+        a = Agenda(end_time=ag.end_time)
+        a.save()
+    return redirect('runningAgenda_list')
+
+
+@login_required(login_url='login')
+def runningagenda_stop(request, pk):
+    ag = Agenda.objects.get(id=pk)
+    current_datetime = datetime.now()
+    ag.end_time = current_datetime
+    ag.save()
+    return redirect('runningAgenda_list')
+
 # ======================================== Upcoming ================================================================
 
 
