@@ -244,6 +244,7 @@ def runningagenda_change(request, pk):
 
         a = ag.end_time
         b = a.time
+
         print("========Time===========", b)
 
         a = Agenda(end_time=ag.end_time)
@@ -259,7 +260,7 @@ def runningagenda_stop(request, pk):
     ag.save()
     return redirect('runningAgenda_list')
 
-# ======================================== Upcoming ================================================================
+# ======================================== Upcoming ============================================
 
 
 @login_required(login_url="/login/")
