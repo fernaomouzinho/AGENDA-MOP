@@ -15,31 +15,24 @@ def menu_home(request):
     agenda_list_home = agenda_list.order_by('is_cancel', '-start_time')
     agenda_count = agenda_list.count()
     all_year = Yearagenda.objects.filter(is_active=True)
-    count_agenda_in_year = agenda_list.values('start_time__year').order_by(
-        'start_time__year').annotate(count=Count('start_time__year'))
+    count_agenda_in_year = agenda_list.values('start_time__year').order_by('start_time__year').annotate(count=Count('start_time__year'))
 
-    concluded_agenda = Agenda.objects.filter(
-        is_active=True, status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")
+    concluded_agenda = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")
     concluded_agenda_count = concluded_agenda.count()
 
     running_agenda = Agenda.objects.filter(is_active=True, status='Read', start_time__lte=datetime.now(), end_time__gte=datetime.now()).order_by("start_time")
     running_agenda_count = running_agenda.count()
 
-    upcoming_agenda = Agenda.objects.filter(
-        is_active=True, is_cancel=False, status='Read', start_time__gte=datetime.now()).order_by("start_time")
+    upcoming_agenda = Agenda.objects.filter(is_active=True, is_cancel=False, status='Read', start_time__gte=datetime.now()).order_by("start_time")
     upcoming_agenda_count = upcoming_agenda.count()
-    pending_upcoming = Agenda.objects.filter(
-        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
-    approved_upcoming = Agenda.objects.filter(
-        is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now(), user=request.user.id).order_by("start_time")
+    pending_upcoming = Agenda.objects.filter(is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now()).order_by("start_time")
+    approved_upcoming = Agenda.objects.filter(is_active=True, is_cancel=False, status='Pending', start_time__gte=datetime.now(), user=request.user.id).order_by("start_time")
 
-    canceled_agenda = Agenda.objects.filter(
-        is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
+    canceled_agenda = Agenda.objects.filter(is_active=True, status='Read', is_cancel=True).order_by('-updated_at')
     canceled_agenda_count = canceled_agenda.count()
 
     request_agenda_list = RequestAgenda.objects.all()
-    request_agenda_list_user = request_agenda_list.filter(
-        user=request.user.id)
+    request_agenda_list_user = request_agenda_list.filter(user=request.user.id)
     request_waitting = request_agenda_list.filter(is_active="False")
 
     count_wait_adj = request_waitting.filter(user__is_adj='True')
@@ -62,13 +55,11 @@ def menu_home(request):
     informative_list = Informative.objects.filter(is_active=True)
     informative_count = informative_list.count()
 
-    executed_informative = Informative.objects.filter(
-        is_active=True, is_done=True)
+    executed_informative = Informative.objects.filter(is_active=True, is_done=True)
     executed_informative_count = executed_informative.count()
     comment_informative = CommentInformative.objects.all()
 
-    unexecuted_informative = Informative.objects.filter(
-        is_active=True, is_done=False)
+    unexecuted_informative = Informative.objects.filter(is_active=True, is_done=False)
 
     unexecuted_informative_count = unexecuted_informative.count()
     current_datetime = datetime.now()
