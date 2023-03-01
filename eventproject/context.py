@@ -22,8 +22,7 @@ def menu_home(request):
         is_active=True, status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")
     concluded_agenda_count = concluded_agenda.count()
 
-    running_agenda = Agenda.objects.filter(is_active=True, status='Read', start_time__lte=datetime.now(
-    ), end_time__gte=datetime.now()).order_by("start_time")
+    running_agenda = Agenda.objects.filter(is_active=True, status='Read', start_time__lte=datetime.now(), end_time__gte=datetime.now()).order_by("start_time")
     running_agenda_count = running_agenda.count()
 
     upcoming_agenda = Agenda.objects.filter(
