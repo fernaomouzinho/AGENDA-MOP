@@ -150,9 +150,8 @@
                             <div class="col-sm-12">
                               <div class="row d-flex justify-content-center">
                                 <input type="text" name="minute" maxlength="2" min="0" max="60" step="1"
-                                  pattern="[0-9]{4}" style="width:70px" class="form-control form-control-sm" />
-
-                                <button type="button"
+                                  style="width:70px" class="form-control form-control-sm" />
+                                <button type="submit"
                                   class="btn border border-primary bg-light btn-sm ml-2">Change</button>
                               </div>
                             </div>
@@ -161,7 +160,7 @@
 
                         <td data-title="Title" style="text-align:center;">
                           <button type="button" class="btn btn-danger btn-sm ml-2">
-                            <span class="fa fa-plus"></span><a class="text-white"
+                            <span class="fa fa-close"></span><a class="text-white"
                               href="{% url 'runningagenda_stop' pk=obj.pk %}" role="button">
                               Stop</a></button>
                         </td>

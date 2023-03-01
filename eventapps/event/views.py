@@ -240,6 +240,11 @@ def runningagenda_change(request, pk):
     ag = Agenda.objects.get(id=pk)
     if request.method == 'POST':
         minute = request.POST.get('minute')
+        print("Minutu:", minute)
+
+        a = ag.end_time
+        b = a.time
+        print("========Time===========", b)
 
         a = Agenda(end_time=ag.end_time)
         a.save()
