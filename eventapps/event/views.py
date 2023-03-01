@@ -237,18 +237,18 @@ def runningAgenda_list_detail(request, title_slug):
 
 @login_required(login_url='login')
 def runningagenda_change(request, pk):
-    ag = Agenda.objects.get(id=pk)
+
     if request.method == 'POST':
-        minute = request.POST.get('minute')
-        print("Minutu:", minute)
+        change_time = request.POST.get('minute')
+        ag = Agenda.objects.get(id=pk)
+        # print("1111111111111111111111111", ag.end_time)
+        # print("2222222222222222222222222", change_time)
 
-        a = ag.end_time
-        b = a.time
+        # a = datetime.strptime(change_time, "%Y/%m/%d %H:%M:%S")
 
-        print("========Time===========", b)
+        ag.end_time = change_time
+        ag.save()
 
-        a = Agenda(end_time=ag.end_time)
-        a.save()
     return redirect('runningAgenda_list')
 
 

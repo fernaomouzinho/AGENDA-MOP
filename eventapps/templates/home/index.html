@@ -119,21 +119,16 @@
                                 </td>
                                 <td class="text-center">{{obj.catagenda }}</td>
                                 <td>{{obj.institution }}</td>
-                                <td class="text-center">{{obj.start_time|date:"d/m/Y G:i" }}
-                                  </td>
+                                <td class="text-center">{{obj.start_time|date:"d/m/Y G:i" }}</td>
                                 <td class="text-center">{{ obj.end_time|date:"d/m/Y G:i"}}</td>
                                 <td>{{ obj.location }} </td>
 
 
                                 <td class='text-center'>
-
-                                  {% with a=obj.start_time b=current_datetime %} {{a|sub:b}} {% endwith %}
-
-
-
+                                {% with a=obj.start_time b=current_datetime %}
+                                {{a|sub:b}}
+                                {% endwith %}
                                 </td>
-
-
                                 <td><button style="font-size:14px;"
                                     class="bg-warning text-white border w-100">Upcoming</button></td>
                                 <td><i class="fa fa-square-o"></i></td>
