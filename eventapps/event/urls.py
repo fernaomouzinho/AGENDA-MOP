@@ -83,9 +83,14 @@ urlpatterns = [
     path('request-agenda/waitting/uedc/', views.waitting_requestedagendauedc_list,
          name='waitting_requestedagendauedc_list'),
 
-
-
-
+     path('request-agenda/approve/uga/', views.approved_requestedagendauga_list,
+         name='approved_requestedagendauga_list'),
+    path('request-agenda/approve/uap/', views.approved_requestedagendauap_list,
+         name='approved_requestedagendauap_list'),
+    path('request-agenda/approve/ucvq/', views.approved_requestedagendaucvq_list,
+         name='approved_requestedagendaucvq_list'),
+    path('request-agenda/approve/uedc/', views.approved_requestedagendauedc_list,
+         name='approved_requestedagendauedc_list'),
 
     path('informative-note/', views.informative_list, name='informative_list'),
     path('informative-note/add/', views.informative_add, name='informative_add'),

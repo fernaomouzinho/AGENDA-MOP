@@ -88,62 +88,49 @@
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
 
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        ADJ-Approve List
-                                        {% if count_aprv_adj.count > 0 %}
-                                        (<b>{{count_aprv_adj.count}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
+                                  <a href="{%url 'approved_requestedagendauga_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      UGA-Approve List
+                                      {% if count_aprv_uga.count > 0%}
+                                      (<b>{{count_aprv_uga.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
 
-                                    </a>
+                                  </a>
+                                  <a href="{%url 'approved_requestedagendauap_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      UAP-Approve List
+                                      {% if count_aprv_uap.count > 0 %}
+                                      (<b>{{count_aprv_uap.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
 
+                                  </a>
+                                  <a href="{%url 'approved_requestedagendaucvq_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      UCVQ-Approve List
+                                      {% if count_aprv_ucvq.count > 0 %}
+                                      (<b>{{count_aprv_ucvq.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
 
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        UGA-Approve List
-                                        {% if count_aprv_uga.count > 0%}
-                                        (<b>{{count_aprv_uga.count}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
-
-                                    </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        UAP-Approve List
-                                        {% if count_aprv_uap.count > 0 %}
-                                        (<b>{{count_aprv_uap.count}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
-
-                                    </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        UCVQ-Approve List
-                                        {% if count_aprv_ucvq.count > 0 %}
-                                        (<b>{{count_aprv_ucvq.count}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
-
-                                    </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        UEDC-Approve List
-                                        {% if count_aprv_uedc.count > 0%}
-                                        (<b>{{count_aprv_uedc.count}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
-                                    </a>
+                                  </a>
+                                  <a href="{%url 'approved_requestedagendauedc_list' %}" class="btn btn-link"
+                                      aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                          style="font-size:18px;"></i>
+                                      UEDC-Approve List
+                                      {% if count_aprv_uedc.count > 0%}
+                                      (<b>{{count_aprv_uedc.count}}</b>)
+                                      {% else %}
+                                      (<b>0</b>)
+                                      {% endif %}
+                                  </a>
                                 </h5>
                             </div>
 
@@ -199,6 +186,7 @@
                                 <th>AGENDA REQUESTED</th>
                                 <th class="text-center">DATE REQUESTED</th>
                                 <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -219,6 +207,27 @@
                                     {% else %}
                                     Waitting
                                     {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
+                                    <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Approve" class="btn btn-sm btn-success"><span
+                                            class="	fa fa-thumbs-o-up"></span> Approved</a>
+                                    {% endif %}
+
+                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+
+
+                                    <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
+                                            style='font-size:20px'></i> Edit</a>
+
+                                    |
+                                    <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
+                                        title="Delete" class="btn btn-sm btn-danger"
+                                        onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
+                                            style='font-size:20px'></i> Delete</a>
+                                  {% endif %}
                                 </td>
                             </tr>
 

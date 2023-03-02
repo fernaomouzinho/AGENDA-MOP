@@ -82,40 +82,40 @@
                                         Waitting List
 
                                         {% if request.user.username == 'adjadn' %}
-                                        {% if count_wait_adj > 0%}
-                                        (<b>{{count_wait_adj}}</b>)
+                                        {% if count_wait_adj.count > 0%}
+                                        (<b>{{count_wait_adj.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
                                         {% endif %}
 
                                         {% if request.user.username == 'ugaadn' %}
-                                        {% if count_wait_adj > 0%}
-                                        (<b>{{count_wait_adj}}</b>)
+                                        {% if count_wait_uga.count > 0%}
+                                        (<b>{{count_wait_uga.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
                                         {% endif %}
 
                                         {% if request.user.username == 'uapadn' %}
-                                        {% if count_wait_uap > 0%}
-                                        (<b>{{count_wait_uap}}</b>)
+                                        {% if count_wait_uap.count > 0%}
+                                        (<b>{{count_wait_uap.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
                                         {% endif %}
 
                                         {% if request.user.username == 'ucvqadn' %}
-                                        {% if count_wait_ucvq > 0%}
-                                        (<b>{{count_wait_ucvq}}</b>)
+                                        {% if count_wait_ucvq.count > 0%}
+                                        (<b>{{count_wait_ucvq.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
                                         {% endif %}
 
                                         {% if request.user.username == 'uedcadn' %}
-                                        {% if count_wait_uedc > 0%}
-                                        (<b>{{count_wait_uedc}}</b>)
+                                        {% if count_wait_uedc.count > 0%}
+                                        (<b>{{count_wait_uedc.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
@@ -143,7 +143,7 @@
         <div class="col-sm-12">
             <div class="border-info shadow-lg bg-white">
                 <div class="card-body">
-                    <div class="card-header bg-card mt-2 d-flex justify-content-between">
+                    <div class="card-header bg-card d-flex justify-content-between">
                         <div class="row flex-row">
                             <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Requested Agenda
                             </h5>
@@ -165,8 +165,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="{% url 'waitting_requestedagendauap_list' %}" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendauap_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UAP-Waitting List
                                         {% if count_wait_uap.count > 0%}
@@ -176,8 +176,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="{% url 'waitting_requestedagendaucvq_list' %}" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendaucvq_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UCVQ-Waitting List
                                         {% if count_wait_ucvq.count > 0%}
@@ -187,8 +187,8 @@
                                         {% endif %}
 
                                     </a>
-                                    <a href="{% url 'waitting_requestedagendauedc_list' %}" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{% url 'waitting_requestedagendauedc_list' %}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UEDC-Waitting List
                                         {% if count_wait_uedc.count > 0%}
@@ -225,59 +225,45 @@
                         <div class="card">
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
-
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        ADJ-Approve List
-                                        {% if count_aprv_adj > 0 %}
-                                        (<b>{{count_aprv_adj}}</b>)
-                                        {% else %}
-                                        (<b>0</b>)
-                                        {% endif %}
-
-                                    </a>
-
-
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{%url 'approved_requestedagendauga_list'%}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UGA-Approve List
-                                        {% if count_aprv_uga > 0%}
-                                        (<b>{{count_aprv_uga}}</b>)
+                                        {% if count_aprv_uga.count > 0%}
+                                        (<b>{{count_aprv_uga.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{%url 'approved_requestedagendauap_list'%}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UAP-Approve List
-                                        {% if count_aprv_uap > 0 %}
-                                        (<b>{{count_aprv_uap}}</b>)
+                                        {% if count_aprv_uap.count > 0 %}
+                                        (<b>{{count_aprv_uap.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{%url 'approved_requestedagendaucvq_list'%}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UCVQ-Approve List
-                                        {% if count_aprv_ucvq > 0 %}
-                                        (<b>{{count_aprv_ucvq}}</b>)
+                                        {% if count_aprv_ucvq.count > 0 %}
+                                        (<b>{{count_aprv_ucvq.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
 
                                     </a>
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                    <a href="{%url 'approved_requestedagendauedc_list'%}" class="btn btn-link"
+                                        aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-list pr-2"
                                             style="font-size:18px;"></i>
                                         UEDC-Approve List
-                                        {% if count_aprv_uedc > 0%}
-                                        (<b>{{count_aprv_uedc}}</b>)
+                                        {% if count_aprv_uedc.count > 0%}
+                                        (<b>{{count_aprv_uedc.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
@@ -391,6 +377,7 @@
                                     {% endif %}
 
                                     {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
+
 
                                     <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip"
                                         title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'

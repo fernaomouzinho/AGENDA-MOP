@@ -643,6 +643,37 @@ def waitting_requestedagendauedc_list(request):
     return render(request, 'event/waitting/request_waittinguedc_list.html', context)
 
 
+
+# ======================================== Waitting Requesting Agenda ================================================================
+@login_required(login_url="/login/")
+def approved_requestedagendauga_list(request):
+    context = {
+    }
+    return render(request, 'event/approve/request_approveuga_list.html', context)
+
+
+@login_required(login_url="/login/")
+def approved_requestedagendauap_list(request):
+    context = {
+    }
+    return render(request, 'event/approve/request_approveuap_list.html', context)
+
+
+@login_required(login_url="/login/")
+def approved_requestedagendaucvq_list(request):
+    context = {
+    }
+    return render(request, 'event/approve/request_approveucvq_list.html', context)
+
+
+@login_required(login_url="/login/")
+def approved_requestedagendauedc_list(request):
+    context = {
+    }
+    return render(request, 'event/approve/request_approveuedc_list.html', context)
+
+
+
 # ======================================== Aprove Request Agenda ================================================================
 
 
