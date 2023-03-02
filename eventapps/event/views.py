@@ -241,14 +241,9 @@ def runningagenda_change(request, pk):
     if request.method == 'POST':
         change_time = request.POST.get('minute')
         ag = Agenda.objects.get(id=pk)
-        # print("1111111111111111111111111", ag.end_time)
-        # print("2222222222222222222222222", change_time)
-
-        # a = datetime.strptime(change_time, "%Y/%m/%d %H:%M:%S")
-
-        ag.end_time = change_time
+        dt_object = datetime.strptime(change_time, "%d/%m/%Y %H:%M:%S")
+        ag.end_time = dt_object
         ag.save()
-
     return redirect('runningAgenda_list')
 
 
