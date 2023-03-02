@@ -149,7 +149,11 @@
 
                                   <td class='text-center'>
                                     {% with ah=current_datetime.hour|sub:obj.end_time.hour am=current_datetime.minute|sub:obj.end_time.minute %}
+                                    {% if ah > 0 %}
                                     {{ah}}h:
+                                    {% else %}
+                                      {{ah|stringformat:"+d"|slice:"1:"}}h:
+                                    {% endif %}
                                     {% if am > 0 %}
                                     {{am}}
                                     {% else %}
@@ -157,8 +161,6 @@
                                     {% endif %}
                                     {% endwith %}
                                   </td>
-
-
                                   <td><button style="font-size:14px;"
                                       class="bg-success text-white border w-100">Running</button></td>
                                   <td><i class="fa fa-spinner fa-spin"></i></td>
