@@ -1,99 +1,85 @@
-{% extends "layouts/base-fullscreen.html" %}
 
-{% block title %} Login {% endblock %}
+	{% extends "layouts/base.html" %}
+	{% load static %}
+	{% load crispy_forms_tags %}
+	{% block content %}
+	<div class="row d-flex justify-content-center ">
+	    <div class="col-sm-12">
+	        <div class="border-info shadow-lg bg-white d-flex justify-content-center">
 
-{% block content %} 
+	            <div class="col-md-6" style="background-color:rgb(237, 246, 247)">
+	                <div class="row">
+	                    <div class="card-body">
+	                        <div class="card-header bg-card p-3 d-flex justify-content-between">
+	                            <div class="row flex-row pl-2">
+	                                <h5 class="text-light"> <i class="fa fa-plus" style="font-size:18px"></i> Register User </h5>
+	                            </div>
+	                        </div>
+	                        <hr>
 
-	<div class="auth-content">
-		<div class="card">
-			<div class="row align-items-center text-center">
-				<div class="col-md-12">
+													{% if not success %}
+	                        <form method="POST" enctype="multipart/form-data">
+	                            {% csrf_token %}
+	                            <div class="col-12">
+																<div class="input-group mb-3">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text"><i class="feather icon-user"></i></span>
+																	</div>
+																	{{ form.username }}
+																</div>
+																<span class="text-error">{{ form.username.errors }}</span>
 
-					<div class="card-body">
-						<img src="/static/assets/images/logo-dark.png" alt="" class="img-fluid mb-4">
-						<h4 class="mb-3 f-w-400">
-							<a target="_blank" 
-							   href="https://appseed.us/admin-dashboards/django-dashboard-gradient-pro">Django PRO</a> - Sign UP
-						</h4>
-						<span class="mb-0 text-muted">
-							{% if msg %}
-								{{ msg | safe }}
-							{% else %}
-								Add your credentials
-							{% endif %} 
-						</span>
-						<!-- dummy spacer -->
-						<p> <br /> </p>		
-						
-						<!-- Hide the form on success -->
-						{% if not success %}
-							<form role="form" method="post" action="">
+																<div class="input-group mb-3">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text"><i class="feather icon-mail"></i></span>
+																	</div>
+																	{{ form.email }}
+																</div>
+																<span class="text-error">{{ form.email.errors }}</span>
 
-								{% csrf_token %}  
-														
-								<div class="input-group mb-3">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="feather icon-user"></i></span>
-									</div>
-									{{ form.username }}
-								</div>	
-								<span class="text-error">{{ form.username.errors }}</span>
+																<div class="input-group mb-4">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text"><i class="feather icon-lock"></i></span>
+																	</div>
+																	{{ form.password1 }}
+																</div>
+																<span class="text-error">{{ form.password1.errors }}</span>
 
-								<div class="input-group mb-3">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="feather icon-mail"></i></span>
-									</div>
-									{{ form.email }}
-								</div>
-								<span class="text-error">{{ form.email.errors }}</span>
+																<div class="input-group mb-4">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text"><i class="feather icon-lock"></i></span>
+																	</div>
+																	{{ form.password2 }}
+																</div>
+																<span class="text-error">{{ form.password2.errors }}</span>
 
-								<div class="input-group mb-4">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="feather icon-lock"></i></span>
-									</div>
-									{{ form.password1 }}
-								</div>
-								<span class="text-error">{{ form.password1.errors }}</span>
+	                            </div>
+	                            <div class="col-12 d-flex justify-content-end p-3"
+	                                style="background-color:rgb(195, 234, 218)">
 
-								<div class="input-group mb-4">
-									<div class="input-group-prepend">
-										<span class="input-group-text"><i class="feather icon-lock"></i></span>
-									</div>
-									{{ form.password2 }}
-								</div>
-								<span class="text-error">{{ form.password2.errors }}</span>
+	                                <button class="btn btn-danger text-white mr-2"><a href="{%url 'home' %}"
+	                                        class="text-white text-decoration-none">Cancel</a></button>
+	                                <button type="submit" class="btn btn-primary">Sign up</button>
+	                            </div>
+	                        </form>
+														{% endif %}
 
-								<div class="form-group text-left mt-2">
-									<div class="checkbox checkbox-primary d-inline">
-										<input type="checkbox" name="checkbox-fill-2" id="checkbox-fill-2">
-										<label for="checkbox-fill-2" class="cr">I agree with <a href="#">terms</a>.</label>
-									</div>
-								</div>
-								<button type="submit" name="register" class="btn btn-primary btn-block mb-4">Sign up</button>
-							
-							</form>
 
-							<p class="mb-0 text-muted">Have an account? <a href="{% url 'login' %}" class="f-w-400">Login</a></p>
-						{% endif %}
 
-						<p class="mb-2 text-muted">
-							<br />
-							&copy; <a target="_blank" rel="noopener" href="https://bit.ly/37fF9RT" class="f-w-400">CodedThemes</a>
-							- coded by <a target="_blank" rel="noopener" href="https://appseed.us" class="f-w-400">AppSeed</a>
-						</p>
 
-					</div>
 
-				</div>
-			</div>
-		</div>
+	                    </div> <!--end card-body-->
+	                </div>
+	                <!--end col-->
+	            </div>
+	            <!--end row-->
+
+	            <!--end card-body-->
+	        </div>
+	        <!--end card-->
+	    </div>
+	    <!--end col-->
 	</div>
+	<!--end row-->
 
-{% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-
-	<script src="/static/assets/js/waves.min.js"></script>
-
-{% endblock javascripts %} 
+	{% endblock %}

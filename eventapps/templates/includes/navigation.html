@@ -32,18 +32,10 @@
                         <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 255, 255)'></i>
                     </a>
                 </li>
-
-
                 {% endif %}
-
-
-
                 {% endif %}
-
-
 
                 {% if user.groups.all.0.name == 'gp_dei' %}
-
                 <!-- =============================== Start Request Agenda ===============================-->
                 {% if pending_request.count != 0 %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'requestedagenda_read' %}">
@@ -79,17 +71,12 @@
 
 
                 <!-- =============================== End Notification ===============================-->
-
                 <!-- ========================== Start Darshboard ===============================-->
                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">DASHBOARD <i
                             class="fa fa-home"></i></a>
                 </li>
                 <!-- ========================= End Darshboard =============================-->
 
-                <!-- ========================== Start Report ===============================-->
-                <li class="nav-item"><a class="nav-link" href="#">REPORT </a>
-                </li>
-                <!-- ========================= End Darshboard =============================-->
 
 
                 <!-- ========================== Start Admin Navigation ===============================-->
@@ -293,6 +280,11 @@
                 {% else %}
 
                 {% endif %}
+
+                <!-- ========================== Start Report ===============================-->
+                <li class="nav-item"><a class="nav-link" href="{% url 'report_agenda' %}">REPORT </a>
+                </li>
+                <!-- ========================= End Darshboard =============================-->
 
 
 

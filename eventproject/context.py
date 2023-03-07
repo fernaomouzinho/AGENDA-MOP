@@ -64,6 +64,9 @@ def menu_home(request):
     unexecuted_informative_count = unexecuted_informative.count()
     current_datetime = datetime.now()
 
+
+    report_conclude = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False, observation__isnull=False, end_time__lt=datetime.now()).order_by("start_time")
+
     return dict(institution_list=institution_list,
                 attendence_list=attendence_list,
                 unit_list=unit_list,
@@ -116,4 +119,6 @@ def menu_home(request):
                 unexecuted_informative=unexecuted_informative,
                 unexecuted_informative_count=unexecuted_informative_count,
                 current_datetime=current_datetime,
+
+                report_conclude=report_conclude,
                 )

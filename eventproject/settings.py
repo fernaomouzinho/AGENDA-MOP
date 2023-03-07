@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'eventapps.custom',
     'eventapps.institute',
     'eventapps.event',
+    'eventapps.reports',
     'crispy_forms',
     'bootstrap_datepicker_plus',
     'mathfilters',
