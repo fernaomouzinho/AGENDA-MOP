@@ -18,7 +18,14 @@ from pathlib import Path
 def report_agenda(request):
     if not request.user.is_authenticated:
         return redirect('login')
+    year=datetime.now().year
+    print(year)
+    single_year = Yearagenda.objects.get(year=year)
+    all_catagenda = CatAgenda.objects.all()
+
     context = {
+       'single_year':single_year,
+       'all_catagenda':all_catagenda,
     }
 
     return render(request, 'report/report_home.html', context)

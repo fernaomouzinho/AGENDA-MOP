@@ -78,7 +78,7 @@
               <div class="widget-small border border-primary d-flex justify-content-left p-2">
                 <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
                 <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
+                  <a href="{%url 'report_based_anual' year=single_year%}">
                     <h6>ANNUAL</h6>
                   </a>
                 </div>
@@ -88,9 +88,8 @@
               <div class="widget-small border border-primary d-flex justify-content-left p-2">
                 <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
                 <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
+                  <a href="{%url 'report_based_semestral' year=single_year %}">
                     <h6>SEMESTRAL</h6>
-
                   </a>
                 </div>
               </div>
@@ -99,9 +98,8 @@
               <div class="widget-small border border-primary d-flex justify-content-left p-2">
                 <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
                 <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
+                  <a href="{%url 'report_based_trimestral' year=single_year %}">
                     <h6>TRIMESTRAL</h6>
-
                   </a>
                 </div>
               </div>
@@ -110,7 +108,7 @@
               <div class="widget-small border border-primary d-flex justify-content-left p-2">
                 <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
                 <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
+                  <a href="{%url 'report_based_mensual' year=single_year %}">
                     <h6>MENSUAL</h6>
                   </a>
                 </div>
@@ -128,28 +126,20 @@
         <hr>
         <div class="col-sm-12 pb-5 pt-3">
           <div class="row">
+            {% for obj in all_catagenda %}
             <div class="col-md-6 col-lg-6">
               <div class="widget-small border border-primary d-flex justify-content-left p-2">
                 <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
                 <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
-                    <h6>INTERNAL</h6>
-
+                  <a
+                    href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug%}">
+                    <h6>{{obj.name_category}}</h6>
                   </a>
                 </div>
               </div>
             </div>
+            {% endfor %}
 
-            <div class="col-md-6 col-lg-6">
-              <div class="widget-small border border-primary d-flex justify-content-left p-2">
-                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
-                <div class="pl-2">
-                  <a href="{%url 'completedAgenda_list' %}">
-                    <h6>EXTERNAL</h6>
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -185,9 +175,6 @@
             </div>
           </div>
         </div>
-
-
-
 
       </div> <!--end card-body-->
     </div>
