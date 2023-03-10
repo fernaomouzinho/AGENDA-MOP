@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block headblock %}
+    {% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{%static 'front/images/icons/favicon.PNG' %}" />
+
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}" integrity="" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'main/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'main/css/main.css' %}" rel="stylesheet">
+
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+</head>
+
+<body>
+
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-12 bg-white">
+                <div class="row d-flex justify-content-center">
+                    <img src="{%static 'main/images/logo.png' %}" style="width:1080px;height:160px;" class="pb-2">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h2>RELATORIO MEETING MANAGEMENT</h2>
+                </div>
+
+                <table class="table table-bordered table-responsive ">
+                    <thead class="table-default">
+                        <tr>
+                            <th>No</th>
+                            <th>Data/Loron</th>
+                            <th>Agenda</th>
+                            <th>Observasaun</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in semester_report %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{obj.start_time|date:"d/m/Y G:i"}}</td>
+                            <td>{{obj.title}}</td>
+                            <td>{{obj.observation}}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+</body>
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+<script src="{% static 'main/js/bootstrap.min.js' %}" integrity="" crossorigin="anonymous"></script>
+
+</html>
+<!-- ======================================================================= End Footer ================================================================ -->

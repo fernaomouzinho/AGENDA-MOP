@@ -1,5 +1,6 @@
-from eventapps.event.models import Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
+from eventapps.event.models import CatAgenda, Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
 from eventapps.institute.models import Institution, Attendence, unitADN, DepartmentADN
+from eventapps.reports.models import Semestral, Trimestral, Mensual
 from datetime import datetime
 from django.db.models import Count
 
@@ -65,12 +66,17 @@ def menu_home(request):
     current_datetime = datetime.now()
 
 
+    all_catagenda = CatAgenda.objects.all()
+    all_agenda=Agenda.objects.all()
+    all_semesters=Semestral.objects.all()
+    all_trimesters=Trimestral.objects.all()
     report_conclude = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False, observation__isnull=False, end_time__lt=datetime.now()).order_by("start_time")
 
     return dict(institution_list=institution_list,
                 attendence_list=attendence_list,
                 unit_list=unit_list,
                 dep_list=dep_list,
+
 
                 agenda_list=agenda_list,
                 histori_agenda_list=histori_agenda_list,
@@ -120,5 +126,9 @@ def menu_home(request):
                 unexecuted_informative_count=unexecuted_informative_count,
                 current_datetime=current_datetime,
 
+                all_agenda=all_agenda,
+                all_catagenda=all_catagenda,
+                all_semesters=all_semesters,
+                all_trimesters=all_trimesters,
                 report_conclude=report_conclude,
                 )

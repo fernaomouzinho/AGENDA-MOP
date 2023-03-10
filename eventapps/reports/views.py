@@ -20,11 +20,8 @@ def report_agenda(request):
         return redirect('login')
     year=datetime.now().year
     single_year = Yearagenda.objects.get(year=year)
-    all_catagenda = CatAgenda.objects.all()
-
     context = {
        'single_year':single_year,
-       'all_catagenda':all_catagenda,
     }
 
     return render(request, 'report/report_home.html', context)
@@ -34,11 +31,9 @@ def report_based_year(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
     single_year = Yearagenda.objects.get(year=year)
-    all_catagenda = CatAgenda.objects.all()
 
     context = {
         'single_year':single_year,
-        'all_catagenda':all_catagenda,
     }
     return render(request, 'report/report_year.html', context)
 
@@ -62,11 +57,10 @@ def report_based_semestral(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
     single_year = Yearagenda.objects.get(year=year)
-    all_semesters=Semestral.objects.all()
+
 
     context = {
         'single_year':single_year,
-        'all_semesters':all_semesters,
     }
     return render(request, 'report/report_semestral.html', context)
 
@@ -106,11 +100,9 @@ def report_based_trimestral(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
     single_year = Yearagenda.objects.get(year=year)
-    all_trimesters=Trimestral.objects.all()
 
     context = {
         'single_year':single_year,
-        'all_trimesters':all_trimesters,
     }
     return render(request, 'report/report_trimestral.html', context)
 
@@ -194,10 +186,12 @@ def report_based_catagenda_annual(request, year, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
     single_year = Yearagenda.objects.get(year=year)
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
     report_catagenda_anual = Agenda.objects.filter(catagenda__name_category_slug=name_cat_slug, start_time__year=year).order_by('-start_time')
 
     context = {
         'single_year':single_year,
+        'single_category':single_category,
         'report_catagenda_anual':report_catagenda_anual,
     }
     return render(request, 'report/report_catagenda_annual.html', context)
@@ -224,7 +218,6 @@ def report_based_canceledagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    current_datetime = datetime.now()
     single_year = Yearagenda.objects.get(year=year)
     report_canceledagenda_anual = Agenda.objects.filter(is_cancel=True).order_by('-start_time')
 
@@ -261,18 +254,64 @@ def report_based_canceledagenda_annual(request, year):
 
 
 
+@login_required(login_url="/login/")
+def print_all_reportagenda_annual(request, year):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    context = {
+       'single_year':single_year,
+    }
+    return render(request, 'report/print/print_all_reportagenda_annual.html', context)
+
+@login_required(login_url="/login/")
+def print_all_reportagenda_semestral(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_semester=Semestral.objects.get(name_slug=name_slug)
+    month_start = 1
+    month_end = 6
+
+    a = request.path
+    b = Path(a)
+    c=b.parent
+    print(c)
+    d=c.stem
+    print(d)
+    head_tail = os.path.split(a)
+    v = head_tail[0]
 
 
+    if v == "/report/agenda/"+d+"/first-semester":
+        rs=Agenda.objects.filter(start_time__month__gte=month_start, start_time__month__lte=month_end, start_time__year=year).order_by('-start_time')
+    else:
+        rs=Agenda.objects.filter(start_time__month__gt=month_end)
+
+    context = {
+        'single_year':single_year,
+        #'all_semesters':all_semesters,
+        'single_semester':single_semester,
+        'semester_report':rs,
+    }
+    return render(request, 'report/print/print_all_reportagenda_semestral.html', context)
 
 
 
 @login_required(login_url="/login/")
-def print_all_report_agenda(request):
+def print_all_reportagenda_category(request, year, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    report_catagenda_anual = Agenda.objects.filter(catagenda__name_category_slug=name_cat_slug, start_time__year=year).order_by('-start_time')
+
     context = {
+        'single_year':single_year,
+        'report_catagenda_anual':report_catagenda_anual,
     }
-    return render(request, 'report/print_all_report_agenda.html', context)
+    return render(request, 'report/print/print_all_reportagenda_category.html', context)
+
+
 
 
 
