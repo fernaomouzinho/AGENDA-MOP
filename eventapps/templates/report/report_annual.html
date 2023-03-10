@@ -83,25 +83,20 @@
                     </div>
                 </div>
                 <hr />
-                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
-                    class="fa fa-angle-double-right"></i>
-                <a href="{%url 'report_based_semestral' year=single_year %}">SEMESTRAL</a> <i
-                    class="fa fa-angle-double-right"></i> <a
-                    href="{%url 'report_based_trimestral' year=single_year %}">TRIMESTRAL</a> <i
-                    class="fa fa-angle-double-right"></i> <a
-                    href="{%url 'report_based_mensual' year=single_year %}">MENSUAL</a> ||||
-
-
+                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                <i class="fa fa-angle-double-right"></i>
+                <a href="{%url 'report_based_semestral' year=single_year %}">SEMESTRAL</a>
+                <i class="fa fa-angle-double-right"></i>
+                <a href="{%url 'report_based_trimestral' year=single_year %}">TRIMESTRAL</a>
+                <i class="fa fa-angle-double-right"></i>
+                <a href="{%url 'report_based_mensual' year=single_year %}">MENSUAL</a> ||||
                 <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
 
                 {% for obj in all_catagenda %}
                 <i class="fa fa-angle-double-right"></i><a
-                    href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug%}">
+                    href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug %}">
                     {{obj.name_category}}</a>
                 {% endfor %}
-
-
-
                 ||||
                 <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
                 <i class="fa fa-angle-double-right"></i><a

@@ -125,6 +125,7 @@ def report_based_trimestral_detail(request, year, name_slug):
     b = Path(a)
     c=b.parent.parent
     d=c.stem
+    print(d)
     head_tail = os.path.split(a)
     v = head_tail[0]
 
@@ -203,12 +204,12 @@ def report_based_concludedagenda_annual(request, year):
 
     current_datetime = datetime.now()
     single_year = Yearagenda.objects.get(year=year)
-    report_concluedagenda_anual = Agenda.objects.filter(end_time__lt=current_datetime).order_by('-start_time')
+    report_concludedagenda_anual = Agenda.objects.filter(end_time__lt=current_datetime, start_time__year=year).order_by('-start_time')
 
 
     context = {
         'single_year':single_year,
-        'report_concluedagenda_anual':report_concluedagenda_anual,
+        'report_concludedagenda_anual':report_concludedagenda_anual,
     }
     return render(request, 'report/report_concludedagenda_annual.html', context)
 
@@ -219,7 +220,7 @@ def report_based_canceledagenda_annual(request, year):
         return redirect('login')
 
     single_year = Yearagenda.objects.get(year=year)
-    report_canceledagenda_anual = Agenda.objects.filter(is_cancel=True).order_by('-start_time')
+    report_canceledagenda_anual = Agenda.objects.filter(is_cancel=True, start_time__year=year).order_by('-start_time')
 
 
     context = {
@@ -282,7 +283,6 @@ def print_all_reportagenda_semestral(request, year, name_slug):
     head_tail = os.path.split(a)
     v = head_tail[0]
 
-
     if v == "/report/agenda/"+d+"/first-semester":
         rs=Agenda.objects.filter(start_time__month__gte=month_start, start_time__month__lte=month_end, start_time__year=year).order_by('-start_time')
     else:
@@ -299,6 +299,71 @@ def print_all_reportagenda_semestral(request, year, name_slug):
 
 
 @login_required(login_url="/login/")
+def print_all_reportagenda_trimestral(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent
+    d=c.stem
+    print(d)
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if v == "/report/agenda/"+d+"/trimestral/first-trimester":
+        rt=Agenda.objects.filter(start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, start_time__year=year).order_by('-start_time')
+    elif v == "/report/agenda/"+d+"/trimestral/second-trimester":
+        rt=Agenda.objects.filter(start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, start_time__year=year).order_by('-start_time')
+    elif v == "/report/agenda/"+d+"/trimestral/third-trimester":
+        rt=Agenda.objects.filter(start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, start_time__year=year).order_by('-start_time')
+    else:
+        rt=Agenda.objects.filter(start_time__month__gt=thirdPeriode_end, start_time__year=year).order_by('-start_time')
+
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'trimester_report':rt,
+    }
+    return render(request, 'report/print/print_all_reportagenda_trimestral.html', context)
+
+
+@login_required(login_url="/login/")
+def print_all_reportagenda_mensual(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    report_mensual = Agenda.objects.filter(start_time__month=month_num)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'report_mensual':report_mensual,
+    }
+    return render(request, 'report/print/print_all_reportagenda_mensual.html', context)
+
+
+
+
+
+
+
+
+
+
+@login_required(login_url="/login/")
 def print_all_reportagenda_category(request, year, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -310,6 +375,79 @@ def print_all_reportagenda_category(request, year, name_cat_slug):
         'report_catagenda_anual':report_catagenda_anual,
     }
     return render(request, 'report/print/print_all_reportagenda_category.html', context)
+
+
+@login_required(login_url="/login/")
+def print_all_reportconcludedagenda_annual(request, year):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    current_datetime = datetime.now()
+    single_year = Yearagenda.objects.get(year=year)
+    report_concludedagenda_anual = Agenda.objects.filter(end_time__lt=current_datetime, start_time__year=year).order_by('-start_time')
+
+    context = {
+       'single_year':single_year,
+       'report_concludedagenda_anual':report_concludedagenda_anual,
+    }
+    return render(request, 'report/print/print_all_reportconcludedagenda_annual.html', context)
+
+@login_required(login_url="/login/")
+def print_all_reportcanceledagenda_annual(request, year):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    report_canceledagenda_anual = Agenda.objects.filter(is_cancel=True, start_time__year=year).order_by('-start_time')
+
+    context = {
+       'single_year':single_year,
+       'report_canceledagenda_anual':report_canceledagenda_anual,
+    }
+    return render(request, 'report/print/print_all_reportcanceledagenda_annual.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
