@@ -14,6 +14,8 @@ urlpatterns = [
     path('report/<int:year>/mensual/<slug:name_slug>/', views.report_based_mensual_detail, name='report_based_mensual_detail'),
 
     path('report/<int:year>/<slug:name_cat_slug>/', views.report_based_catagenda_annual, name='report_based_catagenda_annual'),
+    path('report/<int:year>/concluded/list', views.report_based_concludedagenda_annual, name='report_based_concludedagenda_annual'),
+    path('report/<int:year>/canceled/list', views.report_based_canceledagenda_annual, name='report_based_canceledagenda_annual'),
 
 
 

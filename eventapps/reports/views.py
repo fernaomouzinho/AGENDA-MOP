@@ -19,7 +19,6 @@ def report_agenda(request):
     if not request.user.is_authenticated:
         return redirect('login')
     year=datetime.now().year
-    print(year)
     single_year = Yearagenda.objects.get(year=year)
     all_catagenda = CatAgenda.objects.all()
 
@@ -202,6 +201,59 @@ def report_based_catagenda_annual(request, year, name_cat_slug):
         'report_catagenda_anual':report_catagenda_anual,
     }
     return render(request, 'report/report_catagenda_annual.html', context)
+
+@login_required(login_url="/login/")
+def report_based_concludedagenda_annual(request, year):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    current_datetime = datetime.now()
+    single_year = Yearagenda.objects.get(year=year)
+    report_concluedagenda_anual = Agenda.objects.filter(end_time__lt=current_datetime).order_by('-start_time')
+
+
+    context = {
+        'single_year':single_year,
+        'report_concluedagenda_anual':report_concluedagenda_anual,
+    }
+    return render(request, 'report/report_concludedagenda_annual.html', context)
+
+
+@login_required(login_url="/login/")
+def report_based_canceledagenda_annual(request, year):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    current_datetime = datetime.now()
+    single_year = Yearagenda.objects.get(year=year)
+    report_canceledagenda_anual = Agenda.objects.filter(is_cancel=True).order_by('-start_time')
+
+
+    context = {
+        'single_year':single_year,
+        'report_canceledagenda_anual':report_canceledagenda_anual,
+    }
+    return render(request, 'report/report_canceledagenda_annual.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
