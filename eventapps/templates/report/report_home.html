@@ -15,7 +15,7 @@
 
           <div class="card-header bg-card pb-2  d-flex justify-content-between">
             <div class="row flex-row">
-              <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> Report By:</h5>
+              <h5 class="text-light"> <i class="fa fa-list " style="font-size:18px;"></i> YEAR</h5>
             </div>
 
           </div>
@@ -31,7 +31,6 @@
                     </span>
                   </li>
                   {% endfor %}
-
                 </h5>
               </div>
             </div>
@@ -66,80 +65,116 @@
     <div class="border-info shadow-lg bg-white">
 
       <div class="card-body">
-        <hr />
-        <div class="row justify-content-between">
-          <div class="col-sm-12">
-            <div class="input-group d-flex justify-content-end">
-              <div class="input-group-append">
-                <a href="#" type="button" class="btn btn-light border border-info"><span class="fa fa-print"> Print</a>
-                <a href="#" type="button" class="btn btn-light border border-info"><span class="fa fa-file-excel-o">
-                    Exel</a>
-                <a href="#" type="button" class="btn btn-light border border-info"><span
-                    class="fa fa-file-pdf-o"></span> PDF</a>
+
+        <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
+          <div class="row flex-row">
+            <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> Reported by Periode</h5>
+          </div>
+        </div>
+        <hr>
+        <div class="col-sm-12 pb-5 pt-3">
+          <div class="row">
+            <div class="col-md-6 col-lg-3">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_anual' year=single_year%}">
+                    <h6>ANNUAL</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_semestral' year=single_year %}">
+                    <h6>SEMESTRAL</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_trimestral' year=single_year %}">
+                    <h6>TRIMESTRAL</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_mensual' year=single_year %}">
+                    <h6>MENSUAL</h6>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <hr />
-        <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i class="fa fa-angle-double-right"></i>
-        <a href="{%url 'report_based_semestral' year=single_year %}">SEMESTRAL</a> <i
-          class="fa fa-angle-double-right"></i> <a
-          href="{%url 'report_based_trimestral' year=single_year %}">TRIMESTRAL</a> <i
-          class="fa fa-angle-double-right"></i> <a href="{%url 'report_based_mensual' year=single_year %}">MENSUAL</a>
-        ||||
-
-
-        <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
-
-        {% for obj in all_catagenda %}
-        <i class="fa fa-angle-double-right"></i><a
-          href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug%}">
-          {{obj.name_category}}</a>
-        {% endfor %}
-
-        ||||
-        <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
-        <i class="fa fa-angle-double-right"></i><a
-          href="{%url 'report_based_concludedagenda_annual' year=single_year %}"> CONCLUDED</a>
-        <i class="fa fa-angle-double-right"></i> <a
-          href="{%url 'report_based_canceledagenda_annual' year=single_year %}">CANCELED</a>
 
 
         <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
           <div class="row flex-row">
-            <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> Annual Report
-              {{single_year}}</h5>
+            <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> Reported by Category</h5>
           </div>
         </div>
-        <hr />
-        <section id='no-more-tables'>
-          <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th class="text-center">NU.</th>
-                <th>AGENDA</th>
-                <th class="text-center">START TIME</th>
-                <th class="text-center">END TIME</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for obj in anual_report %}
-              <tr>
-                <td class="text-center">{{ forloop.counter }}</td>
-                <td>
-                  {{obj.title }}
-                </td>
-                <td class="text-center">
-                  {{obj.start_time|date:"d/m/Y G:i" }}
-                </td>
-                <td class="text-center">
-                  {{obj.end_time|date:"d/m/Y G:i" }}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </section>
+        <hr>
+        <div class="col-sm-12 pb-5 pt-3">
+          <div class="row">
+            {% for obj in all_catagenda %}
+            <div class="col-md-6 col-lg-6">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a
+                    href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug%}">
+                    <h6>{{obj.name_category}}</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+
+        <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
+          <div class="row flex-row">
+            <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> Reported by Status</h5>
+          </div>
+        </div>
+        <hr>
+        <div class="col-sm-12 pb-5 pt-3">
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_concludedagenda_annual' year=single_year %}">
+                    <h6> CONCLUDED</h6>
+
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-">
+              <div class="widget-small border border-primary d-flex justify-content-left p-2">
+                <i class="fa fa-file-text-o p-2 bg-primary" style="font-size:38px;color:rgb(255, 255, 255)"></i>
+                <div class="pl-2">
+                  <a href="{%url 'report_based_canceledagenda_annual' year=single_year %}">
+                    <h6>CANCELED</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div> <!--end card-body-->
     </div>
     <!--end col-->
