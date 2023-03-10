@@ -28,7 +28,7 @@
                                     {% for obj in all_year %}
                                     <li class="list-group-item"> <i class="fa fa-angle-double-right"
                                             style="font-size:20px"></i>
-                                        <a href="#">Year</a>
+                                        <a href="{%url 'report_based_year' year=obj.year %}">{{obj.year}}</a>
                                         </span>
                                     </li>
                                     {% endfor %}
@@ -68,10 +68,9 @@
 
             <div class="card-body">
                 <hr />
-                <div class="row">
-
-                    <div class="col-sm-12 d-flex justify-content-end">
-                        <div class="input-group">
+                <div class="row justify-content-between">
+                    <div class="col-sm-12">
+                        <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
                                 <a href="{%url 'print_all_report_agenda'%}" type="button"
                                     class="btn btn-light border border-info"><span class="fa fa-print"> Print</a>
@@ -84,27 +83,46 @@
                     </div>
                 </div>
                 <hr />
+                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
+                    class="fa fa-angle-double-right"></i>
+                <a href="{%url 'report_based_semestral' year=single_year %}">Semestral</a> ||||
+                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
+                    class="fa fa-angle-double-right"></i> <a href="#">Internal</a> <i
+                    class="fa fa-angle-double-right"></i> <a href="#">External</a> |||| <i class="fa fa-clock-o"
+                    style="font-size:18px"></i> {{single_year}} <i class="fa fa-angle-double-right"></i> <a
+                    href="#">Concluded</a><i class="fa fa-angle-double-right"></i> <a href="#">Canceled</a>
+
+
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
                     <div class="row flex-row">
-                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> All Agenda</h5>
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> {{single_semester}}
+                            {{single_year}}</h5>
                     </div>
                 </div>
-                <hr>
+                <hr />
                 <section id='no-more-tables'>
                     <table class="table table-bordered table-sm" id="example" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th class="text-center">NU.</th>
-                                <th class="text-center">YEAR</th>
+                                <th>AGENDA</th>
+                                <th class="text-center">START TIME</th>
+                                <th class="text-center">END TIME</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for obj in all_year %}
+                            {% for obj in semester_report %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
+                                <td>
+                                    {{obj.title }}
+                                </td>
                                 <td class="text-center">
-                                    {{obj.year }}
+                                    {{obj.start_time|date:"d/m/Y G:i" }}
+                                </td>
+                                <td class="text-center">
+                                    {{obj.end_time|date:"d/m/Y G:i" }}
                                 </td>
                             </tr>
                             {% endfor %}

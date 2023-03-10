@@ -14,7 +14,7 @@ def menu_home(request):
     histori_agenda_list = HistAgenda.objects.filter(is_active=True)
     agenda_list_home = agenda_list.order_by('is_cancel', '-start_time')
     agenda_count = agenda_list.count()
-    all_year = Yearagenda.objects.filter(is_active=True)
+    all_year = Yearagenda.objects.all().order_by('-year')
     count_agenda_in_year = agenda_list.values('start_time__year').order_by('start_time__year').annotate(count=Count('start_time__year'))
 
     concluded_agenda = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False,  end_time__lt=datetime.now()).order_by("start_time")

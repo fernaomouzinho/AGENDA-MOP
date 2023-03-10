@@ -15,6 +15,8 @@ class CatAgenda(models.Model):
 
     name_category = models.CharField(
         max_length=200, unique=True, verbose_name='Category Agenda')
+    name_category_slug = models.CharField(
+        max_length=255, null=True, unique=True, verbose_name='Category Agenda Slug')
 
     class Meta:
         # managed = True
@@ -22,6 +24,17 @@ class CatAgenda(models.Model):
 
     def __str__(self):
         return str(self.name_category)
+    
+    def get_absolute_url(self):
+        return reverse("CatAgenda", kwargs={"name_category_slug": self.name_category_slug})
+
+    def save(self, *args, **kwargs):  # new
+        if not self.name_category_slug:
+            self.name_category_slug = slugify(self.name_category)
+        return super(CatAgenda, self).save(*args, **kwargs)
+
+    
+
 
 
 class Agenda(models.Model):
