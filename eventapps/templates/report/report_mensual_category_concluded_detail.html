@@ -54,16 +54,6 @@
 
 
     <div class="col-sm-9">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} p-2 fade show">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
-
-
-        {% endfor %}
-        {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
@@ -72,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
-                                <a href="{%url 'print_all_reportagenda_semestral' year=single_year name_slug=single_semester.name_slug %}"
+                                <a href="{%url 'print_all_reportagenda_mensual' year=single_year name_slug=single_month.name_slug %}"
                                     type="button" class="btn btn-light border border-info"><span class="fa fa-print">
                                         Print</a>
                                 <a href="#" type="button" class="btn btn-light border border-info"><span
@@ -91,53 +81,38 @@
 
                     <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
-                    SEMESTRAL
-
-                    {% for obj in all_semesters %}
-                    <i class="fa fa-angle-double-right"></i>
-                    {% if obj.id == single_semester.id%}
-                    {{obj.name}}
-
-                    {% else %}
-                    <a href="{%url 'report_based_semestral_detail' year=single_year name_slug=obj.name_slug %}">
-                        {{obj.name}}</a>
-
-                    {% endif %}
-                    {% endfor %}
+                    <a href="{%url 'report_based_mensual' year=single_year %}">MENSUAL</a>
+                    <i class="fa fa-angle-double-right"></i>{{single_month}}
                     ||
-
                     <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
-
-                    {% for obj in all_semesters %}
-                    {% if obj.id == single_semester.id%}
-                    {{obj.name}}
-                    {% endif %}
-                    {% endfor %}
-
+                    {{single_month}}
 
                     {% for obj in all_catagenda %}
-                    <i class="fa fa-angle-double-right"></i><a
-                        href="{%url 'report_based_semestral_category_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=obj.name_category_slug %}">
-                        {{obj.name_category}}</a>
-                    {% endfor %}
-                    ||
-                    <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
-
-
-                    {% for obj in all_semesters %}
-                    {% if obj.id == single_semester.id%}
-                    {{obj.name}}
+                    {% if obj.id == single_category.id %}
+                    {{obj.name_category}}
+                    {% else%}
+                    <a
+                        href="{%url 'report_based_mensual_category_detail' year=single_year name_slug=single_month.name_slug name_cat_slug=obj.name_category_slug %}">
+                        {{obj.name_category}}</a>
                     {% endif %}
                     {% endfor %}
+
+
+                    ||
+                    <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
+
                     <i class="fa fa-angle-double-right"></i>
-                    <a
-                        href="{%url 'report_based_semestral_concluded_detail' year=single_year name_slug=single_semester.name_slug %}">
-                        CONCLUDED</a>
+                    {{single_month}}
+                    <i class="fa fa-angle-double-right"></i>
+                    {{single_category}}
+                    <i class="fa fa-angle-double-right"></i>
+                    CONCLUDED
                     <i class="fa fa-angle-double-right"></i> <a
-                        href="{%url 'report_based_semestral_canceled_detail' year=single_year  name_slug=single_semester.name_slug %}">CANCELED</a>
+                        href="{%url 'report_based_mensual_category_canceled_detail' year=single_year name_slug=single_month.name_slug name_cat_slug=single_category.name_category_slug %}">CANCELED</a>
                 </li>
+
 
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
@@ -160,7 +135,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for obj in semester_report %}
+                            {% for obj in report_mensual_cat_concluded %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
                                 <td>

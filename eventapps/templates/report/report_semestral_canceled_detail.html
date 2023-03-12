@@ -54,16 +54,6 @@
 
 
     <div class="col-sm-9">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} p-2 fade show">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
-
-
-        {% endfor %}
-        {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
@@ -116,10 +106,17 @@
                     {% endfor %}
 
 
+
                     {% for obj in all_catagenda %}
-                    <i class="fa fa-angle-double-right"></i><a
+                    <i class="fa fa-angle-double-right"></i>
+                    {% if obj.id == single_category.id %}
+                    {{obj.name_category}}
+                    {% else %}
+                    <a
                         href="{%url 'report_based_semestral_category_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=obj.name_category_slug %}">
                         {{obj.name_category}}</a>
+
+                    {% endif %}
                     {% endfor %}
                     ||
                     <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
@@ -132,12 +129,20 @@
                     {% endif %}
                     {% endfor %}
                     <i class="fa fa-angle-double-right"></i>
+                    {% for obj in all_catagenda %}
+                    {% if obj.id == single_category.id %}
+                    </i>{{obj.name_category}}
+                    {% endif %}
+                    {% endfor %}
+                    <i class="fa fa-angle-double-right"></i>
                     <a
                         href="{%url 'report_based_semestral_concluded_detail' year=single_year name_slug=single_semester.name_slug %}">
                         CONCLUDED</a>
-                    <i class="fa fa-angle-double-right"></i> <a
-                        href="{%url 'report_based_semestral_canceled_detail' year=single_year  name_slug=single_semester.name_slug %}">CANCELED</a>
+                    <i class="fa fa-angle-double-right"></i>CANCELED
                 </li>
+
+
+
 
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
@@ -153,34 +158,22 @@
                             <tr>
                                 <th class="text-center">NU.</th>
                                 <th>AGENDA</th>
-                                <th class="text-center">CAT. AGENDA</th>
                                 <th class="text-center">START TIME</th>
                                 <th class="text-center">END TIME</th>
-                                <th class="text-center">STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for obj in semester_report %}
+                            {% for obj in semester_cat_report %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
                                 <td>
                                     {{obj.title }}
                                 </td>
                                 <td class="text-center">
-                                    {{obj.catagenda }}
-                                </td>
-                                <td class="text-center">
                                     {{obj.start_time|date:"d/m/Y G:i" }}
                                 </td>
                                 <td class="text-center">
                                     {{obj.end_time|date:"d/m/Y G:i" }}
-                                </td>
-                                <td class="text-center">
-                                    {% if obj.is_cancel == False %}
-                                    CONCLUDED
-                                    {% else %}
-                                    CANCELED
-                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

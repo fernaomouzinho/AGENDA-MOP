@@ -135,9 +135,7 @@
                     {% endif %}
                     {% endfor %}
                     <i class="fa fa-angle-double-right"></i>
-                    <a
-                        href="{%url 'report_based_semestral_category_concluded_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}">
-                        CONCLUDED</a>
+                    CONCLUDED
                     <i class="fa fa-angle-double-right"></i> <a
                         href="{%url 'report_based_semestral_category_canceled_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}">CANCELED</a>
                 </li>

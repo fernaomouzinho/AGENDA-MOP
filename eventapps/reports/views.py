@@ -56,6 +56,7 @@ def report_based_anual(request, year):
 
 
 #=================================== SEMESTRAL ========================================#
+# Semestral Annual
 @login_required(login_url="/login/")
 def report_based_semestral(request, year):
     if not request.user.is_authenticated:
@@ -67,7 +68,7 @@ def report_based_semestral(request, year):
     }
     return render(request, 'report/report_semestral.html', context)
 
-
+# Semestral Annual Detail
 @login_required(login_url="/login/")
 def report_based_semestral_detail(request, year, name_slug):
     if not request.user.is_authenticated:
@@ -99,7 +100,7 @@ def report_based_semestral_detail(request, year, name_slug):
     }
     return render(request, 'report/report_semestral_detail.html', context)
 
-
+# Semestral Category
 @login_required(login_url="/login/")
 def report_based_semestral_category_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
@@ -139,6 +140,73 @@ def report_based_semestral_category_detail(request, year, name_slug, name_cat_sl
     return render(request, 'report/report_semestral_category_detail.html', context)
 
 
+# Semestral Concluded
+@login_required(login_url="/login/")
+def report_based_semestral_concluded_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_semester=Semestral.objects.get(name_slug=name_slug)
+    current_datetime = datetime.now()
+
+    month_start = 1
+    month_end = 6
+
+    a = request.path
+    print(a)
+    b = Path(a)
+    c=b.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+
+    if a == "/report/"+d+"/semetral/first-semester/concluded/":
+        rscc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=month_start, start_time__month__lte=month_end, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/semetral/second-semester/concluded/":
+        rscc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=month_end, is_cancel=False).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_semester':single_semester,
+        'semester_cat_concluded_report':rscc,
+    }
+    return render(request, 'report/report_semestral_concluded_detail.html', context)
+
+
+
+# Semestral Category Concluded
+@login_required(login_url="/login/")
+def report_based_semestral_canceled_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_semester=Semestral.objects.get(name_slug=name_slug)
+    current_datetime = datetime.now()
+
+    month_start = 1
+    month_end = 6
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+
+    if a == "/report/"+d+"/semetral/first-semester/canceled/":
+        rsc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=month_start, start_time__month__lte=month_end, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/semetral/second-semester/canceled/":
+        rsc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=month_end, is_cancel=True).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_semester':single_semester,
+        'semester_cat_report':rsc,
+    }
+    return render(request, 'report/report_semestral_canceled_detail.html', context)
+
+
+# Semestral category Concluded
 @login_required(login_url="/login/")
 def report_based_semestral_category_concluded_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
@@ -177,6 +245,7 @@ def report_based_semestral_category_concluded_detail(request, year, name_slug, n
     }
     return render(request, 'report/report_semestral_category_concluded_detail.html', context)
 
+# Semestral Category Canceled
 @login_required(login_url="/login/")
 def report_based_semestral_category_canceled_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
@@ -195,7 +264,6 @@ def report_based_semestral_category_canceled_detail(request, year, name_slug, na
     c=b.parent.parent.parent.parent
     d=c.stem
     head_tail = os.path.split(a)
-
 
 
     if a == "/report/"+d+"/semetral/first-semester/internal/canceled/":
@@ -219,12 +287,8 @@ def report_based_semestral_category_canceled_detail(request, year, name_slug, na
 
 
 
-
-
-
-
-
 #======================================= TRIMESTRAL ========================================#
+# Trimestral Annual
 @login_required(login_url="/login/")
 def report_based_trimestral(request, year):
     if not request.user.is_authenticated:
@@ -277,8 +341,261 @@ def report_based_trimestral_detail(request, year, name_slug):
     return render(request, 'report/report_trimestral_detail.html', context)
 
 
+# Trimestral Category
+@login_required(login_url="/login/")
+def report_based_trimestral_category_detail(request, year, name_slug, name_cat_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if a == "/report/"+d+"/trimestral/first-trimester/internal/":
+        rtc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/internal/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/internal/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/internal/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/first-trimester/external/":
+        rtc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/external/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/external/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/external/":
+        rtc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'single_category':single_category,
+        'trimester_cat_report':rtc,
+    }
+    return render(request, 'report/report_trimestral_category_detail.html', context)
+
+# Trimestral Concluded
+@login_required(login_url="/login/")
+def report_based_trimestral_concluded_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+    current_datetime = datetime.now()
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if a == "/report/"+d+"/trimestral/first-trimester/concluded/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, is_cancel=False).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'trimester_cat_report':rtcc,
+    }
+    return render(request, 'report/report_trimestral_concluded_detail.html', context)
+
+
+
+# Trimestral Canceled
+@login_required(login_url="/login/")
+def report_based_trimestral_canceled_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+    current_datetime = datetime.now()
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if a == "/report/"+d+"/trimestral/first-trimester/canceled/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, is_cancel=True).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'trimester_cat_report':rtcc,
+    }
+    return render(request, 'report/report_trimestral_canceled_detail.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+# Trimestral Category Concluded
+@login_required(login_url="/login/")
+def report_based_trimestral_category_concluded_detail(request, year, name_slug, name_cat_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if a == "/report/"+d+"/trimestral/first-trimester/internal/concluded/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/internal/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/internal/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/internal/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/first-trimester/external/concluded/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/external/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/external/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/external/concluded/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=False).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'single_category':single_category,
+        'trimester_cat_report':rtcc,
+    }
+    return render(request, 'report/report_trimestral_category_concluded_detail.html', context)
+
+# Trimestral Category Canceled
+@login_required(login_url="/login/")
+def report_based_trimestral_category_canceled_detail(request, year, name_slug, name_cat_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_trimester=Trimestral.objects.get(name_slug=name_slug)
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    firstPeriode_start = 1
+    firstPeriode_end = 3
+    secondPeriode_start = 4
+    secondPeriode_end = 6
+    thirdPeriode_start = 7
+    thirdPeriode_end = 9
+
+    a = request.path
+    b = Path(a)
+    c=b.parent.parent.parent.parent
+    d=c.stem
+    head_tail = os.path.split(a)
+    v = head_tail[0]
+
+    if a == "/report/"+d+"/trimestral/first-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/internal/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/first-trimester/external/canceled/":
+        rtcc=Agenda.objects.filter( start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=firstPeriode_start, start_time__month__lte=firstPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/second-trimester/external/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=secondPeriode_start, start_time__month__lte=secondPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/third-trimester/external/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=thirdPeriode_start, start_time__month__lte=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+    elif a == "/report/"+d+"/trimestral/fourth-trimester/external/canceled/":
+        rtcc=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=thirdPeriode_end, catagenda__name_category_slug=name_cat_slug, is_cancel=True).order_by('-start_time')
+
+    context = {
+        'single_year':single_year,
+        'single_trimester':single_trimester,
+        'single_category':single_category,
+        'trimester_cat_report':rtcc,
+    }
+    return render(request, 'report/report_trimestral_category_canceled_detail.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #=================================== MENSUAL ======================================#
+#Mensual Anual
 @login_required(login_url="/login/")
 def report_based_mensual(request, year):
     if not request.user.is_authenticated:
@@ -292,7 +609,7 @@ def report_based_mensual(request, year):
     }
     return render(request, 'report/report_mensual.html', context)
 
-
+#Mensual Anual Detail
 @login_required(login_url="/login/")
 def report_based_mensual_detail(request, year, name_slug):
     if not request.user.is_authenticated:
@@ -301,8 +618,8 @@ def report_based_mensual_detail(request, year, name_slug):
     single_month=Mensual.objects.get(name_slug=name_slug)
     month_num = datetime.strptime(name_slug, '%B').month
     current_datetime = datetime.now()
-    report_mensual = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num)
 
+    report_mensual = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num)
 
     context = {
         'single_year':single_year,
@@ -313,8 +630,129 @@ def report_based_mensual_detail(request, year, name_slug):
 
 
 
+#Mensual Concluded
+@login_required(login_url="/login/")
+def report_based_mensual_concluded_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    current_datetime = datetime.now()
 
-#======================================= CATEGORYA ========================================#
+    report_mensual_concluded = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num, is_cancel=False)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'report_mensual_concluded':report_mensual_concluded,
+    }
+    return render(request, 'report/report_mensual_concluded_detail.html', context)
+
+
+#Mensual Canceled
+@login_required(login_url="/login/")
+def report_based_mensual_canceled_detail(request, year, name_slug):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    current_datetime = datetime.now()
+
+    report_mensual_canceled = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num, is_cancel=True)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'report_mensual_canceled':report_mensual_canceled,
+    }
+    return render(request, 'report/report_mensual_canceled_detail.html', context)
+
+#Mensual Category
+@login_required(login_url="/login/")
+def report_based_mensual_category_detail(request, year, name_slug, name_cat_slug ):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    report_mensual_category = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num, catagenda__name_category_slug=name_cat_slug)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'single_category':single_category,
+        'report_mensual_category':report_mensual_category,
+    }
+    return render(request, 'report/report_mensual_category_detail.html', context)
+
+
+#Mensual Category
+@login_required(login_url="/login/")
+def report_based_mensual_category_concluded_detail(request, year, name_slug, name_cat_slug ):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    report_mensual_cat_concluded = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num, catagenda__name_category_slug=name_cat_slug, is_cancel=False)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'single_category':single_category,
+        'report_mensual_cat_concluded':report_mensual_cat_concluded,
+    }
+    return render(request, 'report/report_mensual_category_concluded_detail.html', context)
+
+
+
+#Mensual Category
+@login_required(login_url="/login/")
+def report_based_mensual_category_canceled_detail(request, year, name_slug, name_cat_slug ):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    single_year = Yearagenda.objects.get(year=year)
+    single_month=Mensual.objects.get(name_slug=name_slug)
+    month_num = datetime.strptime(name_slug, '%B').month
+    single_category = CatAgenda.objects.get(name_category_slug=name_cat_slug)
+    current_datetime = datetime.now()
+
+    report_mensual_cat_canceled = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month=month_num, catagenda__name_category_slug=name_cat_slug, is_cancel=True)
+
+    context = {
+        'single_year':single_year,
+        'single_month':single_month,
+        'single_category':single_category,
+        'report_mensual_cat_canceled':report_mensual_cat_canceled,
+    }
+    return render(request, 'report/report_mensual_category_canceled_detail.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Category Annual
 @login_required(login_url="/login/")
 def report_based_catagenda_annual(request, year, name_cat_slug):
     if not request.user.is_authenticated:
@@ -332,8 +770,13 @@ def report_based_catagenda_annual(request, year, name_cat_slug):
     return render(request, 'report/report_catagenda_annual.html', context)
 
 
-#======================================= STATUS ========================================#
 
+
+
+
+
+
+#Concluded Annual
 @login_required(login_url="/login/")
 def report_based_concludedagenda_annual(request, year):
     if not request.user.is_authenticated:
@@ -349,6 +792,8 @@ def report_based_concludedagenda_annual(request, year):
         'report_concludedagenda_anual':report_concludedagenda_anual,
     }
     return render(request, 'report/report_concludedagenda_annual.html', context)
+
+
 
 
 @login_required(login_url="/login/")

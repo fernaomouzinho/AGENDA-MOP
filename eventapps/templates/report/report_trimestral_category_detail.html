@@ -54,16 +54,6 @@
 
 
     <div class="col-sm-9">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} p-2 fade show">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
-
-
-        {% endfor %}
-        {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
@@ -72,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
-                                <a href="{%url 'print_all_reportagenda_semestral' year=single_year name_slug=single_semester.name_slug %}"
+                                <a href="{%url 'print_all_reportagenda_trimestral' year=single_year name_slug=single_trimester.name_slug %}"
                                     type="button" class="btn btn-light border border-info"><span class="fa fa-print">
                                         Print</a>
                                 <a href="#" type="button" class="btn btn-light border border-info"><span
@@ -87,63 +77,69 @@
 
                 <li class="list-group-item" style="background-color: rgb(194, 255, 235);"> <i
                         class="fa fa-angle-double-right" style="font-size:20px"></i>
-
-
                     <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
-                    SEMESTRAL
-
-                    {% for obj in all_semesters %}
+                    TRIMESTRAL
+                    {% for obj in all_trimesters %}
                     <i class="fa fa-angle-double-right"></i>
-                    {% if obj.id == single_semester.id%}
+                    {% if obj.id == single_trimester.id %}
                     {{obj.name}}
-
                     {% else %}
-                    <a href="{%url 'report_based_semestral_detail' year=single_year name_slug=obj.name_slug %}">
-                        {{obj.name}}</a>
+                    <a href="{%url 'report_based_trimestral_detail' year=single_year name_slug=obj.name_slug %}">
+                        {{obj.name}}
+                    </a>
 
                     {% endif %}
                     {% endfor %}
+
                     ||
 
                     <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
 
-                    {% for obj in all_semesters %}
-                    {% if obj.id == single_semester.id%}
+                    {% for obj in all_trimesters %}
+                    {% if obj.id == single_trimester.id %}
                     {{obj.name}}
                     {% endif %}
                     {% endfor %}
 
-
                     {% for obj in all_catagenda %}
-                    <i class="fa fa-angle-double-right"></i><a
-                        href="{%url 'report_based_semestral_category_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=obj.name_category_slug %}">
+                    <i class="fa fa-angle-double-right"></i>
+                    {% if obj.id == single_category.id %}
+                    {{obj.name_category}}
+                    {% else %}
+                    <a
+                        href="{%url 'report_based_trimestral_category_detail' year=single_year name_slug=single_trimester.name_slug name_cat_slug=obj.name_category_slug%}">
                         {{obj.name_category}}</a>
+                    {% endif %}
                     {% endfor %}
                     ||
                     <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
                     <i class="fa fa-angle-double-right"></i>
-
-
-                    {% for obj in all_semesters %}
-                    {% if obj.id == single_semester.id%}
+                    {% for obj in all_trimesters %}
+                    {% if obj.id == single_trimester.id %}
                     {{obj.name}}
                     {% endif %}
                     {% endfor %}
+                    {% for obj in all_catagenda %}
                     <i class="fa fa-angle-double-right"></i>
+                    {% if obj.id == single_category.id %}
+                    {{obj.name_category}}
+                    {% endif %}
+                    {% endfor %}
                     <a
-                        href="{%url 'report_based_semestral_concluded_detail' year=single_year name_slug=single_semester.name_slug %}">
+                        href="{%url 'report_based_trimestral_category_concluded_detail' year=single_year name_slug=single_trimester.name_slug name_cat_slug=single_category.name_category_slug%}">
                         CONCLUDED</a>
                     <i class="fa fa-angle-double-right"></i> <a
-                        href="{%url 'report_based_semestral_canceled_detail' year=single_year  name_slug=single_semester.name_slug %}">CANCELED</a>
+                        href="{%url 'report_based_trimestral_category_canceled_detail' year=single_year name_slug=single_trimester.name_slug name_cat_slug=single_category.name_category_slug%}">CANCELED</a>
                 </li>
+
 
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
                     <div class="row flex-row">
-                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> {{single_semester}}
-                            {{single_year}}</h5>
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> {{single_category}}
+                        </h5>
                     </div>
                 </div>
                 <hr />
@@ -160,7 +156,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for obj in semester_report %}
+                            {% for obj in trimester_cat_report %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>
                                 <td>

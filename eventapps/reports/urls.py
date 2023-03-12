@@ -10,16 +10,35 @@ urlpatterns = [
     # Semestral
     path('report/<int:year>/semetral/', views.report_based_semestral, name='report_based_semestral'),
     path('report/<int:year>/semetral/<slug:name_slug>/', views.report_based_semestral_detail, name='report_based_semestral_detail'),
+    path('report/<int:year>/semetral/<slug:name_slug>/concluded/', views.report_based_semestral_concluded_detail, name='report_based_semestral_concluded_detail'),
+    path('report/<int:year>/semetral/<slug:name_slug>/canceled/', views.report_based_semestral_canceled_detail, name='report_based_semestral_canceled_detail'),
     path('report/<int:year>/semetral/<slug:name_slug>/<slug:name_cat_slug>/', views.report_based_semestral_category_detail, name='report_based_semestral_category_detail'),
     path('report/<int:year>/semetral/<slug:name_slug>/<slug:name_cat_slug>/concluded/', views.report_based_semestral_category_concluded_detail, name='report_based_semestral_category_concluded_detail'),
     path('report/<int:year>/semetral/<slug:name_slug>/<slug:name_cat_slug>/canceled/', views.report_based_semestral_category_canceled_detail, name='report_based_semestral_category_canceled_detail'),
 
 
-
+    # Trimestral
     path('report/<int:year>/trimestral/', views.report_based_trimestral, name='report_based_trimestral'),
     path('report/<int:year>/trimestral/<slug:name_slug>/', views.report_based_trimestral_detail, name='report_based_trimestral_detail'),
+    path('report/<int:year>/trimestral/<slug:name_slug>/concluded/', views.report_based_trimestral_concluded_detail, name='report_based_trimestral_concluded_detail'),
+    path('report/<int:year>/trimestral/<slug:name_slug>/canceled/', views.report_based_trimestral_canceled_detail, name='report_based_trimestral_canceled_detail'),
+    path('report/<int:year>/trimestral/<slug:name_slug>/<slug:name_cat_slug>/', views.report_based_trimestral_category_detail, name='report_based_trimestral_category_detail'),
+    path('report/<int:year>/trimestral/<slug:name_slug>/<slug:name_cat_slug>/concluded/', views.report_based_trimestral_category_concluded_detail, name='report_based_trimestral_category_concluded_detail'),
+    path('report/<int:year>/trimestral/<slug:name_slug>/<slug:name_cat_slug>/canceled/', views.report_based_trimestral_category_canceled_detail, name='report_based_trimestral_category_canceled_detail'),
+
+    # Mensual
     path('report/<int:year>/mensual/', views.report_based_mensual, name='report_based_mensual'),
     path('report/<int:year>/mensual/<slug:name_slug>/', views.report_based_mensual_detail, name='report_based_mensual_detail'),
+    path('report/<int:year>/mensual/<slug:name_slug>/concluded/', views.report_based_mensual_concluded_detail, name='report_based_mensual_concluded_detail'),
+    path('report/<int:year>/mensual/<slug:name_slug>/canceled/', views.report_based_mensual_canceled_detail, name='report_based_mensual_canceled_detail'),
+    path('report/<int:year>/mensual/<slug:name_slug>/<slug:name_cat_slug>/', views.report_based_mensual_category_detail, name='report_based_mensual_category_detail'),
+    path('report/<int:year>/mensual/<slug:name_slug>/<slug:name_cat_slug>/concluded/', views.report_based_mensual_category_concluded_detail, name='report_based_mensual_category_concluded_detail'),
+    path('report/<int:year>/mensual/<slug:name_slug>/<slug:name_cat_slug>/canceled/', views.report_based_mensual_category_canceled_detail, name='report_based_mensual_category_canceled_detail'),
+
+
+
+
+
 
     path('report/<int:year>/<slug:name_cat_slug>/', views.report_based_catagenda_annual, name='report_based_catagenda_annual'),
     path('report/<int:year>/concluded/list', views.report_based_concludedagenda_annual, name='report_based_concludedagenda_annual'),
