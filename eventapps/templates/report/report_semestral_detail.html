@@ -84,15 +84,59 @@
                     </div>
                 </div>
                 <hr />
-                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
-                    class="fa fa-angle-double-right"></i>
-                <a href="{%url 'report_based_semestral' year=single_year %}">Semestral</a> ||||
-                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
-                    class="fa fa-angle-double-right"></i> <a href="#">Internal</a> <i
-                    class="fa fa-angle-double-right"></i> <a href="#">External</a> |||| <i class="fa fa-clock-o"
-                    style="font-size:18px"></i> {{single_year}} <i class="fa fa-angle-double-right"></i> <a
-                    href="#">Concluded</a><i class="fa fa-angle-double-right"></i> <a href="#">Canceled</a>
 
+                <li class="list-group-item" style="background-color: rgb(194, 255, 235);"> <i
+                        class="fa fa-angle-double-right" style="font-size:20px"></i>
+
+
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+                    SEMESTRAL
+
+                    {% for obj in all_semesters %}
+                    <i class="fa fa-angle-double-right"></i>
+                    {% if obj.id == single_semester.id%}
+                    {{obj.name}}
+
+                    {% else %}
+                    <a href="{%url 'report_based_semestral_detail' year=single_year name_slug=obj.name_slug %}">
+                        {{obj.name}}</a>
+
+                    {% endif %}
+                    {% endfor %}
+                    ||
+
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+
+                    {% for obj in all_semesters %}
+                    {% if obj.id == single_semester.id%}
+                    {{obj.name}}
+                    {% endif %}
+                    {% endfor %}
+
+
+                    {% for obj in all_catagenda %}
+                    <i class="fa fa-angle-double-right"></i><a
+                        href="{%url 'report_based_semestral_category_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=obj.name_category_slug %}">
+                        {{obj.name_category}}</a>
+                    {% endfor %}
+                    ||
+                    <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+
+
+                    {% for obj in all_semesters %}
+                    {% if obj.id == single_semester.id%}
+                    {{obj.name}}
+                    {% endif %}
+                    {% endfor %}
+                    <i class="fa fa-angle-double-right"></i>
+                    <a href="{%url 'report_based_concludedagenda_annual' year=single_year %}">
+                        CONCLUDED</a>
+                    <i class="fa fa-angle-double-right"></i> <a
+                        href="{%url 'report_based_canceledagenda_annual' year=single_year %}">CANCELED</a>
+                </li>
 
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
@@ -108,8 +152,10 @@
                             <tr>
                                 <th class="text-center">NU.</th>
                                 <th>AGENDA</th>
+                                <th class="text-center">CAT. AGENDA</th>
                                 <th class="text-center">START TIME</th>
                                 <th class="text-center">END TIME</th>
+                                <th class="text-center">STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,10 +166,20 @@
                                     {{obj.title }}
                                 </td>
                                 <td class="text-center">
+                                    {{obj.catagenda }}
+                                </td>
+                                <td class="text-center">
                                     {{obj.start_time|date:"d/m/Y G:i" }}
                                 </td>
                                 <td class="text-center">
                                     {{obj.end_time|date:"d/m/Y G:i" }}
+                                </td>
+                                <td class="text-center">
+                                    {% if obj.is_cancel == False %}
+                                    CONCLUDED
+                                    {% else %}
+                                    CANCELED
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

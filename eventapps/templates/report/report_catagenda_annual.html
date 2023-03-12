@@ -54,16 +54,6 @@
 
 
     <div class="col-sm-9">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} p-2 fade show">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }}
-        </div>
-
-
-        {% endfor %}
-        {% endif %}
         <div class="border-info shadow-lg bg-white">
 
             <div class="card-body">
@@ -88,18 +78,49 @@
                     </div>
                 </div>
                 <hr />
-                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}} <i
-                    class="fa fa-angle-double-right"></i>
-                <a href="{%url 'report_based_semestral' year=single_year %}">Semestral</a>
-                <i class="fa fa-angle-double-right"></i> <a
-                    href="{%url 'report_based_trimestral' year=single_year %}">Trimestral</a>
-                <i class="fa fa-angle-double-right"></i> <a href="#">Mensual</a> ||||
-                <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
-                <i class="fa fa-angle-double-right"></i> <a href="#">Internal</a>
-                <i class="fa fa-angle-double-right"></i> <a href="#">External</a> ||||
-                <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
-                <i class="fa fa-angle-double-right"></i><a href="#"></a>Concluded</a>
-                <i class="fa fa-angle-double-right"></i> <a href="#">Canceled</a>
+
+
+                <li class="list-group-item" style="background-color: rgb(194, 255, 235);"> <i
+                        class="fa fa-angle-double-right" style="font-size:20px"></i>
+
+
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+                    <a href="{%url 'report_based_semestral' year=single_year %}">SEMESTRAL</a>
+                    ||
+
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+                    <a href="{%url 'report_based_trimestral' year=single_year %}">TRIMESTRAL</a>
+
+                    ||
+
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i>
+                    <a href="{%url 'report_based_mensual' year=single_year %}">MENSUAL</a>
+                    ||
+                    <i class="fa fa-clock-o" style="font-size:18px"> </i> {{single_year}}
+
+                    {% for obj in all_catagenda %}
+                    <i class="fa fa-angle-double-right"></i>
+                    {% if obj.id == single_category.id %}
+                    {{obj.name_category}}
+                    {% else %}
+                    <a
+                        href="{%url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug %}">
+                        {{obj.name_category}}</a>
+                    {% endif %}
+                    {% endfor %}
+                    ||
+                    <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
+                    <i class="fa fa-angle-double-right"></i><a
+                        href="{%url 'report_based_concludedagenda_annual' year=single_year %}">
+                        CONCLUDED</a>
+                    <i class="fa fa-angle-double-right"></i> <a
+                        href="{%url 'report_based_canceledagenda_annual' year=single_year %}">CANCELED</a>
+                </li>
+
+
 
 
 
@@ -116,8 +137,10 @@
                             <tr>
                                 <th class="text-center">NU.</th>
                                 <th>AGENDA</th>
+                                <th class="text-center">CAT. AGENDA</th>
                                 <th class="text-center">START TIME</th>
                                 <th class="text-center">END TIME</th>
+                                <th class="text-center">STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,10 +151,20 @@
                                     {{obj.title }}
                                 </td>
                                 <td class="text-center">
+                                    {{obj.catagenda }}
+                                </td>
+                                <td class="text-center">
                                     {{obj.start_time|date:"d/m/Y G:i" }}
                                 </td>
                                 <td class="text-center">
                                     {{obj.end_time|date:"d/m/Y G:i" }}
+                                </td>
+                                <td class="text-center">
+                                    {% if obj.is_cancel == False %}
+                                    CONCLUDED
+                                    {% else %}
+                                    CANCELED
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

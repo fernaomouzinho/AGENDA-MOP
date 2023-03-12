@@ -52,16 +52,6 @@
 
 
   <div class="col-sm-9">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} p-2 fade show">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      {{ message }}
-    </div>
-
-
-    {% endfor %}
-    {% endif %}
     <div class="border-info shadow-lg bg-white">
 
       <div class="card-body">
@@ -174,8 +164,8 @@
             </div>
           </div>
         </div>
-
       </div> <!--end card-body-->
+
     </div>
     <!--end col-->
 

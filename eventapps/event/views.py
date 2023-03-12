@@ -103,6 +103,7 @@ def agenda_add(request):
         if agendaform.is_valid():
             agendaform = agendaform.save(commit=False)
             agendaform.user = request.user
+
             if agendaform.start_time >= current_datetime:
                 agendaform.status = "Pending"
 
@@ -111,6 +112,7 @@ def agenda_add(request):
 
             elif agendaform.end_time < current_datetime:
                 agendaform.status = "Read"
+
             last_hist = HistAgenda.objects.all().first()
 
             ha = HistAgenda(id=agendaform.id, user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time, end_time_new=agendaform.end_time,
