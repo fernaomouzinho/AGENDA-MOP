@@ -67,7 +67,6 @@ def menu_home(request):
 
     #======================== PRINT ========================================
     all_catagenda = CatAgenda.objects.all()
-    all_agenda=Agenda.objects.filter(end_time__lt=current_datetime)
     all_semesters=Semestral.objects.all()
     all_trimesters=Trimestral.objects.all()
     report_conclude = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False, observation__isnull=False, end_time__lt=datetime.now()).order_by("start_time")
@@ -77,11 +76,11 @@ def menu_home(request):
                 unit_list=unit_list,
                 dep_list=dep_list,
 
-
                 agenda_list=agenda_list,
                 histori_agenda_list=histori_agenda_list,
                 agenda_list_home=agenda_list_home,
-
+                    
+                
                 agenda_count=agenda_count,
                 all_year=all_year,
                 count_agenda_in_year=count_agenda_in_year,
@@ -125,8 +124,7 @@ def menu_home(request):
                 unexecuted_informative=unexecuted_informative,
                 unexecuted_informative_count=unexecuted_informative_count,
                 current_datetime=current_datetime,
-
-                all_agenda=all_agenda,
+                
                 all_catagenda=all_catagenda,
                 all_semesters=all_semesters,
                 all_trimesters=all_trimesters,

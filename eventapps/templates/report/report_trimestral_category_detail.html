@@ -62,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
-                                <a href="{%url 'print_all_reportagenda_trimestral' year=single_year name_slug=single_trimester.name_slug %}"
+                                <a href="{%url 'print_all_reportagenda_trimestral_category' year=single_year name_slug=single_trimester.name_slug name_cat_slug=single_category.name_category_slug %}"
                                     type="button" class="btn btn-light border border-info"><span class="fa fa-print">
                                         Print</a>
                                 <a href="#" type="button" class="btn btn-light border border-info"><span
@@ -115,18 +115,22 @@
                     {% endfor %}
                     ||
                     <i class="fa fa-clock-o" style="font-size:18px"></i> {{single_year}}
-                    <i class="fa fa-angle-double-right"></i>
+
                     {% for obj in all_trimesters %}
                     {% if obj.id == single_trimester.id %}
+                    <i class="fa fa-angle-double-right"></i>
                     {{obj.name}}
                     {% endif %}
                     {% endfor %}
+
+
                     {% for obj in all_catagenda %}
-                    <i class="fa fa-angle-double-right"></i>
                     {% if obj.id == single_category.id %}
+                    <i class="fa fa-angle-double-right"></i>
                     {{obj.name_category}}
                     {% endif %}
                     {% endfor %}
+                    <i class="fa fa-angle-double-right"></i>
                     <a
                         href="{%url 'report_based_trimestral_category_concluded_detail' year=single_year name_slug=single_trimester.name_slug name_cat_slug=single_category.name_category_slug%}">
                         CONCLUDED</a>

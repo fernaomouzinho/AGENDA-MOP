@@ -62,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
-                                <a href="{%url 'print_all_reportagenda_semestral' year=single_year name_slug=single_semester.name_slug %}"
+                                <a href="{%url 'print_all_reportagenda_semestral_category_canceled' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}"
                                     type="button" class="btn btn-light border border-info"><span class="fa fa-print">
                                         Print</a>
                                 <a href="#" type="button" class="btn btn-light border border-info"><span
@@ -135,12 +135,12 @@
                     {% endif %}
                     {% endfor %}
                     <i class="fa fa-angle-double-right"></i>
+
                     <a
-                        href="{%url 'report_based_semestral_category_concluded_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}">
-                        CONCLUDED</a>
-                    <i class="fa fa-angle-double-right"></i> <a
-                        href="{%url 'report_based_semestral_category_canceled_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}">CANCELED</a>
+                        href="{%url 'report_based_semestral_category_concluded_detail' year=single_year name_slug=single_semester.name_slug name_cat_slug=single_category.name_category_slug %}">CONCLUDED</a>
+                    <i class="fa fa-angle-double-right"></i> CANCELED
                 </li>
+
 
 
 

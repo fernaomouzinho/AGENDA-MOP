@@ -62,7 +62,7 @@
                     <div class="col-sm-12">
                         <div class="input-group d-flex justify-content-end">
                             <div class="input-group-append">
-                                <a href="{%url 'print_all_reportagenda_mensual' year=single_year name_slug=single_month.name_slug %}"
+                                <a href="{%url 'print_all_reportagenda_mensual_canceled' year=single_year name_slug=single_month.name_slug %}"
                                     type="button" class="btn btn-light border border-info"><span class="fa fa-print">
                                         Print</a>
                                 <a href="#" type="button" class="btn btn-light border border-info"><span
@@ -116,8 +116,8 @@
 
                 <div class="card-header bg-card pb-2 mt-2 d-flex justify-content-between">
                     <div class="row flex-row">
-                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i> {{single_semester}}
-                            {{single_year}}</h5>
+                        <h5 class="text-light"> <i class="fa fa-list" style="font-size:18px;"></i>
+                            {{single_year}} : Mensual Report based on cancel agenda</h5>
                     </div>
                 </div>
                 <hr />
