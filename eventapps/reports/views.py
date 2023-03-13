@@ -82,13 +82,14 @@ def report_based_semestral_detail(request, year, name_slug):
     month_end = 6
 
     a = request.path
+    print(a)
     b = Path(a)
     c=b.parent.parent
     d=c.stem
     head_tail = os.path.split(a)
     v = head_tail[0]
 
-    if v == "/report/"+d+"/semestral/first-semester":
+    if a == "/report/"+d+"/semestral/first-semester/":
         rs=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=month_start, start_time__month__lte=month_end).order_by('-start_time')
     else:
         rs=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=month_end).order_by('-start_time')
@@ -792,19 +793,22 @@ def print_all_reportagenda_semestral(request, year, name_slug):
     single_year = Yearagenda.objects.get(year=year)
     single_semester=Semestral.objects.get(name_slug=name_slug)
     current_datetime = datetime.now()
+
+
     month_start = 1
     month_end = 6
 
     a = request.path
+    print(a)
     b = Path(a)
-    c=b.parent
+    c=b.parent.parent
     d=c.stem
     head_tail = os.path.split(a)
     v = head_tail[0]
 
-    if v == "/report/agenda/"+d+"/first-semester":
+    if a == "/report/agenda/"+d+"/semestral/first-semester/":
         rs=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gte=month_start, start_time__month__lte=month_end).order_by('-start_time')
-    else:
+    elif a == "/report/agenda/"+d+"/semestral/second-semester/":
         rs=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, start_time__month__gt=month_end).order_by('-start_time')
 
     context = {
