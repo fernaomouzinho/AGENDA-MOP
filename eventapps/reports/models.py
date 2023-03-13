@@ -61,3 +61,12 @@ class Mensual(models.Model):
         if not self.name_slug:
             self.name_slug = slugify(self.name)
         return super(Mensual, self).save(*args, **kwargs)
+    
+class Logo(models.Model):
+    logo = models.ImageField(
+        upload_to='logo', default=None, verbose_name='Logo ADN')
+    
+
+    class Meta:
+        # managed = True
+        verbose_name_plural = ("Logo")
