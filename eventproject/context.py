@@ -65,9 +65,9 @@ def menu_home(request):
     unexecuted_informative_count = unexecuted_informative.count()
     current_datetime = datetime.now()
 
-
+    #======================== PRINT ========================================
     all_catagenda = CatAgenda.objects.all()
-    all_agenda=Agenda.objects.all()
+    all_agenda=Agenda.objects.filter(end_time__lt=current_datetime)
     all_semesters=Semestral.objects.all()
     all_trimesters=Trimestral.objects.all()
     report_conclude = Agenda.objects.filter(is_active=True, status='Read', is_cancel=False, observation__isnull=False, end_time__lt=datetime.now()).order_by("start_time")
