@@ -65,17 +65,17 @@ urlpatterns = [
     path('report/agenda/<int:year>/mensual/<slug:name_slug>/<slug:name_cat_slug>/concluded/', views.print_all_reportagenda_mensual_category_concluded, name='print_all_reportagenda_mensual_category_concluded'),
     path('report/agenda/<int:year>/mensual/<slug:name_slug>/<slug:name_cat_slug>/canceled/', views.print_all_reportagenda_mensual_category_canceled, name='print_all_reportagenda_mensual_category_canceled'),
 
-
-
-
-
     path('report/agenda/<int:year>/category/<slug:name_cat_slug>/', views.print_all_reportagenda_category, name='print_all_reportagenda_category'),
     path('report/all/agenda/<int:year>/concluded/', views.print_all_reportconcludedagenda_annual, name='print_all_reportconcludedagenda_annual'),
     path('report/all/agenda/<int:year>/canceled/', views.print_all_reportcanceledagenda_annual, name='print_all_reportcanceledagenda_annual'),
 
+
+
     # Download CSV
-    path('completed-agenda/download/csv/', views.download_Completed_Agenda_CSV, name='download_Completed_Agenda_CSV'),
-    path('concluded-agenda/download/csv/', views.download_Concluded_Agenda_CSV, name='download_Concluded_Agenda_CSV'),
-    path('upcoming-agenda/download/csv/', views.download_Upcoming_Agenda_CSV, name='download_Upcoming_Agenda_CSV'),
+    path('download/all/agenda/<int:year>/csv/', views.csv_all_reportagenda_annual, name='csv_all_reportagenda_annual'),
+
+    # Download PDF
+    path('download/all/agenda/<int:year>/pdf/', views.pdf_all_reportagenda_annual, name='pdf_all_reportagenda_annual'),
+
 
 ]

@@ -18,17 +18,24 @@
     <script src="{% static 'main/js/jquery.min.js' %}"></script>
     <style type="text/css" media="print">
         @page {
-            size: landscape;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            font-size: 12px;
+
+            size: letter landscape;
+            margin-top: 1cm;
+            margin-left: 0.25cm;
+            margin-right: 0.25cm;
+            margin-bottom: 1cm;
+            font-size: 14px;
+
         }
 
         body {
             writing-mode: horizontal-tb;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            font-size: 12px;
+            margin-top: 1cm;
+            margin-left: 0.25cm;
+            margin-right: 0.25cm;
+            margin-bottom: 1cm;
+            font-size: 14px;
+
         }
     </style>
 
@@ -46,20 +53,46 @@
                     <h2>RELATORIO MEETING MANAGEMENT</h2>
                 </div>
 
-                <table class="table table-bordered table-responsive ">
-                    <thead class="table-default">
+                <table class="table table-sm table-bordered pt-5">
+                    <thead style="background-color: beige;">
                         <tr>
-                            <th>No</th>
-                            <th>Data/Loron</th>
-                            <th>Agenda</th>
-                            <th>Observasaun</th>
+                            <th style="width: 2px;">
+                                <h5>No</h5>
+                            </th>
+                            <th class="text-center align-middle">
+                                <h5>Data/Loron</h5>
+                            </th>
+                            <th class="text-center">
+                                <h5>Agenda</h5>
+                            </th>
+                            <th class="text-center">
+                                <h5>Observasaun</h5>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for obj in trimester_cat_report %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{obj.start_time|date:"d/m/Y G:i"}}</td>
+                            <td class="text-center align-middle" style="width: 4cm;">
+                                {% if obj.start_time|date:"l" == "Monday" %}
+                                Segunda-Feira
+                                {% elif obj.start_time|date:"l" == "Tuesday" %}
+                                Tersa-Feira
+                                {% elif obj.start_time|date:"l" == "Wednesday" %}
+                                Quarta-Feira
+                                {% elif obj.start_time|date:"l" == "Thursday" %}
+                                Quinta-Feira
+                                {% elif obj.start_time|date:"l" == "Friday" %}
+                                Sexta-Feira
+                                {% elif obj.start_time|date:"l" == "Saturday" %}
+                                Sabado
+                                {% elif obj.start_time|date:"l" == "Sunday" %}
+                                Domingo
+                                {% endif %}
+                                <br>
+                                {{obj.start_time|date:"d/m/Y"}}
+                            </td>
                             <td>{{obj.title}}</td>
                             <td>{{obj.observation}}</td>
                         </tr>

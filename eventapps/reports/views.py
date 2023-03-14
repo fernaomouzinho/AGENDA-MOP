@@ -9,6 +9,9 @@ from .form import CalendarPickerForm
 from eventapps.reports.models import Semestral, Trimestral, Mensual
 import os
 from pathlib import Path
+from reportlab.pdfgen    import canvas
+from reportlab.lib.utils import ImageReader
+from datetime            import datetime
 
 
 
@@ -689,7 +692,6 @@ def report_based_mensual_category_concluded_detail(request, year, name_slug, nam
     return render(request, 'report/report_mensual_category_concluded_detail.html', context)
 
 
-
 #Mensual Category
 @login_required(login_url="/login/")
 def report_based_mensual_category_canceled_detail(request, year, name_slug, name_cat_slug ):
@@ -729,8 +731,6 @@ def report_based_catagenda_annual(request, year, name_cat_slug):
     }
     return render(request, 'report/report_catagenda_annual.html', context)
 
-
-
 #Concluded Annual
 @login_required(login_url="/login/")
 def report_based_concludedagenda_annual(request, year):
@@ -740,7 +740,6 @@ def report_based_concludedagenda_annual(request, year):
     current_datetime = datetime.now()
     single_year = Yearagenda.objects.get(year=year)
     report_concludedagenda_anual = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime, is_cancel=False).order_by('-start_time')
-
 
     context = {
         'single_year':single_year,
@@ -763,10 +762,6 @@ def report_based_canceledagenda_annual(request, year):
         'report_canceledagenda_anual':report_canceledagenda_anual,
     }
     return render(request, 'report/report_canceledagenda_annual.html', context)
-
-
-
-
 
 
 #===================================================== PRINT REPORT ================================================
@@ -1386,23 +1381,6 @@ def print_all_reportagenda_mensual_category_canceled(request, year, name_slug, n
     }
     return render(request, 'report/print/print_all_reportagenda_mensual_category_canceled.html', context)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # ==============================  Report all Agenda based Category Anual except upcoming agenda ================
 @login_required(login_url="/login/")
 def print_all_reportagenda_category(request, year, name_cat_slug):
@@ -1451,45 +1429,47 @@ def print_all_reportcanceledagenda_annual(request, year):
 
 
 
-#======================================================== Download PDF ===========================================================
-def download_Completed_Agenda_CSV(request):
+#======================================================== Download CSV ===========================================================
+def csv_all_reportagenda_annual(request, year):
     response = HttpResponse(content_type='text/csv')
     response['Content_Disposition'] = 'attachment; filename="agenda.csv"'
     writer=csv.writer(response)
-    writer.writerow(['Relatorio Meeting Management'])
-    writer.writerow(['Nu', 'Data/Loron', 'Agenda', 'Observasaun'])
 
-    n=0
-    for i in Agenda.objects.all():
-        writer.writerow([n+1, i.start_time, i.title, i.observation])
-        n=n+1
-    return response
-
-def download_Concluded_Agenda_CSV(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content_Disposition'] = 'attachment; filename="agenda.csv"'
-    writer=csv.writer(response)
     writer.writerow(['Relatorio Meeting Management'])
     writer.writerow(['Nu', 'Data/Loron', 'Agenda', 'Observasaun'])
     current_datetime = datetime.now()
-
     n=0
-    for i in Agenda.objects.all():
-        if i.start_time >= current_datetime:
-            writer.writerow([n+1, i.start_time, i.title, i.observation])
+    anual_report=Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime).order_by('-start_time')
+    for i in anual_report:
+        writer.writerow([n+1, i.start_time, i.title, i.observation])
         n=n+1
     return response
 
-def download_Upcoming_Agenda_CSV(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content_Disposition'] = 'attachment; filename="agenda.csv"'
-    writer=csv.writer(response)
-    writer.writerow(['Relatorio Meeting Management'])
-    writer.writerow(['Nu', 'Data/Loron', 'Agenda', 'Observasaun'])
 
-    n=0
-    for i in Agenda.objects.all():
 
-        writer.writerow([n+1, i.start_time, i.title, i.observation])
-        n=n+1
+#======================================================== Download PDF ===========================================================
+def pdf_all_reportagenda_annual(request, year):
+    # Create the HttpResponse object
+    response = HttpResponse(content_type='application/pdf')
+    # This line force a download
+    response['Content-Disposition'] = 'attachment; filename="1.pdf"'
+    # Generate unique timestamp
+    ts = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
+    p = canvas.Canvas(response)
+    # Write content on the PDF
+
+    my_image = ImageReader('https://www.google.com/images/srpr/logo11w.png')
+
+    p.drawImage(my_image, 10, 600, mask='auto')
+
+
+
+
+    current_datetime = datetime.now()
+    anual_report = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime).order_by('-start_time')
+    p.drawString(100, 500, "a")
+    p.showPage()
+    p.save()
+
+    # Show the result to the user
     return response
