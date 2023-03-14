@@ -76,53 +76,75 @@
                             <div class="card-header" id="headingTwo">
                                 <h5 class="mb-0">
 
-                                    <a href="#" class="btn btn-link" aria-expanded="false"
-                                        aria-controls="collapseTwo"><i class="fa fa-list pr-2"
-                                            style="font-size:18px;"></i>
-                                        Waitting List
+
 
                                         {% if request.user.username == 'adjadn' %}
+                                        <a href="{% url 'requestedagenda_list' %}" class="btn btn-link" aria-expanded="false"
+                                            aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                                style="font-size:18px;"></i>
+                                            Waitting List
                                         {% if count_wait_adj.count > 0%}
                                         (<b>{{count_wait_adj.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
+                                        </a>
                                         {% endif %}
 
                                         {% if request.user.username == 'ugaadn' %}
+                                        <a href="{% url 'requestedagenda_list' %}" class="btn btn-link" aria-expanded="false"
+                                            aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                                style="font-size:18px;"></i>
+                                            Waitting List
                                         {% if count_wait_uga.count > 0%}
                                         (<b>{{count_wait_uga.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
+                                          </a>
                                         {% endif %}
 
                                         {% if request.user.username == 'uapadn' %}
+                                        <a href="{% url 'requestedagenda_list' %}" class="btn btn-link" aria-expanded="false"
+                                            aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                                style="font-size:18px;"></i>
+                                            Waitting List
                                         {% if count_wait_uap.count > 0%}
                                         (<b>{{count_wait_uap.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
+                                        </a>
                                         {% endif %}
 
                                         {% if request.user.username == 'ucvqadn' %}
+                                        <a href="{% url 'requestedagenda_list' %}" class="btn btn-link" aria-expanded="false"
+                                            aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                                style="font-size:18px;"></i>
+                                            Waitting List
                                         {% if count_wait_ucvq.count > 0%}
                                         (<b>{{count_wait_ucvq.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
+                                        </a>
                                         {% endif %}
 
                                         {% if request.user.username == 'uedcadn' %}
+                                        <a href="{% url 'requestedagenda_list' %}" class="btn btn-link" aria-expanded="false"
+                                            aria-controls="collapseTwo"><i class="fa fa-list pr-2"
+                                                style="font-size:18px;"></i>
+                                            Waitting List
                                         {% if count_wait_uedc.count > 0%}
                                         (<b>{{count_wait_uedc.count }}</b>)
                                         {% else %}
                                         (<b>0</b>)
                                         {% endif %}
+                                        </a>
                                         {% endif %}
 
 
-                                    </a>
+
                                 </h5>
                             </div>
 

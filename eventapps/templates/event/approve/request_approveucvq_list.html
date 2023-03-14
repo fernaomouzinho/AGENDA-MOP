@@ -195,7 +195,7 @@
                                 <th>AGENDA REQUESTED</th>
                                 <th class="text-center">DATE REQUESTED</th>
                                 <th class="text-center">STATUS</th>
-                                <th class="text-center">ACTION</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -211,34 +211,12 @@
                                 </td>
 
                                 <td class="text-center">
-                                    {% if obj.approve == True %}
+                                    {% if obj.is_active == True %}
                                     Approved
                                     {% else %}
                                     Waitting
                                     {% endif %}
                                 </td>
-                                <td class="text-center">
-                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_dei'%}
-                                    <a href="{%url 'requestedagenda_approve' pk=obj.id %}" data-toggle="tooltip"
-                                        title="Approve" class="btn btn-sm btn-success"><span
-                                            class="	fa fa-thumbs-o-up"></span> Approved</a>
-                                    {% endif %}
-
-                                    {% if user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'gp_adj' or user.groups.all.0.name == 'gp_cord'%}
-
-
-
-                                    <a href="{%url 'requestedagenda_edit' pk=obj.id %}" data-toggle="tooltip"
-                                        title="Edit" class="btn btn-sm btn-warning"><i class='fa fa-edit'
-                                            style='font-size:20px'></i> Edit</a>
-
-                                    |
-                                    <a href="{%url 'requestedagenda_delete' pk=obj.id %}" data-toggle="tooltip"
-                                        title="Delete" class="btn btn-sm btn-danger"
-                                        onclick="return confirm(' Are you ready to delete?')"><i class='fa fa-trash'
-                                            style='font-size:20px'></i> Delete</a>
-                                </td>
-                                {% endif %}
                             </tr>
 
                             {% endfor %}
