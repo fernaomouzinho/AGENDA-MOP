@@ -9,9 +9,9 @@ from .form import CalendarPickerForm
 from eventapps.reports.models import Semestral, Trimestral, Mensual
 import os
 from pathlib import Path
-from reportlab.pdfgen    import canvas
-from reportlab.lib.utils import ImageReader
-from datetime            import datetime
+# from reportlab.pdfgen    import canvas
+# from reportlab.lib.utils import ImageReader
+# from datetime            import datetime
 
 
 
@@ -1448,28 +1448,28 @@ def csv_all_reportagenda_annual(request, year):
 
 
 #======================================================== Download PDF ===========================================================
-def pdf_all_reportagenda_annual(request, year):
-    # Create the HttpResponse object
-    response = HttpResponse(content_type='application/pdf')
-    # This line force a download
-    response['Content-Disposition'] = 'attachment; filename="1.pdf"'
-    # Generate unique timestamp
-    ts = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
-    p = canvas.Canvas(response)
-    # Write content on the PDF
+# def pdf_all_reportagenda_annual(request, year):
+#     # Create the HttpResponse object
+#     response = HttpResponse(content_type='application/pdf')
+#     # This line force a download
+#     response['Content-Disposition'] = 'attachment; filename="1.pdf"'
+#     # Generate unique timestamp
+#     ts = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
+#     p = canvas.Canvas(response)
+#     # Write content on the PDF
 
-    my_image = ImageReader('https://www.google.com/images/srpr/logo11w.png')
+#     my_image = ImageReader('https://www.google.com/images/srpr/logo11w.png')
 
-    p.drawImage(my_image, 10, 600, mask='auto')
-
-
+#     p.drawImage(my_image, 10, 600, mask='auto')
 
 
-    current_datetime = datetime.now()
-    anual_report = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime).order_by('-start_time')
-    p.drawString(100, 500, "a")
-    p.showPage()
-    p.save()
 
-    # Show the result to the user
-    return response
+
+#     current_datetime = datetime.now()
+#     anual_report = Agenda.objects.filter(start_time__year=year, end_time__lt=current_datetime).order_by('-start_time')
+#     p.drawString(100, 500, "a")
+#     p.showPage()
+#     p.save()
+
+#     # Show the result to the user
+#     return response

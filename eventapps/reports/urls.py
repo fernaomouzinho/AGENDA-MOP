@@ -75,7 +75,7 @@ urlpatterns = [
     path('download/all/agenda/<int:year>/csv/', views.csv_all_reportagenda_annual, name='csv_all_reportagenda_annual'),
 
     # Download PDF
-    path('download/all/agenda/<int:year>/pdf/', views.pdf_all_reportagenda_annual, name='pdf_all_reportagenda_annual'),
+    #path('download/all/agenda/<int:year>/pdf/', views.pdf_all_reportagenda_annual, name='pdf_all_reportagenda_annual'),
 
 
 ]
