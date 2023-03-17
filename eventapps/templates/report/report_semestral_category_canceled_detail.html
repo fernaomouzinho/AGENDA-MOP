@@ -159,8 +159,10 @@
                             <tr>
                                 <th class="text-center">NU.</th>
                                 <th>AGENDA</th>
+                                <th class="text-center">CAT. AGENDA</th>
                                 <th class="text-center">START TIME</th>
                                 <th class="text-center">END TIME</th>
+                                <th class="text-center">STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,11 +173,22 @@
                                     {{obj.title }}
                                 </td>
                                 <td class="text-center">
+                                    {{obj.catagenda }}
+                                </td>
+                                <td class="text-center">
                                     {{obj.start_time|date:"d/m/Y G:i" }}
                                 </td>
                                 <td class="text-center">
                                     {{obj.end_time|date:"d/m/Y G:i" }}
                                 </td>
+                                <td class="text-center">
+                                    {% if obj.is_cancel == False %}
+                                    CONCLUDED
+                                    {% else %}
+                                    CANCELED
+                                    {% endif %}
+                                </td>
+
                             </tr>
                             {% endfor %}
                         </tbody>
