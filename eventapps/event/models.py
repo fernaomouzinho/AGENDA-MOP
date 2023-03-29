@@ -119,13 +119,13 @@ class HistAgenda(models.Model):
     def __str__(self):
         return str(self.title)
 
-    def get_absolute_url(self):
-        return reverse("Title", kwargs={"title_slug": self.title_slug})
+    # def get_absolute_url(self):
+    #     return reverse("Title", kwargs={"title_slug": self.title_slug})
 
-    def save(self, *args, **kwargs):  # new
-        if not self.title_slug:
-            self.title_slug = slugify(self.title)
-        return super(HistAgenda, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):  # new
+    #     if not self.title_slug:
+    #         self.title_slug = slugify(self.title)
+    #     return super(HistAgenda, self).save(*args, **kwargs)
 
 
 class RequestAgenda(models.Model):
