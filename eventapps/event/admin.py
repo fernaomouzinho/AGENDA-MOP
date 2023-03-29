@@ -13,7 +13,7 @@ admin.site.register(CatAgenda, CatAgendaAdmin)
 class AgendaAdmin(admin.ModelAdmin):
     list_display = ['id',  'title', 'start_time',
                     'end_time', 'location', 'observation']
-    prepopulated_fields = {"title": ("title_slug",)}  # new
+    prepopulated_fields = {"title_slug": ("title",)}  # new
 
 
 admin.site.register(Agenda, AgendaAdmin)
