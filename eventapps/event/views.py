@@ -113,11 +113,11 @@ def agenda_add(request):
             elif agendaform.end_time < current_datetime:
                 agendaform.status = "Read"
 
-            last_hist = HistAgenda.objects.all().first()
+            # last_hist = HistAgenda.objects.all().first()
 
-            ha = HistAgenda(id=agendaform.id, user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, catagenda=agendaform.catagenda, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time, end_time_new=agendaform.end_time,
-                            location=agendaform.location, location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
-            ha.save()
+            # ha = HistAgenda(id=agendaform.id, user=request.user, title=agendaform.title, title_slug=agendaform.title_slug, catagenda=agendaform.catagenda, institution=agendaform.institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time, end_time_new=agendaform.end_time,
+            #                 location=agendaform.location, location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
+            # ha.save()
 
             agendaform.save()
 
