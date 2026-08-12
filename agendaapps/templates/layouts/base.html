@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% if title %}
+<title>MOP AGENDA - {{ title }}</title>
+{% else %}
+<title>MOP AGENDA</title>
+{% endif %}
+
+<link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+<link rel="icon" href="{% static 'main/images/favicon.png' %}">
+<link rel="stylesheet" href="{% static 'main/css/layout.css' %}">
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+{% include 'includes/header.html' %}
+<!-- SIDEBAR -->
+{% include 'includes/sidebar.html' %}
+<!-- PAGE -->
+<div class="page-wrapper">
+    <!-- CONTENT -->
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</div>
+<!-- FIXED FOOTER -->
+{% include 'includes/footer.html' %}
+
+<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+<script>
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("show");
+}
+</script>
+
+{% block scripts %}{% endblock %}
+
+{% block extrascripts %}
+
+
+<script> 
+    (function () {
+
+    let running = false;
+
+    const LOGIN_URL = "http://localhost:5173/login";
+    const INTERVAL = 10000;
+
+    async function checkPortalSession() {
+
+        if (running) return;
+        running = true;
+
+        try {
+            const res = await fetch("/api/agenda-auth-status/", {
+                method: "GET",
+                credentials: "include",
+                cache: "no-store"
+            });
+
+            if (!res.ok) return;
+
+            const data = await res.json();
+
+            //  ONLY TRUST BACKEND RESULT
+            if (data.active === false) {
+                window.location.replace(LOGIN_URL);
+            }
+
+        } catch (e) {
+            // ignore
+        } finally {
+            running = false;
+        }
+    }
+
+    checkPortalSession();
+    setInterval(checkPortalSession, INTERVAL);
+
+    })();
+</script> 
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- DATATABLE CSS -->
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+
+<style>
+
+    .institution-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+
+    .institution-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+
+    .institution-btn-add {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+
+    .institution-btn-add:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+
+    /* ============================
+       TABLE
+    ============================ */
+
+    .institution-table {
+        width: 100% !important;
+    }
+
+
+    .institution-table thead th {
+        background-color: #eaf2f8;
+        color: #17324d;
+
+        font-weight: 600;
+
+        text-align: center !important;
+        vertical-align: middle !important;
+
+        white-space: nowrap;
+    }
+
+
+    .institution-table tbody td {
+        vertical-align: middle !important;
+        font-size: 13px;
+    }
+
+
+    .institution-table tbody tr:hover {
+        background-color: #f6f9fc;
+    }
+
+
+    /* Center NU and ASAUN */
+    .institution-table tbody td:first-child,
+    .institution-table tbody td:last-child {
+        text-align: center;
+    }
+
+
+    /* ============================
+       BUTTONS
+    ============================ */
+
+    .btn-action-edit {
+        background-color: #f4b942;
+        border-color: #f4b942;
+        color: #222;
+
+        font-size: 12px;
+    }
+
+
+    .btn-action-edit:hover {
+        background-color: #d99b20;
+        border-color: #d99b20;
+        color: #ffffff;
+    }
+
+
+    .btn-action-delete {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: #ffffff;
+
+        font-size: 12px;
+    }
+
+
+    .btn-action-delete:hover {
+        background-color: #a71d2a;
+        border-color: #a71d2a;
+        color: #ffffff;
+    }
+
+
+    /* ============================
+       DATATABLE
+    ============================ */
+
+    .dataTables_wrapper {
+        font-size: 13px;
+    }
+
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 12px;
+        color: #52697d;
+    }
+
+
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #ced9e2;
+        border-radius: 5px;
+
+        padding: 5px 8px;
+
+        margin-left: 6px;
+
+        outline: none;
+    }
+
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #1976b9;
+
+        box-shadow:
+            0 0 0 2px rgba(25, 118, 185, 0.10);
+    }
+
+
+    .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #ced9e2;
+        border-radius: 5px;
+
+        padding: 4px 6px;
+
+        margin: 0 4px;
+    }
+
+
+    .dataTables_wrapper .dataTables_info {
+        padding-top: 12px !important;
+
+        color: #6b7d8c;
+
+        font-size: 12px;
+    }
+
+
+    .dataTables_wrapper .dataTables_paginate {
+        padding-top: 8px;
+    }
+
+
+    .dataTables_wrapper
+    .dataTables_paginate
+    .paginate_button {
+        border-radius: 5px !important;
+    }
+
+</style>
+
+
+
+<div class="container-fluid">
+
+
+    <div class="row justify-content-center">
+
+
+        <div class="col-12">
+
+
+            <div class="card shadow-sm border-0 institution-card">
+
+
+                <div class="card-body">
+
+
+                    <!-- BUTTON AREA -->
+                    <div class="row align-items-center mb-3">
+
+
+                        <div class="col-12 col-md-6 mb-2 mb-md-0">
+
+
+                            <a href="{% url 'institution_add' %}"
+                               class="btn btn-sm institution-btn-add">
+
+
+                                <i class="fa fa-plus mr-1"></i>
+
+                                Aumenta Instituisaun
+
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- HEADER -->
+                    <div class="institution-header mb-3">
+
+
+                        <h6 class="mb-0">
+
+                            <i class="fa fa-list mr-1"></i>
+
+                            LISTA INSTITUISAUN
+
+                        </h6>
+
+
+                    </div>
+
+
+
+                    <!-- TABLE -->
+                    <div class="table-responsive">
+
+
+                        <table
+                            class="table table-bordered table-sm table-hover institution-table"
+                            id="example"
+                            width="100%">
+
+
+                            <thead>
+
+
+                                <tr>
+
+
+                                    <th style="width:70px;">
+
+                                        NU.
+
+                                    </th>
+
+
+                                    <th>
+
+                                        NARAN INSTITUISAUN
+
+                                    </th>
+
+
+                                    <th style="width:200px;">
+
+                                        ASAUN
+
+                                    </th>
+
+
+                                </tr>
+
+
+                            </thead>
+
+
+
+                            <tbody>
+
+
+                                {% for obj in institution_list %}
+
+
+                                <tr>
+
+
+                                    <!-- NUMBER -->
+                                    <td>
+
+                                        {{ forloop.counter }}
+
+                                    </td>
+
+
+
+                                    <!-- INSTITUTION -->
+                                    <td>
+
+                                        {{ obj.name_institution }}
+
+                                    </td>
+
+
+
+                                    <!-- ACTION -->
+                                    <td>
+
+
+                                        <a
+                                            href="{% url 'institution_edit' pk=obj.id %}"
+                                            data-toggle="tooltip"
+                                            title="Hadia"
+                                            class="btn btn-sm btn-action-edit mb-1 mr-1">
+
+
+                                            <i class="fa fa-edit"></i>
+
+                                            Hadia
+
+
+                                        </a>
+
+
+
+                                        <a
+                                            href="{% url 'institution_delete' pk=obj.id %}"
+                                            data-toggle="tooltip"
+                                            title="Hamos"
+                                            class="btn btn-sm btn-action-delete mb-1"
+                                            onclick="return confirm('Ita hakarak hamos instituisaun ida ne?')">
+
+
+                                            <i class="fa fa-trash"></i>
+
+                                            Hamos
+
+
+                                        </a>
+
+
+                                    </td>
+
+
+                                </tr>
+
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+                    <!-- END TABLE -->
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+{{ block.super }}
+
+
+<!-- DATATABLE JS -->
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+
+    if (
+        $.fn.DataTable &&
+        !$.fn.DataTable.isDataTable('#example')
+    ) {
+
+
+        $('#example').DataTable({
+
+
+            responsive: true,
+
+
+            autoWidth: false,
+
+
+            pageLength: 10,
+
+
+            lengthMenu: [
+
+                [10, 25, 50, 100, -1],
+
+                [10, 25, 50, 100, "Hotu"]
+
+            ],
+
+
+            /* SORT BY INSTITUTION NAME */
+            order: [
+                [1, 'asc']
+            ],
+
+
+            columnDefs: [
+
+
+                /* CENTER NUMBER AND ACTION */
+                {
+                    targets: [
+                        0,
+                        2
+                    ],
+
+                    className:
+                        'text-center align-middle'
+                },
+
+
+                /* NUMBER + ACTION NOT SORTABLE */
+                {
+                    targets: [
+                        0,
+                        2
+                    ],
+
+                    orderable: false
+                },
+
+
+                /* ACTION NOT SEARCHABLE */
+                {
+                    targets: [
+                        2
+                    ],
+
+                    searchable: false
+                }
+
+            ],
+
+
+
+            language: {
+
+
+                search:
+
+                    "Buka:",
+
+
+                searchPlaceholder:
+
+                    "Buka instituisaun...",
+
+
+                lengthMenu:
+
+                    "Hatudu _MENU_ dadus",
+
+
+                info:
+
+                    "Hatudu _START_ to'o _END_ husi _TOTAL_ dadus",
+
+
+                infoEmpty:
+
+                    "La iha dadus",
+
+
+                infoFiltered:
+
+                    "(filtra husi total _MAX_ dadus)",
+
+
+                zeroRecords:
+
+                    "Dadus ne'ebé buka la hetan",
+
+
+                emptyTable:
+
+                    "Lista instituisaun seidauk iha",
+
+
+                loadingRecords:
+
+                    "Dadus karrega hela...",
+
+
+                processing:
+
+                    "Prosesa hela...",
+
+
+                paginate: {
+
+
+                    first:
+
+                        "Primeiru",
+
+
+                    last:
+
+                        "Ikus",
+
+
+                    next:
+
+                        "Oin",
+
+
+                    previous:
+
+                        "Kotuk"
+
+
+                }
+
+
+            }
+
+
+        });
+
+
+    }
+
+
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+
+</script>
+
+
+{% endblock %}

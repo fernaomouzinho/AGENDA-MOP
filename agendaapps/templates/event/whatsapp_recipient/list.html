@@ -1,0 +1,863 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     DATATABLE CSS
+========================================================= -->
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+
+<style>
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.recipient-page-title {
+    color: #17324d;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.recipient-page-subtitle {
+    color: #6b7d8c;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.btn-add-recipient {
+    background: #0f4c81;
+    border-color: #0f4c81;
+    color: #ffffff;
+
+    border-radius: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    padding: 8px 14px;
+}
+
+.btn-add-recipient:hover {
+    background: #0b3b65;
+    border-color: #0b3b65;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.recipient-card {
+    border: none;
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 5px 18px
+        rgba(15, 76, 129, 0.10);
+}
+
+.recipient-card-header {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    padding: 13px 18px;
+}
+
+.recipient-card-header h6 {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.recipient-card-body {
+    padding: 18px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.recipient-table {
+    width: 100% !important;
+    margin-bottom: 0;
+}
+
+
+/* HEADER CENTER */
+.recipient-table thead th {
+    background-color: #eaf2f8;
+
+    color: #17324d;
+
+    border-color: #dbe6ef;
+
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    padding: 11px 8px;
+}
+
+
+/* BODY CENTER */
+.recipient-table tbody td {
+    color: #334e68;
+
+    border-color: #e4ebf1;
+
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    font-size: 13px;
+
+    padding: 10px 8px;
+}
+
+
+.recipient-table tbody tr:hover {
+    background-color: #f8fbfd;
+}
+
+
+/* =========================================================
+   AGENDA
+========================================================= */
+
+.agenda-name {
+    color: #0f4c81;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PHONE NUMBER
+========================================================= */
+
+.phone-number {
+    white-space: nowrap;
+
+    font-weight: 500;
+}
+
+.whatsapp-icon {
+    color: #25D366;
+
+    margin-right: 4px;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-active {
+    display: inline-block;
+
+    min-width: 75px;
+
+    background: #e6f6ec;
+
+    color: #198754;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.status-inactive {
+    display: inline-block;
+
+    min-width: 75px;
+
+    background: #edf0f2;
+
+    color: #6c757d;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.btn-edit-recipient {
+    background: #fff4d6;
+
+    border: 1px solid #f0c36d;
+
+    color: #856404;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+}
+
+.btn-edit-recipient:hover {
+    background: #ffc107;
+
+    border-color: #ffc107;
+
+    color: #212529;
+}
+
+
+.btn-delete-recipient {
+    background: #fde8e8;
+
+    border: 1px solid #f5b7b7;
+
+    color: #c82333;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+}
+
+.btn-delete-recipient:hover {
+    background: #dc3545;
+
+    border-color: #dc3545;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DATATABLE
+========================================================= */
+
+.dataTables_wrapper {
+    font-size: 13px;
+}
+
+
+/* SHOW ENTRIES */
+.dataTables_wrapper .dataTables_length {
+    margin-bottom: 12px;
+
+    color: #52697d;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #ced9e2;
+
+    border-radius: 5px;
+
+    padding: 4px 6px;
+
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+
+/* SEARCH */
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 12px;
+
+    color: #52697d;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ced9e2;
+
+    border-radius: 5px;
+
+    padding: 5px 8px;
+
+    margin-left: 6px;
+
+    outline: none;
+}
+
+
+/* INFORMATION */
+.dataTables_wrapper .dataTables_info {
+    padding-top: 12px !important;
+
+    color: #6b7d8c;
+
+    font-size: 12px;
+}
+
+
+/* PAGINATION */
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 8px;
+}
+
+.dataTables_wrapper
+.dataTables_paginate
+.paginate_button {
+    border-radius: 5px !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 768px) {
+
+    .recipient-header {
+        display: block !important;
+    }
+
+    .recipient-header
+    .btn-add-recipient {
+        margin-top: 12px;
+    }
+
+    .recipient-table {
+        min-width: 850px;
+    }
+
+}
+
+</style>
+
+
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3 recipient-header">
+
+
+        <div>
+
+            <h4 class="recipient-page-title">
+
+                <i class="fa fa-whatsapp text-success mr-1"></i>
+
+                Receptor WhatsApp
+
+            </h4>
+
+
+            <div class="recipient-page-subtitle">
+
+                Lista receptor ba notifikasaun ajenda
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="{% url 'whatsapp_recipient_add' %}"
+            class="btn btn-add-recipient">
+
+            <i class="fa fa-plus mr-1"></i>
+
+            Aumenta Receptor
+
+        </a>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div
+                class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                role="alert">
+
+
+                {{ message }}
+
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close">
+
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+
+                </button>
+
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         CARD
+    ====================================================== -->
+
+    <div class="card recipient-card">
+
+
+        <!-- CARD HEADER -->
+        <div class="recipient-card-header">
+
+
+            <h6>
+
+                <i class="fa fa-list mr-1"></i>
+
+                LISTA RECEPTOR WHATSAPP
+
+            </h6>
+
+
+        </div>
+
+
+
+        <!-- CARD BODY -->
+        <div class="recipient-card-body">
+
+
+            <div class="table-responsive">
+
+
+                <!-- =================================================
+                     DATATABLE
+                ================================================== -->
+
+                <table
+                    id="recipientTable"
+                    class="table table-bordered table-sm table-hover recipient-table"
+                    width="100%">
+
+
+                    <!-- =============================================
+                         TABLE HEADER
+                    ============================================== -->
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:60px;">
+                                NU.
+                            </th>
+
+                            <th>
+                                AJENDA
+                            </th>
+
+                            <th>
+                                NARAN
+                            </th>
+
+                            <th style="width:190px;">
+                                NUMERU WHATSAPP
+                            </th>
+
+                            <th style="width:110px;">
+                                STATUS
+                            </th>
+
+                            <th style="width:190px;">
+                                ASAUN
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- =============================================
+                         TABLE BODY
+                    ============================================== -->
+
+                    <tbody>
+
+
+                        {% for recipient in recipients %}
+
+
+                        <tr>
+
+
+                            <!-- NU -->
+                            <td>
+
+                                {{ forloop.counter }}
+
+                            </td>
+
+
+
+                            <!-- AGENDA -->
+                            <td>
+
+                                <span class="agenda-name">
+
+                                    {{ recipient.agenda.title }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- NAME -->
+                            <td>
+
+                                {{ recipient.name }}
+
+                            </td>
+
+
+
+                            <!-- WHATSAPP -->
+                            <td>
+
+                                <span class="phone-number">
+
+
+                                    <i class="fa fa-whatsapp whatsapp-icon"></i>
+
+
+                                    {{ recipient.phone_number }}
+
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- STATUS -->
+                            <td>
+
+
+                                {% if recipient.is_active %}
+
+
+                                    <span class="status-active">
+
+                                        <i class="fa fa-check-circle mr-1"></i>
+
+                                        ATIVU
+
+                                    </span>
+
+
+                                {% else %}
+
+
+                                    <span class="status-inactive">
+
+                                        <i class="fa fa-times-circle mr-1"></i>
+
+                                        LA ATIVU
+
+                                    </span>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- ACTION -->
+                            <td>
+
+
+                                <!-- EDIT -->
+                                <a
+                                    href="{% url 'whatsapp_recipient_edit' recipient.pk %}"
+                                    class="btn btn-sm btn-edit-recipient mr-1"
+                                    data-toggle="tooltip"
+                                    title="Altera receptor">
+
+
+                                    <i class="fa fa-edit"></i>
+
+                                    Altera
+
+
+                                </a>
+
+
+
+                                <!-- DELETE -->
+                                <a
+                                    href="{% url 'whatsapp_recipient_delete' recipient.pk %}"
+                                    class="btn btn-sm btn-delete-recipient"
+                                    data-toggle="tooltip"
+                                    title="Hamos receptor"
+                                    onclick="return confirm('Ita boot hakarak hamos receptor ida ne?');">
+
+
+                                    <i class="fa fa-trash"></i>
+
+                                    Hamos
+
+
+                                </a>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+{{ block.super }}
+
+
+<!-- =========================================================
+     DATATABLE JS
+========================================================= -->
+
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+
+    /* =====================================================
+       DATATABLE
+    ===================================================== */
+
+    if (
+        $.fn.DataTable &&
+        !$.fn.DataTable.isDataTable('#recipientTable')
+    ) {
+
+
+        $('#recipientTable').DataTable({
+
+
+            responsive: true,
+
+
+            autoWidth: false,
+
+
+            pageLength: 10,
+
+
+            lengthMenu: [
+
+                [10, 25, 50, 100, -1],
+
+                [10, 25, 50, 100, "Hotu"]
+
+            ],
+
+
+            /* AGENDA SORT */
+            order: [
+                [1, 'asc']
+            ],
+
+
+            columnDefs: [
+
+                /* ALL COLUMNS CENTER */
+                {
+                    targets: '_all',
+                    className:
+                        'text-center align-middle'
+                },
+
+
+                /* NU + STATUS + ACTION NOT SORTABLE */
+                {
+                    targets: [
+                        0,
+                        4,
+                        5
+                    ],
+
+                    orderable: false
+                },
+
+
+                /* ACTION NOT SEARCHABLE */
+                {
+                    targets: [5],
+
+                    searchable: false
+                }
+
+            ],
+
+
+
+            language: {
+
+
+                search:
+                    "Buka:",
+
+
+                searchPlaceholder:
+                    "Buka receptor...",
+
+
+                lengthMenu:
+                    "Hatudu _MENU_ dadus",
+
+
+                info:
+                    "Hatudu _START_ to'o _END_ husi _TOTAL_ dadus",
+
+
+                infoEmpty:
+                    "La iha dadus",
+
+
+                infoFiltered:
+                    "(filtra husi total _MAX_ dadus)",
+
+
+                zeroRecords:
+                    "Dadus ne'ebé buka la hetan",
+
+
+                emptyTable:
+                    "Dadus receptor WhatsApp seidauk iha",
+
+
+                loadingRecords:
+                    "Dadus karrega hela...",
+
+
+                processing:
+                    "Prosesa hela...",
+
+
+                paginate: {
+
+                    first:
+                        "Primeiru",
+
+                    last:
+                        "Ikus",
+
+                    next:
+                        "Oin",
+
+                    previous:
+                        "Kotuk"
+
+                }
+
+            }
+
+
+        });
+
+
+    }
+
+
+
+    /* =====================================================
+       TOOLTIP
+    ===================================================== */
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+
+</script>
+
+
+{% endblock %}

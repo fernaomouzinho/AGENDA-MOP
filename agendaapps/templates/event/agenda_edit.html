@@ -1,0 +1,160 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .agenda-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .agenda-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 12px 16px;
+    }
+
+    .agenda-header h6 {
+        font-weight: 600;
+    }
+
+    .agenda-body {
+        background-color: #f6f9fc;
+    }
+
+    .btn-agenda-list {
+        background-color: #ffffff;
+        color: #0f4c81;
+        border: 1px solid #ffffff;
+        font-weight: 500;
+    }
+
+    .btn-agenda-list:hover {
+        background-color: #eaf2f8;
+        color: #0b3b65;
+    }
+
+    .btn-save-agenda {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        min-width: 110px;
+    }
+
+    .btn-save-agenda:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+    .btn-cancel-agenda {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #ffffff;
+        min-width: 110px;
+    }
+
+    .btn-cancel-agenda:hover {
+        background-color: #b02a37;
+        border-color: #b02a37;
+        color: #ffffff;
+    }
+
+    .agenda-form-field {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 agenda-card">
+
+                <!-- HEADER -->
+                <div class="card-header agenda-header
+                            d-flex justify-content-between
+                            align-items-center flex-wrap">
+
+                    <h6 class="mb-0">
+                        <i class="fa fa-edit me-1"></i>
+                        Hadia Ajenda
+                    </h6>
+
+                    <a href="{% url 'agenda_list' %}"
+                       class="btn btn-sm btn-agenda-list mt-2 mt-md-0">
+
+                        <i class="fa fa-list me-1"></i>
+                        Lista Ajenda
+
+                    </a>
+
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body agenda-body">
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <!-- TWO COLUMN FORM -->
+                        <div class="row">
+
+                            {% for field in agendaform %}
+
+                            <div class="col-12 col-md-6 agenda-form-field">
+
+                                {{ field|as_crispy_field }}
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {{ agendaform.media|safe }}
+
+                        <hr>
+
+                        <!-- BUTTONS -->
+                        <div class="text-right mt-3">
+
+                            <a href="{% url 'agenda_list' %}"
+                               class="btn btn-cancel-agenda px-4 me-2">
+
+                                <i class="fa fa-times me-1"></i>
+                                Kansela
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-save-agenda px-4">
+
+                                <i class="fa fa-save me-1"></i>
+                                Atualiza
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

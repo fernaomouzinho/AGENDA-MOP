@@ -1,0 +1,838 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     DATATABLE CSS
+========================================================= -->
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+
+<style>
+
+    /* =========================================================
+       CARD
+    ========================================================= */
+
+    .agenda-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .agenda-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+    .agenda-header h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       ADD BUTTON
+    ========================================================= */
+
+    .agenda-btn-add {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .agenda-btn-add:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
+    .agenda-table {
+        width: 100% !important;
+    }
+
+    .agenda-table thead th {
+        background-color: #eaf2f8;
+        color: #17324d;
+
+        font-weight: 600;
+
+        text-align: center !important;
+        vertical-align: middle !important;
+
+        white-space: nowrap;
+    }
+
+    .agenda-table tbody td {
+        vertical-align: middle !important;
+        font-size: 13px;
+    }
+
+    .agenda-table tbody tr:hover {
+        background-color: #f6f9fc;
+    }
+
+
+    /* =========================================================
+       TITLE LINK
+    ========================================================= */
+
+    .agenda-title-link {
+        color: #0f4c81;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .agenda-title-link:hover {
+        color: #082f4f;
+        text-decoration: underline;
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .status-upcoming {
+        background-color: #0dcaf0;
+        color: #073642;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+
+    .status-running {
+        background-color: #ffc107;
+        color: #3d3000;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+
+    .status-completed {
+        background-color: #198754;
+        color: #ffffff;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+
+    .status-cancelled {
+        background-color: #dc3545;
+        color: #ffffff;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+    ========================================================= */
+
+    .btn-action-edit {
+        background-color: #f4b942;
+        border-color: #f4b942;
+        color: #222;
+        font-size: 12px;
+    }
+
+    .btn-action-edit:hover {
+        background-color: #d99b20;
+        border-color: #d99b20;
+        color: #ffffff;
+    }
+
+    .btn-action-delete {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: #ffffff;
+        font-size: 12px;
+    }
+
+    .btn-action-delete:hover {
+        background-color: #a71d2a;
+        border-color: #a71d2a;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+       DATATABLE
+    ========================================================= */
+
+    .dataTables_wrapper {
+        font-size: 13px;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 12px;
+        color: #52697d;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #ced9e2;
+        border-radius: 5px;
+        padding: 5px 8px;
+        margin-left: 6px;
+        outline: none;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #1976b9;
+        box-shadow: 0 0 0 2px rgba(25, 118, 185, 0.10);
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #ced9e2;
+        border-radius: 5px;
+        padding: 4px 6px;
+        margin: 0 4px;
+    }
+
+    .dataTables_wrapper .dataTables_info {
+        color: #6b7d8c;
+        font-size: 12px;
+        padding-top: 12px !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        padding-top: 8px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 5px !important;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media(max-width: 991px) {
+
+        .agenda-table {
+            min-width: 1100px;
+        }
+
+    }
+
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 agenda-card">
+
+                <div class="card-body">
+
+
+                    <!-- =================================================
+                         BUTTON AREA
+                    ================================================== -->
+
+                    <div class="row align-items-center mb-3">
+
+                        <div class="col-12 col-md-6 mb-2 mb-md-0">
+
+                            {% if user.is_authenticated %}
+
+                                <a href="{% url 'agenda_add' %}"
+                                   class="btn btn-sm agenda-btn-add">
+
+                                    <i class="fa fa-plus mr-1"></i>
+
+                                    Kria Ajenda
+
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         HEADER
+                    ================================================== -->
+
+                    <div class="agenda-header mb-3">
+
+                        <h6>
+
+                            <i class="fa fa-list mr-1"></i>
+
+                            LISTA AJENDA
+
+                        </h6>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TABLE
+                    ================================================== -->
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table table-bordered table-sm table-hover agenda-table"
+                            id="example"
+                            width="100%">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        NU.
+                                    </th>
+
+                                    <th>
+                                        AJENDA
+                                    </th>
+
+                                    <th>
+                                        KAT.
+                                    </th>
+
+                                    <th>
+                                        KRIA
+                                    </th>
+
+                                    <th>
+                                        HAHU
+                                    </th>
+
+                                    <th>
+                                        REMATA
+                                    </th>
+
+                                    <th>
+                                        FATIN
+                                    </th>
+
+                                    <th>
+                                        STATUS
+                                    </th>
+
+                                    <th>
+                                        ASAUN
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for obj in agenda_list %}
+
+                                <tr>
+
+
+                                    <!-- =================================================
+                                         NUMBER
+                                    ================================================== -->
+
+                                    <td class="text-center">
+
+                                        {{ forloop.counter }}
+
+                                    </td>
+
+
+                                    {% if obj.is_cancel == False %}
+
+
+                                        <!-- =============================================
+                                             TITLE
+                                        ============================================== -->
+
+                                        <td>
+
+                                            <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                               class="agenda-title-link">
+
+                                                {{ obj.title }}
+
+                                            </a>
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             CATEGORY
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+                                            {{ obj.catagenda }}
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             INSTITUTION
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+                                            {{ obj.institution }}
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             START TIME
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+                                            {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             END TIME
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+                                            {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             LOCATION
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+                                            {% if obj.location %}
+
+                                                {{ obj.location }}
+
+                                            {% else %}
+
+                                                -
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- =============================================
+                                             STATUS
+                                        ============================================== -->
+
+                                        <td class="text-center">
+
+
+                                            {% if obj.start_time >= current_datetime %}
+
+
+                                                <span class="badge status-upcoming">
+
+                                                    TUIR MAI
+
+                                                </span>
+
+
+                                            {% elif obj.start_time <= current_datetime and obj.end_time >= current_datetime %}
+
+
+                                                <span class="badge status-running">
+
+                                                    LAO HELA
+
+                                                </span>
+
+
+                                            {% elif obj.end_time < current_datetime %}
+
+
+                                                <span class="badge status-completed">
+
+                                                    KONKLUIDU
+
+                                                </span>
+
+
+                                            {% else %}
+
+
+                                                <span class="badge badge-secondary">
+
+                                                    #
+
+                                                </span>
+
+
+                                            {% endif %}
+
+
+                                        </td>
+
+
+                                    {% else %}
+
+
+                                        <!-- =============================================
+                                             CANCELED AGENDA
+                                        ============================================== -->
+
+                                        <td>
+
+                                            <a href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+                                               class="agenda-title-link">
+
+                                                {{ obj.title }}
+
+                                            </a>
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.catagenda }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.institution }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {% if obj.location %}
+
+                                                {{ obj.location }}
+
+                                            {% else %}
+
+                                                -
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            <span class="badge status-cancelled">
+
+                                                KANSELA
+
+                                            </span>
+
+                                        </td>
+
+
+                                    {% endif %}
+
+
+                                    <!-- =================================================
+                                         ACTION
+                                    ================================================== -->
+
+                                    <td class="text-center">
+
+
+                                        <!-- EDIT -->
+                                        <a href="{% url 'agenda_edit' pk=obj.id %}"
+                                           class="btn btn-sm btn-action-edit mb-1"
+                                           data-toggle="tooltip"
+                                           title="Hadia Ajenda">
+
+                                            <i class="fa fa-edit"></i>
+
+                                            Hadia
+
+                                        </a>
+
+
+                                        <!-- DELETE -->
+                                        <a href="{% url 'agenda_delete' pk=obj.id %}"
+                                           class="btn btn-sm btn-action-delete mb-1"
+                                           data-toggle="tooltip"
+                                           title="Hamos Ajenda"
+                                           onclick="return confirm('Ita hakarak hamos ajenda ida ne?')">
+
+                                            <i class="fa fa-trash"></i>
+
+                                            Hamos
+
+                                        </a>
+
+
+                                    </td>
+
+
+                                </tr>
+
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+{{ block.super }}
+
+
+<!-- =========================================================
+     DATATABLE JS
+========================================================= -->
+
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+
+<script>
+
+$(document).ready(function () {
+
+
+    /* =====================================================
+       DATATABLE
+    ===================================================== */
+
+    if (
+        $.fn.DataTable &&
+        !$.fn.DataTable.isDataTable('#example')
+    ) {
+
+
+        $('#example').DataTable({
+
+            responsive: true,
+
+            autoWidth: false,
+
+            pageLength: 10,
+
+
+            lengthMenu: [
+
+                [10, 25, 50, 100, -1],
+
+                [10, 25, 50, 100, "Hotu"]
+
+            ],
+
+
+            /* SORT BY START TIME */
+            order: [
+                [4, 'desc']
+            ],
+
+
+            columnDefs: [
+
+
+                /* CENTER COLUMNS */
+                {
+                    targets: [
+                        0,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8
+                    ],
+
+                    className:
+                        'text-center align-middle'
+                },
+
+
+                /* NUMBER + ACTION NOT SORTABLE */
+                {
+                    targets: [
+                        0,
+                        8
+                    ],
+
+                    orderable: false
+                },
+
+
+                /* ACTION NOT SEARCHABLE */
+                {
+                    targets: [8],
+
+                    searchable: false
+                }
+
+            ],
+
+
+            language: {
+
+
+                search:
+
+                    "Buka:",
+
+
+                searchPlaceholder:
+
+                    "Buka ajenda...",
+
+
+                lengthMenu:
+
+                    "Hatudu _MENU_ dadus",
+
+
+                info:
+
+                    "Hatudu _START_ to'o _END_ husi _TOTAL_ dadus",
+
+
+                infoEmpty:
+
+                    "La iha dadus",
+
+
+                infoFiltered:
+
+                    "(filtra husi total _MAX_ dadus)",
+
+
+                zeroRecords:
+
+                    "Dadus ne'ebé buka la hetan",
+
+
+                emptyTable:
+
+                    "Lista ajenda seidauk iha",
+
+
+                loadingRecords:
+
+                    "Dadus karrega hela...",
+
+
+                processing:
+
+                    "Prosesa hela...",
+
+
+                paginate: {
+
+                    first:
+
+                        "Primeiru",
+
+                    last:
+
+                        "Ikus",
+
+                    next:
+
+                        "Oin",
+
+                    previous:
+
+                        "Kotuk"
+
+                }
+
+            }
+
+
+        });
+
+
+    }
+
+
+    /* =====================================================
+       TOOLTIP
+    ===================================================== */
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+
+</script>
+
+
+{% endblock %}

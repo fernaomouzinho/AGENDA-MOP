@@ -1,0 +1,160 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .institution-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .institution-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 12px 16px;
+    }
+
+    .institution-header h6 {
+        font-weight: 600;
+    }
+
+    .institution-body {
+        background-color: #f6f9fc;
+    }
+
+    .btn-institution-list {
+        background-color: #ffffff;
+        color: #0f4c81;
+        border: 1px solid #ffffff;
+        font-weight: 500;
+    }
+
+    .btn-institution-list:hover {
+        background-color: #eaf2f8;
+        color: #0b3b65;
+    }
+
+    .btn-save-institution {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        min-width: 110px;
+    }
+
+    .btn-save-institution:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+    .btn-cancel-institution {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #ffffff;
+        min-width: 110px;
+    }
+
+    .btn-cancel-institution:hover {
+        background-color: #b02a37;
+        border-color: #b02a37;
+        color: #ffffff;
+    }
+
+    .institution-form-field {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 institution-card">
+
+                <!-- HEADER -->
+                <div class="card-header institution-header
+                            d-flex justify-content-between
+                            align-items-center flex-wrap">
+
+                    <h6 class="mb-0">
+                        <i class="fa fa-plus me-1"></i>
+                        Aumenta Instituisaun Foun
+                    </h6>
+
+                    <a href="{% url 'institution_list' %}"
+                       class="btn btn-sm btn-institution-list mt-2 mt-md-0">
+
+                        <i class="fa fa-list me-1"></i>
+                        Lista Instituisaun
+
+                    </a>
+
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body institution-body">
+
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <!-- FORM -->
+                        <div class="row">
+
+                            {% for field in institutionform %}
+
+                            <div class="col-12 col-md-6 institution-form-field">
+
+                                {{ field|as_crispy_field }}
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {{ institutionform.media|safe }}
+
+                        <hr>
+
+                        <!-- BUTTONS -->
+                        <div class="text-right mt-3">
+
+                            <a href="{% url 'institution_list' %}"
+                               class="btn btn-cancel-institution px-4 me-2">
+
+                                <i class="fa fa-times me-1"></i>
+                                Kansela
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-save-institution px-4">
+
+                                <i class="fa fa-save me-1"></i>
+                                Rai
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

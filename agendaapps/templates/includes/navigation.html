@@ -1,0 +1,255 @@
+{% load static %}
+<header class="site-header fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-card">
+        <a class="navbar-brand ps-2" href="{%url 'home' %}">
+            MOP - SISTEMA AJENDA </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {% if user.is_authenticated %}
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                {% if user.groups.all.0.name == 'gp_che' %}
+                <!-- =============================== Start Request Agenda ===============================-->
+                {% if approved_upcoming.count != 0 %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'requestedagenda_read' %}">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 255, 255)'></i>
+                        <span class="ag">{{ approved_upcoming.count }}</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 255, 255)'></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% endif %}
+
+                {% if user.groups.all.0.name == 'gp_min' %}
+                <!-- =============================== Start Request Agenda ===============================-->
+                {% if pending_request.count != 0 %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'requestedagenda_read' %}">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                        {% if pending_request.count != 0 %}
+                        <span class="ag">{{ pending_request.count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-envelope' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% endif %}
+
+                <!-- =============================== Start Notification ===============================-->
+                {% if pending_upcoming.count != 0 %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'upcomingAgenda_read' %}">
+                        <i class='fa fa-bell' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                        {% if pending_upcoming.count != 0 %}
+                        <span class="ag">{{ pending_upcoming.count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">
+                        <i class='fa fa-bell' style='font-size:20px; color:rgb(255, 187, 0)'></i>
+                    </a>
+                </li>
+                {% endif %}
+
+
+                <!-- =============================== End Notification ===============================-->
+                <!-- ========================== Start Darshboard ===============================-->
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">VARANDA <i
+                            class="fa fa-home"></i></a>
+                </li>
+                <!-- ========================= End Darshboard =============================-->
+                <!-- ========================== Start Admin Navigation ===============================-->
+                {% if user.groups.all.0.name == 'admin' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">INSTITUISAUN</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+                        <a class="dropdown-item" href="{% url 'institution_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i> Aumenta Instituisaun
+                        </a>
+                        <a class="dropdown-item" href="{% url 'institution_list' %}"><i class="fa fa-list "
+                                aria-hidden="true"></i> Lista Instituisaun
+                        </a>
+                    </div>
+                </li>
+
+                  <li class="nav-item"><a class="nav-link" href="{% url 'agenda_list' %}">AJENDA </a>
+                </li>
+
+                {% comment %} <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">NOTA INFORMATIVU</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+
+                        <a class="dropdown-item" href="{% url 'informative_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i>
+                            Aumenta Nota</a>
+
+
+                        <a class="dropdown-item" href="{% url 'informative_list' %}"><i class="fa fa-list"
+                                aria-hidden="true"></i>
+                            Lista Nota</a>
+
+
+                    </div>
+                </li> {% endcomment %}
+
+
+
+                {% comment %} <!-- ========================= End Admin Navigation=============================-->
+                {% elif user.groups.all.0.name == 'gp_dei' %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">AGENDA</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+                        <a class="dropdown-item" href="{% url 'agenda_list' %}"><i class="fa fa-list"
+                                aria-hidden="true"></i> Lista Ajenda
+                        </a>
+                        <a class="dropdown-item" href="{% url 'requestedagenda_list' %}"><i class="fa fa-calendar"
+                                aria-hidden="true"></i>
+                            Lista Ajenda Pedidu</a>
+
+                    </div>
+                </li> {% endcomment %}
+
+                {% comment %} <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">NOTA INFORMATIVU</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+
+                        <a class="dropdown-item" href="{% url 'informative_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i>
+                            Aumenta Nota</a>
+
+
+                        <a class="dropdown-item" href="{% url 'informative_list' %}"><i class="fa fa-list"
+                                aria-hidden="true"></i>
+                            Lista Nota</a>
+
+
+                    </div>
+                </li> {% endcomment %}
+
+                <!-- ========================== Start Adjunto Navigation ===============================-->
+
+
+
+                {% elif user.groups.all.0.name == 'gp_min' %}
+                 <li class="nav-item"><a class="nav-link" href="{% url 'agenda_list' %}">AJENDA </a>
+                </li>
+
+                {% comment %} <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">NOTA INFORMATIVU</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+
+                        <a class="dropdown-item" href="{% url 'informative_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i>
+                            Kria Nota</a>
+
+
+                        <a class="dropdown-item" href="{% url 'informative_list' %}"><i class="fa fa-list "
+                                aria-hidden="true"></i>
+                            Lista Nota</a>
+
+
+                    </div>
+                </li> {% endcomment %}
+
+
+
+                {% comment %} {% elif user.groups.all.0.name == 'gp_cord' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">AJENDA</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+                        <a class="dropdown-item" href="{% url 'requestedagenda_list' %}"><i class="fa fa-list "
+                                aria-hidden="true"></i>
+                            Lista Ajenda Pedidu</a>
+                    </div>
+                </li> {% endcomment %}
+
+                 {% elif user.groups.all.0.name == 'gp_ass' %}
+                 <li class="nav-item"><a class="nav-link" href="{% url 'agenda_list' %}">AJENDA <i
+                            class="fa"></i></a>
+                </li>
+
+
+                {% elif user.groups.all.0.name == 'gp_sec' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">INTITUISAUN</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+
+                        <a class="dropdown-item" href="{% url 'institution_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i>
+                            Aumenta Instituisaun
+                        </a>
+                        <a class="dropdown-item" href="{% url 'institution_list' %}"><i class="fa fa-list "
+                                aria-hidden="true"></i>
+                            Lista Instituisaun
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agenda_list' %}">AJENDA </a>
+                </li>
+
+                {% comment %} <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">NOTA INFORMATIVU</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+
+                        <a class="dropdown-item" href="{% url 'informative_add' %}"><i class="fa fa-plus"
+                                aria-hidden="true"></i>
+                            Aumenta Nota</a>
+
+
+                        <a class="dropdown-item" href="{% url 'informative_list' %}"><i class="fa fa-list "
+                                aria-hidden="true"></i>
+                            Lista Nota</a>
+
+                    </div>
+                </li> {% endcomment %}
+                {% else %}
+
+                {% endif %}
+
+                <!-- ========================== Start Report ===============================-->
+                <li class="nav-item"><a class="nav-link" href="{% url 'report_agenda' %}">RELATORIU </a>
+                </li>
+                <!-- ========================= End Darshboard =============================-->
+
+
+
+                <!-- =============================== USER ===============================-->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"> <i class='fa fa-user-circle'
+                            style='font-size:20px'></i> {{ request.user.username|upper }}</a>
+                    <div class="dropdown-menu" aria-labelledby="profile">
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="#"><i class='fa fa-cog'></i> Troka
+                            Palavra Xave</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Sai</a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+        {% endif %}
+    </nav>
+
+</header>

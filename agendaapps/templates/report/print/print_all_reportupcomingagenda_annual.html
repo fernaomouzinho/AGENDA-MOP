@@ -1,0 +1,649 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% block headblock %}
+    {% endblock %}
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Ajenda Tuir-Mai</title>
+
+
+    <link rel="icon"
+          href="{% static 'main/images/favicon.png' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'main/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+
+
+    <style>
+
+        /* ============================
+           SCREEN
+        ============================ */
+
+        body {
+            background: #f5f7fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1d2b3a;
+            margin: 0;
+            padding: 25px;
+        }
+
+
+        .report-container {
+            max-width: 1500px;
+            margin: auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.08);
+        }
+
+
+        /* ============================
+           BUTTONS
+        ============================ */
+
+        .report-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+
+        /* ============================
+           LOGO
+        ============================ */
+
+        .report-logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+
+        .report-logo img {
+            max-width: 800px;
+            width: 100%;
+            height: auto;
+        }
+
+
+        /* ============================
+           TITLE
+        ============================ */
+
+        .report-title {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+
+        .report-title h4 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0c4b8e;
+        }
+
+
+        .report-title h6 {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+
+        /* ============================
+           SECTION TITLE
+        ============================ */
+
+        .report-section-title {
+            background: linear-gradient(90deg, #0c4b8e, #237fba);
+            color: #ffffff;
+
+            padding: 10px 14px;
+
+            border-radius: 7px;
+
+            margin-bottom: 15px;
+
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+
+        /* ============================
+           TABLE
+        ============================ */
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+
+        .report-table thead th {
+            background-color: #e8f1f7;
+
+            color: #102d47;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            text-align: center;
+            vertical-align: middle;
+
+            border: 1px solid #cad7e1;
+
+            padding: 8px;
+        }
+
+
+        .report-table tbody td {
+            border: 1px solid #d5dee5;
+
+            padding: 8px;
+
+            font-size: 13px;
+
+            vertical-align: middle;
+        }
+
+
+        /* ============================
+           STATUS
+        ============================ */
+
+        .status-upcoming {
+            display: inline-block;
+
+            background-color: #f4ab00;
+            color: #ffffff;
+
+            padding: 4px 10px;
+
+            border-radius: 5px;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        /* ============================
+           PRINT
+        ============================ */
+
+        @media print {
+
+            @page {
+
+                size: A4 landscape;
+
+                margin-top: 10mm;
+                margin-left: 8mm;
+                margin-right: 8mm;
+                margin-bottom: 10mm;
+
+            }
+
+
+            html,
+            body {
+
+                margin: 0 !important;
+                padding: 0 !important;
+
+                background: #ffffff !important;
+
+            }
+
+
+            .report-container {
+
+                width: 100%;
+
+                max-width: none;
+
+                margin: 0;
+
+                padding: 0;
+
+                box-shadow: none;
+
+                border-radius: 0;
+
+            }
+
+
+            .no-print {
+                display: none !important;
+            }
+
+
+            .report-logo img {
+                max-width: 650px;
+            }
+
+
+            .report-section-title {
+
+                background: #e8f1f7 !important;
+
+                color: #000000 !important;
+
+                border: 1px solid #999999;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+
+            }
+
+
+            .report-table thead {
+                display: table-header-group;
+            }
+
+
+            .report-table tr {
+                page-break-inside: avoid;
+            }
+
+
+            .report-table th,
+            .report-table td {
+
+                font-size: 11px;
+
+                padding: 5px;
+
+            }
+
+
+            .report-table thead th {
+
+                background-color: #e8f1f7 !important;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+
+            }
+
+
+            .status-upcoming {
+
+                background-color: #f4ab00 !important;
+
+                color: #ffffff !important;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="report-container">
+
+
+    <!-- ==============================
+         ACTION BUTTONS
+    =============================== -->
+
+    <div class="report-actions no-print">
+
+        <button type="button"
+                onclick="window.print();"
+                class="btn btn-outline-primary btn-sm">
+
+            <i class="fa fa-print"></i>
+            Print
+
+        </button>
+
+
+        <button type="button"
+                onclick="window.history.back();"
+                class="btn btn-outline-secondary btn-sm">
+
+            <i class="fa fa-arrow-left"></i>
+            Fila
+
+        </button>
+
+    </div>
+
+
+
+    <!-- ==============================
+         LOGO
+    =============================== -->
+
+    {% if logo_adn %}
+
+        <div class="report-logo">
+
+            <img src="{{ logo_adn.logo.url }}"
+                 alt="Logo">
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- ==============================
+         TITLE
+    =============================== -->
+
+    <div class="report-title">
+
+        <h4>
+            MINISTÉRIU OBRAS PÚBLIKAS
+        </h4>
+
+        <h6>
+            AJENDA TUIR-MAI
+        </h6>
+
+        {% if single_year %}
+            <small>
+                Tinan {{ single_year }}
+            </small>
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ==============================
+         SECTION HEADER
+    =============================== -->
+
+    <div class="report-section-title">
+
+        <i class="fa fa-calendar-plus-o"></i>
+
+        Relatóriu Ajenda Tuir-Mai
+
+        {% if single_year %}
+            {{ single_year }}
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ==============================
+         TABLE
+    =============================== -->
+
+    <div class="table-responsive">
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+
+                    <th style="width:5%;">
+                        NU.
+                    </th>
+
+
+                    <th style="width:23%;">
+                        AJENDA
+                    </th>
+
+
+                    <th style="width:16%;">
+                        AJENDA HUSI
+                    </th>
+
+
+                    <th style="width:18%;">
+                        DATA & ORAS HAHU
+                    </th>
+
+
+                    <th style="width:18%;">
+                        DATA & ORAS REMATA
+                    </th>
+
+
+                    <th style="width:15%;">
+                        FATIN
+                    </th>
+
+
+                    <th style="width:8%;">
+                        STATUS
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for obj in report_upcomingagenda_anual %}
+
+                    <tr>
+
+
+                        <!-- NUMBER -->
+                        <td class="text-center">
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+
+                        <!-- AGENDA -->
+                        <td>
+
+                            {{ obj.title }}
+
+                        </td>
+
+
+                        <!-- INSTITUTION -->
+                        <td class="text-center">
+
+                            {{ obj.institution }}
+
+                        </td>
+
+
+                        <!-- START TIME -->
+                        <td class="text-center">
+
+                            {% if obj.start_time|date:"l" == "Monday" %}
+
+                                Segunda-Feira
+
+                            {% elif obj.start_time|date:"l" == "Tuesday" %}
+
+                                Tersa-Feira
+
+                            {% elif obj.start_time|date:"l" == "Wednesday" %}
+
+                                Quarta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Thursday" %}
+
+                                Quinta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Friday" %}
+
+                                Sexta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Saturday" %}
+
+                                Sábadu
+
+                            {% elif obj.start_time|date:"l" == "Sunday" %}
+
+                                Domingu
+
+                            {% endif %}
+
+
+                            <br>
+
+
+                            <strong>
+
+                                {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- END TIME -->
+                        <td class="text-center">
+
+                            {% if obj.end_time|date:"l" == "Monday" %}
+
+                                Segunda-Feira
+
+                            {% elif obj.end_time|date:"l" == "Tuesday" %}
+
+                                Tersa-Feira
+
+                            {% elif obj.end_time|date:"l" == "Wednesday" %}
+
+                                Quarta-Feira
+
+                            {% elif obj.end_time|date:"l" == "Thursday" %}
+
+                                Quinta-Feira
+
+                            {% elif obj.end_time|date:"l" == "Friday" %}
+
+                                Sexta-Feira
+
+                            {% elif obj.end_time|date:"l" == "Saturday" %}
+
+                                Sábadu
+
+                            {% elif obj.end_time|date:"l" == "Sunday" %}
+
+                                Domingu
+
+                            {% endif %}
+
+
+                            <br>
+
+
+                            <strong>
+
+                                {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- LOCATION -->
+                        <td>
+
+                            {{ obj.location }}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td class="text-center">
+
+                            <span class="status-upcoming">
+                                TUIR MAI
+                            </span>
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center">
+
+                            La iha Ajenda Tuir-Mai.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================
+     AUTOMATIC PRINT SETTINGS
+===================================== -->
+
+<script>
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    window.print();
+
+                },
+                500
+            );
+
+        }
+    );
+
+</script>
+
+
+<script src="{% static 'main/js/jquery.min.js' %}"></script>
+
+<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+
+
+</body>
+
+</html>

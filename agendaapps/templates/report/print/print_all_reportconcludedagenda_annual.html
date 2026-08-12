@@ -1,0 +1,580 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Relatóriu Ajenda Konkluidu</title>
+
+    <link rel="icon"
+          href="{% static 'main/images/favicon.png' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'main/css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet"
+          href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+
+
+    <style>
+
+        /* =========================================
+           SCREEN
+        ========================================= */
+
+        body {
+            background: #f5f7fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1d2b3a;
+            margin: 0;
+            padding: 25px;
+        }
+
+
+        .print-container {
+            max-width: 1500px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.08);
+        }
+
+
+        /* =========================================
+           ACTION BUTTONS
+        ========================================= */
+
+        .print-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+
+        .print-actions .btn {
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           REPORT HEADER
+        ========================================= */
+
+        .report-logo {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+
+        .report-logo img {
+            max-height: 90px;
+            max-width: 180px;
+        }
+
+
+        .report-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+
+        .report-title h3 {
+            font-size: 21px;
+            font-weight: 700;
+            margin: 5px 0;
+            color: #0c4b8e;
+        }
+
+
+        .report-title h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+
+        .report-title p {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           BLUE TITLE
+        ========================================= */
+
+        .report-section-title {
+            background: linear-gradient(90deg, #0c4b8e, #237fba);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+
+        .report-table thead th {
+            background: #e8f1f7;
+            color: #102d47;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #cad7e1;
+            padding: 8px;
+        }
+
+
+        .report-table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            border: 1px solid #d5dee5;
+            padding: 8px;
+        }
+
+
+        .status-concluded {
+            background: #198754;
+            color: white;
+            padding: 4px 9px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+
+        /* =========================================
+           PRINT
+        ========================================= */
+
+        @media print {
+
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+
+
+            html,
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+
+            body {
+                font-size: 11px;
+            }
+
+
+            .print-container {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+
+            /* Don't print buttons */
+            .no-print {
+                display: none !important;
+            }
+
+
+            .report-logo img {
+                max-height: 70px;
+            }
+
+
+            .report-title {
+                margin-bottom: 15px;
+            }
+
+
+            .report-title h3 {
+                font-size: 18px;
+                color: black !important;
+            }
+
+
+            .report-section-title {
+                background: #e8f1f7 !important;
+                color: black !important;
+                border: 1px solid #999;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+
+            .report-table {
+                width: 100%;
+            }
+
+
+            .report-table thead {
+                display: table-header-group;
+            }
+
+
+            .report-table tr {
+                page-break-inside: avoid;
+            }
+
+
+            .report-table th,
+            .report-table td {
+                font-size: 11px;
+                padding: 5px;
+            }
+
+
+            .report-table thead th {
+                background: #e8f1f7 !important;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+
+            .status-concluded {
+                background: #198754 !important;
+                color: white !important;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="print-container">
+
+
+    <!-- =========================================
+         PRINT ACTION
+    ========================================== -->
+
+    <div class="print-actions no-print">
+
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                onclick="window.print();">
+
+            <i class="fa fa-print"></i>
+            Print
+
+        </button>
+
+
+        <button type="button"
+                class="btn btn-outline-secondary btn-sm"
+                onclick="window.history.back();">
+
+            <i class="fa fa-arrow-left"></i>
+            Fila
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================================
+         LOGO
+    ========================================== -->
+
+    {% if logo_adn %}
+
+        <div class="report-logo">
+
+            <img src="{{ logo_adn.logo.url }}"
+                 alt="Logo">
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =========================================
+         REPORT TITLE
+    ========================================== -->
+
+    <div class="report-title">
+
+        <h3>MINISTÉRIU OBRAS PÚBLIKAS</h3>
+
+        <h5>
+            RELATÓRIU MEETING MANAGEMENT
+        </h5>
+
+        <p>
+            Relatóriu Ajenda Konkluidu
+        </p>
+
+        {% if single_year %}
+            <p>
+                <strong>Tinan {{ single_year }}</strong>
+            </p>
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =========================================
+         SECTION
+    ========================================== -->
+
+    <div class="report-section-title">
+
+        <i class="fa fa-check-circle"></i>
+
+        Relatóriu Ajenda Konkluidu
+
+        {% if single_year %}
+            {{ single_year }}
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =========================================
+         TABLE
+    ========================================== -->
+
+    <div class="table-responsive">
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+
+                    <th style="width:5%;">
+                        NU.
+                    </th>
+
+                    <th style="width:13%;">
+                        DATA / LORON
+                    </th>
+
+                    <th style="width:25%;">
+                        AJENDA
+                    </th>
+
+                    <th style="width:15%;">
+                        KAT. AJENDA
+                    </th>
+
+                    <th style="width:12%;">
+                        ORAS HAHU
+                    </th>
+
+                    <th style="width:12%;">
+                        ORAS REMATA
+                    </th>
+
+                    <th>
+                        OBSERVASAUN
+                    </th>
+
+                    <th style="width:8%;">
+                        STATUS
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for obj in report_concludedagenda_anual %}
+
+                    <tr>
+
+                        <!-- NUMBER -->
+                        <td class="text-center">
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+
+                        <!-- DATE / DAY -->
+                        <td class="text-center">
+
+                            {% if obj.start_time|date:"l" == "Monday" %}
+                                Segunda-Feira
+
+                            {% elif obj.start_time|date:"l" == "Tuesday" %}
+                                Tersa-Feira
+
+                            {% elif obj.start_time|date:"l" == "Wednesday" %}
+                                Quarta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Thursday" %}
+                                Quinta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Friday" %}
+                                Sexta-Feira
+
+                            {% elif obj.start_time|date:"l" == "Saturday" %}
+                                Sábadu
+
+                            {% elif obj.start_time|date:"l" == "Sunday" %}
+                                Domingu
+
+                            {% endif %}
+
+                            <br>
+
+                            <strong>
+                                {{ obj.start_time|date:"d/m/Y" }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- AGENDA -->
+                        <td>
+
+                            {{ obj.title }}
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+                        <td class="text-center">
+
+                            {{ obj.catagenda }}
+
+                        </td>
+
+
+                        <!-- START -->
+                        <td class="text-center">
+
+                            {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                        </td>
+
+
+                        <!-- END -->
+                        <td class="text-center">
+
+                            {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                        </td>
+
+
+                        <!-- OBSERVATION -->
+                        <td>
+
+                            {% if obj.observation %}
+
+                                {{ obj.observation|safe }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td class="text-center">
+
+                            <span class="status-concluded">
+                                KONKLUIDU
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="8"
+                            class="text-center">
+
+                            Dadus la iha.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =============================================
+     AUTOMATICALLY SHOW PRINT SETTINGS
+============================================= -->
+
+<script>
+
+    window.addEventListener("load", function () {
+
+        /*
+         * Small delay allows logo/CSS/table
+         * to finish rendering before print preview.
+         */
+        setTimeout(function () {
+
+            window.print();
+
+        }, 500);
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

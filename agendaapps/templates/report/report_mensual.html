@@ -1,0 +1,327 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .report-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .report-body {
+        background-color: #f6f9fc;
+    }
+
+    .report-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+
+    .report-header h6 {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .year-section {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .year-title {
+        color: #17324d;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .year-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .year-btn {
+        display: inline-block;
+        min-width: 90px;
+        padding: 8px 18px;
+        text-align: center;
+        border: 1px solid #0f4c81;
+        border-radius: 6px;
+        color: #0f4c81;
+        background-color: #ffffff;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .year-btn:hover {
+        background-color: #0f4c81;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .year-btn.active {
+        background-color: #0f4c81;
+        color: #ffffff;
+    }
+
+    .report-navigation {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+
+    .report-navigation a {
+        color: #0f4c81;
+        font-weight: 500;
+        text-decoration: none;
+        margin-right: 5px;
+    }
+
+    .report-navigation a:hover {
+        color: #0b3b65;
+        text-decoration: underline;
+    }
+
+    .report-navigation .separator {
+        color: #a0a0a0;
+        margin: 0 5px;
+    }
+
+    .current-report {
+        color: #0f4c81;
+        font-weight: 700;
+    }
+
+    .month-card {
+        display: flex;
+        align-items: center;
+        min-height: 75px;
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+
+    .month-card:hover {
+        border-color: #1976b9;
+        box-shadow: 0 3px 10px rgba(15, 76, 129, 0.12);
+        transform: translateY(-1px);
+    }
+
+    .month-icon {
+        width: 65px;
+        min-width: 65px;
+        height: 75px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        font-size: 30px;
+    }
+
+    .month-content {
+        padding: 10px 15px;
+    }
+
+    .month-content a {
+        color: #0f4c81;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .month-content a:hover {
+        color: #0b3b65;
+        text-decoration: none;
+    }
+
+    .month-content h6 {
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 report-card">
+
+                <div class="card-body report-body">
+
+                    <!-- YEAR -->
+                    {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_dei" %}
+
+                        <div class="year-section mb-4">
+
+                            <div class="year-title">
+                                <i class="fa fa-calendar"></i>
+                                Tinan
+                            </div>
+
+                            <div class="year-list">
+
+                                {% for obj in all_year %}
+
+                                <a href="{% url 'report_based_year' year=obj.year %}"
+                                   class="year-btn {% if obj.year == single_year %}active{% endif %}">
+                                    {{ obj.year }}
+                                </a>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+                    {% endif %}
+
+
+                    <!-- REPORT NAVIGATION -->
+                    <div class="report-navigation mb-4">
+
+                        <i class="fa fa-clock-o"></i>
+                        {{ single_year }}
+
+                        <i class="fa fa-angle-double-right"></i>
+
+                        <a href="{% url 'report_based_semestral' year=single_year %}">
+                            Semestral
+                        </a>
+
+                        <span class="separator">|</span>
+
+                        <i class="fa fa-clock-o"></i>
+                        {{ single_year }}
+
+                        <i class="fa fa-angle-double-right"></i>
+
+                        <a href="{% url 'report_based_trimestral' year=single_year %}">
+                            Trimestral
+                        </a>
+
+                        <span class="separator">|</span>
+
+                        <i class="fa fa-clock-o"></i>
+                        {{ single_year }}
+
+                        <i class="fa fa-angle-double-right"></i>
+
+                        <span class="current-report">
+                            Mensal
+                        </span>
+
+                        <span class="separator">|</span>
+
+                        {% for obj in all_catagenda %}
+
+                            <i class="fa fa-angle-double-right"></i>
+
+                            <a href="{% url 'report_based_catagenda_annual' year=single_year name_cat_slug=obj.name_category_slug %}">
+                                {{ obj.name_category|title }}
+                            </a>
+
+                        {% endfor %}
+
+                        <span class="separator">|</span>
+
+                        <i class="fa fa-angle-double-right"></i>
+
+                        <a href="{% url 'report_based_concludedagenda_annual' year=single_year %}">
+                            Konkluidu
+                        </a>
+
+                        <i class="fa fa-angle-double-right"></i>
+
+                        <a href="{% url 'report_based_canceledagenda_annual' year=single_year %}">
+                            Kanseladu
+                        </a>
+
+                    </div>
+
+
+                    <!-- HEADER -->
+                    <div class="report-header mb-4">
+
+                        <h6>
+                            <i class="fa fa-calendar"></i>
+                            Relatóriu Mensal {{ single_year }}
+                        </h6>
+
+                    </div>
+
+
+                    <!-- MONTH LIST -->
+                    <div class="row">
+
+                        {% for obj in all_months %}
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3">
+
+                            <div class="month-card">
+
+                                <div class="month-icon">
+                                    <i class="fa fa-file-text-o"></i>
+                                </div>
+
+                                <div class="month-content">
+
+                                    <a href="{% url 'report_based_mensual_detail' year=single_year name_slug=obj.name_slug %}">
+
+                                        <h6>
+                                            {{ obj.name }}
+                                        </h6>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+    $('#example').DataTable({
+        responsive: true,
+        pageLength: 10
+    });
+
+});
+
+</script>
+
+{% endblock %}

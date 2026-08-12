@@ -1,0 +1,354 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .agenda-detail-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+    }
+
+    .agenda-detail-body {
+        background-color: #f6f9fc;
+        padding: 22px;
+    }
+
+    .agenda-detail-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .agenda-detail-header h5 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .info-card {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+        height: 100%;
+    }
+
+    .info-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #6b7d8c;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .info-value {
+        margin: 0;
+        color: #17324d;
+        font-size: 14px;
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+    .agenda-title-value {
+        color: #0f4c81;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .observation-box {
+        min-height: 150px;
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .action-section {
+        margin-top: 22px;
+        padding: 16px 18px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #14844f, #20a967);
+        color: #ffffff;
+    }
+
+    .action-section h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .back-button {
+        font-size: 13px;
+        border-radius: 6px;
+    }
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card agenda-detail-card">
+
+                <div class="agenda-detail-body">
+
+
+                    <!-- HEADER -->
+                    <div class="agenda-detail-header">
+
+                        <h5>
+                            <i class="fa fa-calendar-o mr-2"></i>
+                            AJENDA ENKONTRU
+                        </h5>
+
+                        <button
+                            type="button"
+                            class="btn btn-light btn-sm back-button"
+                            onclick="window.history.back();">
+
+                            <i class="fa fa-arrow-left"></i>
+                            Fila
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+                    <div class="row mb-3">
+
+                        <div class="col-12">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Titulu Enkontru
+                                </span>
+
+                                <p class="info-value agenda-title-value">
+                                    {{ single_agenda.title }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BASIC INFORMATION -->
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Kategoria Ajenda
+                                </span>
+
+                                <p class="info-value">
+                                    {{ single_agenda.catagenda }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Tipu Enkontru
+                                </span>
+
+                                <p class="info-value">
+                                    {{ single_agenda.meeting_type }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Ajenda Kria Husi
+                                </span>
+
+                                <p class="info-value">
+                                    {{ single_agenda.institution }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE AND LOCATION -->
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Data no Oras Hahu
+                                </span>
+
+                                <p class="info-value">
+
+                                    <i class="fa fa-calendar text-primary mr-1"></i>
+                                    {{ single_agenda.start_time|date:"d/m/Y" }}
+
+                                    <br>
+
+                                    <i class="fa fa-clock-o text-primary mr-1"></i>
+                                    {{ single_agenda.start_time|date:"H:i" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Data no Oras Remata
+                                </span>
+
+                                <p class="info-value">
+
+                                    <i class="fa fa-calendar text-primary mr-1"></i>
+                                    {{ single_agenda.end_time|date:"d/m/Y" }}
+
+                                    <br>
+
+                                    <i class="fa fa-clock-o text-primary mr-1"></i>
+                                    {{ single_agenda.end_time|date:"H:i" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="info-card">
+
+                                <span class="info-label">
+                                    Fatin
+                                </span>
+
+                                <p class="info-value">
+
+                                    <i class="fa fa-map-marker text-danger mr-1"></i>
+
+                                    {% if single_agenda.location %}
+                                        {{ single_agenda.location }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- OBSERVATION -->
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <div class="observation-box">
+
+                                <span class="info-label">
+                                    Observasaun
+                                </span>
+
+                                <div class="info-value">
+
+                                    {% if single_agenda.observation %}
+
+                                        {{ single_agenda.observation|safe }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            La iha observasaun.
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INVITE / DELEGATE -->
+                    <div class="action-section">
+
+                        {% if single_agenda.catagenda.name_category == "Internal" %}
+
+                            <h5>
+                                <i class="fa fa-users mr-2"></i>
+                                KONVIDA BA ENKONTRU
+                            </h5>
+
+                        {% else %}
+
+                            <h5>
+                                <i class="fa fa-user-plus mr-2"></i>
+                                DELEGA BA TUIR ENKONTRU
+                            </h5>
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,434 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .agenda-card {
+        border-radius: 14px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .agenda-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 13px 18px;
+    }
+
+    .agenda-header h5 {
+        margin-bottom: 0;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .agenda-body {
+        background-color: #f6f9fc;
+        padding: 20px;
+    }
+
+    .agenda-info-box {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .agenda-info-box label {
+        color: #17324d;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .agenda-info-box .form-control:disabled {
+        background-color: #eef4f8;
+        color: #374957;
+        opacity: 1;
+        border-color: #d5e1ea;
+    }
+
+    .comment-section {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .comment-title {
+        color: #17324d;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e3ebf2;
+    }
+
+    .btn-back-list {
+        background-color: #ffffff;
+        color: #0f4c81;
+        border: 1px solid #ffffff;
+        font-weight: 500;
+    }
+
+    .btn-back-list:hover {
+        background-color: #eaf2f8;
+        color: #0b3b65;
+    }
+
+    .form-action {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #dbe6ef;
+    }
+
+    .btn-save-agenda {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        min-width: 105px;
+    }
+
+    .btn-save-agenda:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+    .btn-cancel-agenda {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #ffffff;
+        min-width: 105px;
+    }
+
+    .btn-cancel-agenda:hover {
+        background-color: #b02a37;
+        border-color: #b02a37;
+        color: #ffffff;
+    }
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm agenda-card">
+
+                <!-- HEADER -->
+                <div class="card-header agenda-header
+                            d-flex justify-content-between
+                            align-items-center flex-wrap">
+
+                    <h5>
+                        <i class="fa fa-commenting-o"></i>
+                        Komentariu Ajenda
+                    </h5>
+
+                    {% if v == "/concluded-agenda/comment/add" %}
+
+                        <a href="{% url 'concludedAgenda_list' %}"
+                           class="btn btn-sm btn-back-list mt-2 mt-md-0">
+
+                            <i class="fa fa-list"></i>
+                            Lista Ajenda Konkluidu
+
+                        </a>
+
+                    {% elif v == "/canceled-agenda/comment/add" %}
+
+                        <a href="{% url 'canceledAgenda_list' %}"
+                           class="btn btn-sm btn-back-list mt-2 mt-md-0">
+
+                            <i class="fa fa-list"></i>
+                            Lista Ajenda Kanseladu
+
+                        </a>
+
+                    {% elif v == "/running-agenda/comment/add" %}
+
+                        <a href="{% url 'runningAgenda_list' %}"
+                           class="btn btn-sm btn-back-list mt-2 mt-md-0">
+
+                            <i class="fa fa-list"></i>
+                            Lista Ajenda Lao Hela
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- BODY -->
+                <div class="card-body agenda-body">
+
+                    <form method="POST"
+                          enctype="multipart/form-data"
+                          id="commentAgendaForm">
+
+                        {% csrf_token %}
+
+
+                        <!-- AGENDA INFORMATION -->
+                        <div class="agenda-info-box">
+
+                            <div class="comment-title">
+
+                                <i class="fa fa-info-circle"></i>
+                                Informasaun Ajenda
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <!-- TITLE -->
+                                <div class="col-12 mb-3">
+
+                                    <label>
+                                        TITULU ENKONTRU
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.title }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- MEETING TYPE -->
+                                <div class="col-12 mb-3">
+
+                                    <label>
+                                        TIPU ENKONTRU
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.meeting_type }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- CATEGORY -->
+                                <div class="col-12 col-md-4 mb-3">
+
+                                    <label>
+                                        KATEGORIA AJENDA
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.catagenda }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- INSTITUTION -->
+                                <div class="col-12 col-md-8 mb-3">
+
+                                    <label>
+                                        AJENDA PREPARA HUSI
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.institution }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- START -->
+                                <div class="col-12 col-md-6 mb-3">
+
+                                    <label>
+                                        DATA NO ORAS HAHU
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.start_time|date:'d/m/Y H:i' }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- END -->
+                                <div class="col-12 col-md-6 mb-3">
+
+                                    <label>
+                                        DATA NO ORAS REMATA
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.end_time|date:'d/m/Y H:i' }}"
+                                           disabled>
+
+                                </div>
+
+
+                                <!-- LOCATION -->
+                                <div class="col-12">
+
+                                    <label>
+                                        FATIN
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           value="{{ single_agenda.location }}"
+                                           disabled>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- COMMENT FORM -->
+                        <div class="comment-section">
+
+                            <div class="comment-title">
+
+                                <i class="fa fa-comment"></i>
+                                Komentariu / Observasaun
+
+                            </div>
+
+                            <!-- Widget JS/CSS -->
+                            {{ commentagendaform.media|safe }}
+
+                            <!-- Form Fields -->
+                            {{ commentagendaform|crispy }}
+
+                        </div>
+
+
+                        <!-- ACTION BUTTONS -->
+                        <div class="form-action
+                                    d-flex
+                                    justify-content-end
+                                    flex-wrap">
+
+                            {% if v == "/concluded-agenda/comment/add" %}
+
+                                <a href="{% url 'concludedAgenda_list' %}"
+                                   class="btn btn-cancel-agenda mr-2 mb-2">
+
+                                    <i class="fa fa-times"></i>
+                                    Kansela
+
+                                </a>
+
+                            {% elif v == "/canceled-agenda/comment/add" %}
+
+                                <a href="{% url 'canceledAgenda_list' %}"
+                                   class="btn btn-cancel-agenda mr-2 mb-2">
+
+                                    <i class="fa fa-times"></i>
+                                    Kansela
+
+                                </a>
+
+                            {% elif v == "/running-agenda/comment/add" %}
+
+                                <a href="{% url 'runningAgenda_list' %}"
+                                   class="btn btn-cancel-agenda mr-2 mb-2">
+
+                                    <i class="fa fa-times"></i>
+                                    Kansela
+
+                                </a>
+
+                            {% endif %}
+
+
+                            <button type="submit"
+                                    class="btn btn-save-agenda mb-2">
+
+                                <i class="fa fa-save"></i>
+                                Rai
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+$(document).ready(function () {
+
+    $('#commentAgendaForm').on('submit', function () {
+
+        var observationField = $('#id_observation');
+
+        if (observationField.length) {
+
+            try {
+
+                /*
+                 * Get content from Summernote
+                 */
+                var content =
+                    observationField.summernote('code');
+
+                /*
+                 * Put Summernote HTML back into textarea
+                 * before Django receives POST
+                 */
+                observationField.val(content);
+
+                console.log(
+                    'Observation submitted:',
+                    content
+                );
+
+            } catch (e) {
+
+                /*
+                 * If widget already synchronizes automatically,
+                 * submission continues normally.
+                 */
+                console.log(
+                    'Summernote synchronization:',
+                    e
+                );
+
+            }
+
+        }
+
+    });
+
+});
+</script>
+
+{% endblock %}

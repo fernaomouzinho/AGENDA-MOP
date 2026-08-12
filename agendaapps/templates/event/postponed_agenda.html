@@ -1,0 +1,381 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+
+    .agenda-card {
+        border-radius: 14px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .agenda-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 13px 16px;
+    }
+
+    .agenda-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .agenda-body {
+        background-color: #f6f9fc;
+        padding: 18px;
+    }
+
+    .form-panel {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .history-panel {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .form-action {
+        margin-top: 18px;
+        padding-top: 15px;
+        border-top: 1px solid #dbe6ef;
+    }
+
+    .btn-save-agenda {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        min-width: 100px;
+    }
+
+    .btn-save-agenda:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+    .btn-cancel-agenda {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #ffffff;
+        min-width: 100px;
+    }
+
+    .btn-cancel-agenda:hover {
+        background-color: #b02a37;
+        border-color: #b02a37;
+        color: #ffffff;
+    }
+
+    .history-table thead {
+        background-color: #0f4c81;
+        color: #ffffff;
+    }
+
+    .history-table th {
+        vertical-align: middle !important;
+        font-size: 12px;
+    }
+
+    .history-table td {
+        vertical-align: middle !important;
+        font-size: 13px;
+    }
+
+    .old-value {
+        color: #dc3545;
+        font-weight: 500;
+    }
+
+    .new-value {
+        color: #198754;
+        font-weight: 500;
+    }
+
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row">
+
+
+        <!-- ==========================================
+             LEFT - EDIT / POSTPONE FORM
+        =========================================== -->
+        <div class="col-12 col-lg-4 mb-3">
+
+            <div class="card shadow-sm agenda-card h-100">
+
+                <div class="card-header agenda-header">
+
+                    <h5>
+                        <i class="fa fa-edit"></i>
+                        Adia Ajenda
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body agenda-body">
+
+                    <div class="form-panel">
+
+                        <form method="POST"
+                              enctype="multipart/form-data">
+
+                            {% csrf_token %}
+
+                            {{ postponedagendaform.media|safe }}
+
+                            {{ postponedagendaform|crispy }}
+
+
+                            <!-- BUTTONS -->
+                            <div class="form-action
+                                        d-flex
+                                        justify-content-end">
+
+                                <a href="{% url 'upcomingAgenda_list' %}"
+                                   class="btn btn-cancel-agenda mr-2">
+
+                                    <i class="fa fa-times"></i>
+                                    Kansela
+
+                                </a>
+
+
+                                <button type="submit"
+                                        class="btn btn-save-agenda">
+
+                                    <i class="fa fa-save"></i>
+                                    Rai
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             RIGHT - HISTORY
+        =========================================== -->
+        <div class="col-12 col-lg-8 mb-3">
+
+            <div class="card shadow-sm agenda-card h-100">
+
+                <div class="card-header agenda-header">
+
+                    <h5>
+                        <i class="fa fa-history"></i>
+                        Istóriku Adiamentu Ajenda
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body agenda-body">
+
+                    <div class="history-panel">
+
+                        <section id="no-more-tables">
+
+                            <div class="table-responsive">
+
+                                <table class="table
+                                              table-bordered
+                                              table-sm
+                                              history-table"
+                                       id="example"
+                                       width="100%"
+                                       cellspacing="0">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th rowspan="2"
+                                                class="text-center align-middle">
+                                                NU.
+                                            </th>
+
+                                            <th rowspan="2"
+                                                class="align-middle">
+                                                AJENDA
+                                            </th>
+
+                                            <th colspan="2"
+                                                class="text-center">
+                                                ORAS ANTERIOR
+                                            </th>
+
+                                            <th colspan="2"
+                                                class="text-center">
+                                                ORAS FOUN
+                                            </th>
+
+                                            <th colspan="2"
+                                                class="text-center">
+                                                FATIN
+                                            </th>
+
+                                        </tr>
+
+
+                                        <tr>
+
+                                            <th class="text-center">
+                                                ORAS HAHU
+                                            </th>
+
+                                            <th class="text-center">
+                                                ORAS REMATA
+                                            </th>
+
+                                            <th class="text-center">
+                                                ORAS HAHU
+                                            </th>
+
+                                            <th class="text-center">
+                                                ORAS REMATA
+                                            </th>
+
+                                            <th class="text-center">
+                                                TUIR LOOS
+                                            </th>
+
+                                            <th class="text-center">
+                                                FOUN
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                        {% for obj in histori_agenda_list %}
+
+                                            {% if obj.start_time != obj.start_time_new %}
+
+                                                <tr>
+
+                                                    <td class="text-center">
+                                                        {{ forloop.counter }}
+                                                    </td>
+
+
+                                                    <td>
+                                                        {{ obj.title }}
+                                                    </td>
+
+
+                                                    <!-- OLD START -->
+                                                    <td class="text-center old-value">
+
+                                                        {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                                                    </td>
+
+
+                                                    <!-- OLD END -->
+                                                    <td class="text-center old-value">
+
+                                                        {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                                                    </td>
+
+
+                                                    <!-- NEW START -->
+                                                    <td class="text-center new-value">
+
+                                                        {{ obj.start_time_new|date:"d/m/Y H:i" }}
+
+                                                    </td>
+
+
+                                                    <!-- NEW END -->
+                                                    <td class="text-center new-value">
+
+                                                        {{ obj.end_time_new|date:"d/m/Y H:i" }}
+
+                                                    </td>
+
+
+                                                    <!-- OLD LOCATION -->
+                                                    <td class="text-center">
+
+                                                        {{ obj.location }}
+
+                                                    </td>
+
+
+                                                    <!-- NEW LOCATION -->
+                                                    <td class="text-center">
+
+                                                        {{ obj.location_new }}
+
+                                                    </td>
+
+                                                </tr>
+
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#example').DataTable();
+
+    });
+
+</script>
+
+{% endblock %}

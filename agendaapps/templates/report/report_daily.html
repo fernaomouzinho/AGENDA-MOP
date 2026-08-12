@@ -1,0 +1,388 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .report-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .report-body {
+        background-color: #f6f9fc;
+    }
+
+    .report-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+
+    .report-header h6 {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .year-section {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .year-title {
+        color: #17324d;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .year-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .year-btn {
+        display: inline-block;
+        min-width: 90px;
+        padding: 8px 18px;
+        text-align: center;
+        border: 1px solid #0f4c81;
+        border-radius: 6px;
+        color: #0f4c81;
+        background-color: #ffffff;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .year-btn:hover {
+        background-color: #0f4c81;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .year-btn.active {
+        background-color: #0f4c81;
+        color: #ffffff;
+    }
+
+    .filter-section {
+        background-color: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .filter-title {
+        color: #17324d;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 15px;
+    }
+
+    .filter-form .form-group {
+        margin-bottom: 0;
+        min-width: 220px;
+    }
+
+    .btn-search {
+        background-color: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        min-width: 100px;
+    }
+
+    .btn-search:hover {
+        background-color: #0b3b65;
+        border-color: #0b3b65;
+        color: #ffffff;
+    }
+
+    .report-table thead th {
+        background-color: #eaf2f8;
+        color: #17324d;
+        font-weight: 600;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .report-table tbody td {
+        vertical-align: middle;
+    }
+
+    .report-table tbody tr:hover {
+        background-color: #f6f9fc;
+    }
+
+    .status-concluded {
+        background-color: #198754;
+        color: #ffffff;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-cancelled {
+        background-color: #dc3545;
+        color: #ffffff;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .btn-print-row {
+        color: #0f4c81;
+        font-size: 18px;
+        text-decoration: none;
+    }
+
+    .btn-print-row:hover {
+        color: #0b3b65;
+        text-decoration: none;
+    }
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm border-0 report-card">
+
+                <div class="card-body report-body">
+
+
+                    <!-- YEAR -->
+                    {% if user.is_authenticated %}
+                        {% if user.groups.all.0.name != "gp_dei" %}
+
+                        <div class="year-section mb-4">
+
+                            <div class="year-title">
+                                <i class="fa fa-calendar"></i>
+                                Tinan
+                            </div>
+
+                            <div class="year-list">
+
+                                {% for obj in all_year %}
+
+                                <a href="{% url 'report_based_year' year=obj.year %}"
+                                   class="year-btn {% if obj.year == single_year %}active{% endif %}">
+                                    {{ obj.year }}
+                                </a>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+                    {% endif %}
+
+
+                    <!-- HEADER -->
+                    <div class="report-header mb-3">
+
+                        <h6>
+                            <i class="fa fa-calendar-check-o"></i>
+                            Relatóriu Diária
+                        </h6>
+
+                    </div>
+
+
+                    <!-- DATE FILTER -->
+                    <div class="filter-section mb-4">
+
+                        <div class="filter-title">
+                            <i class="fa fa-search"></i>
+                            Buka Ajenda Tuir Data
+                        </div>
+
+                        <form method="GET" class="filter-form">
+
+                            <div class="form-group">
+
+                                {{ form.start_date.label_tag }}
+                                {{ form.start_date }}
+
+                            </div>
+
+                            <div class="form-group">
+
+                                {{ form.end_date.label_tag }}
+                                {{ form.end_date }}
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <button type="submit"
+                                        class="btn btn-search">
+
+                                    <i class="fa fa-search"></i>
+                                    Buka
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-sm table-hover report-table"
+                               id="example"
+                               width="100%">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th class="text-center">
+                                        NU.
+                                    </th>
+
+                                    <th>
+                                        AJENDA
+                                    </th>
+
+                                    <th class="text-center">
+                                        KAT. AJENDA
+                                    </th>
+
+                                    <th class="text-center">
+                                        ORAS HAHU
+                                    </th>
+
+                                    <th class="text-center">
+                                        ORAS REMATA
+                                    </th>
+
+                                    <th class="text-center">
+                                        STATUS
+                                    </th>
+
+                                    <th class="text-center">
+                                        ASAUN
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for obj in agendas %}
+
+                                <tr>
+
+                                    <td class="text-center">
+                                        {{ forloop.counter }}
+                                    </td>
+
+                                    <td>
+                                        {{ obj.title }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ obj.catagenda }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ obj.start_time|date:"d/m/Y H:i" }}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {{ obj.end_time|date:"d/m/Y H:i" }}
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        {% if obj.is_cancel == False %}
+
+                                            <span class="status-concluded">
+                                                KONKLUIDU
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-cancelled">
+                                                KANSELADU
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a href="{% url 'print_each_reportagenda_daily' title_slug=obj.title_slug %}"
+                                           class="btn-print-row"
+                                           title="Print">
+
+                                            <i class="fa fa-print"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+    $('#example').DataTable({
+        responsive: true,
+        pageLength: 10
+    });
+
+});
+
+</script>
+
+{% endblock %}

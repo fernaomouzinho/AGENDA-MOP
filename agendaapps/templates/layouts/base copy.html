@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% if title %}
+    <title>MOP AGENDA  - {{ title }}</title>
+    {% else %}
+    <title>MOP AGENDA</title>
+    {% endif %}
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}" integrity="" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'main/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'main/css/mains.css' %}" rel="stylesheet">
+
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <head>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+</head>
+
+    <style>
+        /*==========================================
+ Notification
+ ===========================================*/
+
+        .ag,
+        .in {
+            position: absolute;
+            border-radius: 50%;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            margin-top: -30px;
+
+        }
+
+        .ag {
+            margin-left: 12px;
+            background-color: #FF0000;
+        }
+
+        .in {
+            margin-left: 13px;
+            background-color: #FF0000;
+        }
+    </style>
+
+</head>
+
+<body>
+    {% include 'includes/navigation.html' %}
+    <main role="main" class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10">
+                
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="page-footer font-small bg-footer mt-5">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2025 Copyright:
+            <a href="http://adn.gov.tl"> MOP</a>
+            <p>SISTEMA REJISTRASAUN AJENDA
+                <br /><small>
+                    Dezenvolve husi:
+                    <a href="#" target="_blank">TECNICO MOP</a>
+                </small>
+            </p>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}" integrity="" crossorigin="anonymous"></script>
+    <!-- Datatable -->
+    <link href="{% static 'main/datatables/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'main/datatables/js/jquery.dataTables.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'main/datatables/js/dataTables.bootstrap4.min.js' %}" type="text/javascript"></script>
+
+
+    {% if user.is_authenticated %}
+    {% endif %}
+    {% block scripts %}{% endblock %}
+    {% block extrascripts %}
+    <script>
+        tinymce.init({
+        selector: '#id',
+        plugins: 'hr advlist lists code',
+        toolbar: 'undo redo | formatselect | bold italic underline | hr | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | code',
+        menubar: 'insert',
+        content_style: "hr { border: 1px solid #ddd; }"  // Custom HR style
+    });
+    </script>
+    {% endblock extrascripts %}
+</body>
+
+</html>

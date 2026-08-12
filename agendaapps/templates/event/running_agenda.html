@@ -1,0 +1,1103 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     DATATABLE CSS
+========================================================= -->
+
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+
+<style>
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.agenda-dashboard {
+    background-color: #f6f9fc;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.dashboard-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: none;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-header {
+    background: linear-gradient(135deg, #0f4c81, #1976b9);
+    color: #ffffff;
+    padding: 13px 18px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.dashboard-header h5 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.summary-card {
+    display: flex;
+    align-items: center;
+
+    min-height: 90px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #dbe6ef;
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    transition: all 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 4px 12px
+        rgba(15, 76, 129, 0.12);
+}
+
+
+/* =========================================================
+   SUMMARY ICON
+========================================================= */
+
+.summary-icon {
+    width: 72px;
+    min-width: 72px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: 30px;
+}
+
+.icon-total {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+}
+
+.icon-concluded {
+    background:
+        linear-gradient(
+            135deg,
+            #14844f,
+            #20a967
+        );
+}
+
+.icon-cancelled {
+    background:
+        linear-gradient(
+            135deg,
+            #bd2130,
+            #dc3545
+        );
+}
+
+.icon-running {
+    background:
+        linear-gradient(
+            135deg,
+            #138496,
+            #17a2b8
+        );
+}
+
+.icon-upcoming {
+    background:
+        linear-gradient(
+            135deg,
+            #d39e00,
+            #ffc107
+        );
+}
+
+
+/* =========================================================
+   SUMMARY CONTENT
+========================================================= */
+
+.summary-content {
+    padding: 10px 14px;
+}
+
+.summary-content h6 {
+    margin: 0 0 5px 0;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: #586b7c;
+}
+
+.summary-content h3 {
+    margin: 0;
+
+    color: #17324d;
+
+    font-weight: 700;
+}
+
+.summary-content a {
+    text-decoration: none;
+}
+
+.summary-content a:hover {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.agenda-table-header {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    border-radius: 8px;
+
+    padding: 12px 16px;
+
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.agenda-table-header h6 {
+    margin: 0;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.agenda-table {
+    width: 100% !important;
+}
+
+.agenda-table thead th {
+    background-color: #eaf2f8;
+
+    color: #17324d;
+
+    font-weight: 600;
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+
+    text-align: center;
+}
+
+.agenda-table tbody td {
+    vertical-align: middle;
+
+    font-size: 13px;
+}
+
+.agenda-table tbody tr:hover {
+    background-color: #f6f9fc;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.agenda-title {
+    color: #0f4c81;
+
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+.agenda-title:hover {
+    color: #0b3b65;
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   OBSERVATION
+========================================================= */
+
+.observation-yes {
+    color: #198754;
+
+    font-size: 19px;
+}
+
+.observation-no {
+    color: #6c757d;
+
+    font-size: 19px;
+}
+
+
+/* =========================================================
+   COMMENT BUTTON
+========================================================= */
+
+.btn-comment-add {
+    background-color: #0f4c81;
+
+    border-color: #0f4c81;
+
+    color: #ffffff;
+
+    font-weight: 500;
+}
+
+.btn-comment-add:hover {
+    background-color: #0b3b65;
+
+    border-color: #0b3b65;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   TIME CONTROL
+========================================================= */
+
+.time-control-box {
+    min-width: 260px;
+}
+
+.time-control-box .form-control {
+    min-width: 170px;
+}
+
+
+/* =========================================================
+   UPDATE TIME BUTTON
+========================================================= */
+
+.btn-time-update {
+    background-color: #ffffff;
+
+    border: 1px solid #0f4c81;
+
+    color: #0f4c81;
+
+    font-weight: 500;
+}
+
+.btn-time-update:hover {
+    background-color: #0f4c81;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   STOP BUTTON
+========================================================= */
+
+.btn-stop-agenda {
+    background-color: #dc3545;
+
+    border-color: #dc3545;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+}
+
+.btn-stop-agenda:hover {
+    background-color: #b02a37;
+
+    border-color: #b02a37;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DATATABLE
+========================================================= */
+
+.dataTables_wrapper {
+    font-size: 13px;
+}
+
+.dataTables_wrapper .dataTables_length {
+    margin-bottom: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ced4da;
+
+    border-radius: 5px;
+
+    padding: 5px 8px;
+
+    margin-left: 6px;
+
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #ced4da;
+
+    border-radius: 5px;
+
+    padding: 4px 6px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    padding-top: 12px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 8px;
+}
+
+.dataTables_wrapper
+.dataTables_paginate
+.paginate_button {
+    border-radius: 5px !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 991px) {
+
+    .summary-card {
+        min-height: 80px;
+    }
+
+    .summary-icon {
+        width: 60px;
+        min-width: 60px;
+
+        height: 80px;
+
+        font-size: 25px;
+    }
+
+    .time-control-box {
+        min-width: 220px;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm dashboard-card">
+
+                <div class="card-body agenda-dashboard">
+
+
+                    <!-- =================================================
+                         HEADER
+                    ================================================== -->
+
+                    <div class="dashboard-header">
+
+                        <h5>
+
+                            <i class="fa fa-spinner fa-spin"></i>
+
+                            AJENDA LAO HELA
+
+                        </h5>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SUMMARY
+                    ================================================== -->
+
+                    <div class="row">
+
+
+                        <!-- TOTAL -->
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+
+                            <div class="summary-card">
+
+                                <div class="summary-icon icon-total">
+
+                                    <i class="fa fa-calendar"></i>
+
+                                </div>
+
+
+                                <div class="summary-content">
+
+                                    <a href="{% url 'completedAgenda_list' %}">
+
+                                        <h6>
+                                            TOTAL AJENDA
+                                        </h6>
+
+                                        <h3>
+                                            {{ agenda_count }}
+                                        </h3>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONCLUDED -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-3">
+
+                            <div class="summary-card">
+
+                                <div class="summary-icon icon-concluded">
+
+                                    <i class="fa fa-check-circle"></i>
+
+                                </div>
+
+
+                                <div class="summary-content">
+
+                                    <a href="{% url 'concludedAgenda_list' %}">
+
+                                        <h6>
+                                            KONKLUIDU
+                                        </h6>
+
+                                        <h3>
+                                            {{ concluded_agenda_count }}
+                                        </h3>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CANCELED -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-3">
+
+                            <div class="summary-card">
+
+                                <div class="summary-icon icon-cancelled">
+
+                                    <i class="fa fa-times-circle"></i>
+
+                                </div>
+
+
+                                <div class="summary-content">
+
+                                    <a href="{% url 'canceledAgenda_list' %}">
+
+                                        <h6>
+                                            KANSELADU
+                                        </h6>
+
+                                        <h3>
+                                            {{ canceled_agenda_count }}
+                                        </h3>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- RUNNING -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-3">
+
+                            <div class="summary-card">
+
+                                <div class="summary-icon icon-running">
+
+                                    <i class="fa fa-spinner fa-spin"></i>
+
+                                </div>
+
+
+                                <div class="summary-content">
+
+                                    <a href="{% url 'runningAgenda_list' %}">
+
+                                        <h6>
+                                            LAO HELA
+                                        </h6>
+
+                                        <h3>
+                                            {{ running_agenda_count }}
+                                        </h3>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- UPCOMING -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-3">
+
+                            <div class="summary-card">
+
+                                <div class="summary-icon icon-upcoming">
+
+                                    <i class="fa fa-clock-o"></i>
+
+                                </div>
+
+
+                                <div class="summary-content">
+
+                                    <a href="{% url 'upcomingAgenda_list' %}">
+
+                                        <h6>
+                                            TUIR MAI
+                                        </h6>
+
+                                        <h3>
+                                            {{ upcoming_agenda_count }}
+                                        </h3>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TABLE HEADER
+                    ================================================== -->
+
+                    <div class="agenda-table-header">
+
+                        <h6>
+
+                            <i class="fa fa-spinner fa-spin"></i>
+
+                            LISTA AJENDA LAO HELA
+
+                        </h6>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         DATATABLE
+                    ================================================== -->
+
+                    <div class="table-responsive">
+
+                        <table
+                            id="example"
+                            class="table table-bordered table-sm table-hover agenda-table"
+                            width="100%">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th class="text-center align-middle">
+                                        NU.
+                                    </th>
+
+                                    <th class="text-center align-middle">
+                                        AJENDA
+                                    </th>
+
+                                    <th class="text-center align-middle">
+                                        ORAS HAHU
+                                    </th>
+
+                                    <th class="text-center align-middle">
+                                        ORAS REMATA
+                                    </th>
+
+                                    <th class="text-center align-middle">
+                                        FATIN
+                                    </th>
+
+                                    <th class="text-center align-middle">
+                                        OBSERVASAUN
+                                    </th>
+
+
+                                   
+
+                                <th class="text-center align-middle">
+                                    KOMENTARIU
+                                </th>
+
+                                <th class="text-center align-middle">
+                                    MUDA ORAS
+                                </th>
+
+                                <th class="text-center align-middle">
+                                    HAPARA
+                                </th>
+
+                                     
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% for obj in running_agenda %}
+
+
+                                <tr>
+
+
+                                    <!-- NUMBER -->
+                                    <td class="text-center">
+
+                                        {{ forloop.counter }}
+
+                                    </td>
+
+
+                                    <!-- TITLE -->
+                                    <td>
+
+                                        <a
+                                            href="{% url 'runningAgenda_list_detail' title_slug=obj.title_slug %}"
+                                            class="agenda-title">
+
+                                            {{ obj.title }}
+
+                                        </a>
+
+                                    </td>
+
+
+                                    <!-- START TIME -->
+                                    <td class="text-center">
+
+                                        {{ obj.start_time|date:"d/m/Y H:i" }}
+
+                                    </td>
+
+
+                                    <!-- END TIME -->
+                                    <td class="text-center">
+
+                                        {{ obj.end_time|date:"d/m/Y H:i" }}
+
+                                    </td>
+
+
+                                    <!-- LOCATION -->
+                                    <td class="text-center">
+
+                                        {% if obj.location %}
+
+                                            {{ obj.location }}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- OBSERVATION -->
+                                    <td class="text-center">
+
+
+                                        {% if obj.observation %}
+
+                                            <i
+                                                class="fa fa-check-square-o observation-yes"
+                                                data-toggle="tooltip"
+                                                title="Iha observasaun">
+
+                                            </i>
+
+                                        {% else %}
+
+                                            <i
+                                                class="fa fa-square-o observation-no"
+                                                data-toggle="tooltip"
+                                                title="La iha observasaun">
+
+                                            </i>
+
+                                        {% endif %}
+
+
+                                    </td>
+
+
+                                    <!-- =================================================
+                                         ADMIN ACTIONS
+                                    ================================================== -->
+
+                                    {% if user.is_authenticated %}
+
+                                        {% if user.groups.all.0.name != "gp_cord" %}
+
+
+                                            <!-- COMMENT -->
+                                            <td class="text-center">
+
+
+                                                {% if obj.observation %}
+
+
+                                                    <a
+                                                        href="{% url 'commentRuAgenda_add' pk=obj.pk %}"
+                                                        class="btn btn-warning btn-sm"
+                                                        data-toggle="tooltip"
+                                                        title="Hadia komentariu">
+
+                                                        <i class="fa fa-edit"></i>
+
+                                                        Hadia
+
+                                                    </a>
+
+
+                                                {% else %}
+
+
+                                                    <a
+                                                        href="{% url 'commentRuAgenda_add' pk=obj.pk %}"
+                                                        class="btn btn-comment-add btn-sm"
+                                                        data-toggle="tooltip"
+                                                        title="Aumenta komentariu">
+
+                                                        <i class="fa fa-plus"></i>
+
+                                                        Aumenta
+
+                                                    </a>
+
+
+                                                {% endif %}
+
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                 CHANGE END TIME
+                                            ================================================== -->
+
+                                            <td class="text-center time-control-box">
+
+
+                                                <form
+                                                    action="{% url 'runningagenda_change' pk=obj.pk %}"
+                                                    method="POST"
+                                                    class="form-inline d-flex justify-content-center flex-nowrap">
+
+                                                    {% csrf_token %}
+
+
+                                                    <input
+                                                        type="text"
+                                                        name="minute"
+                                                        value="{{ obj.end_time|date:'d/m/Y H:i:s' }}"
+                                                        class="form-control form-control-sm mr-2"
+                                                        autocomplete="off">
+
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-time-update btn-sm">
+
+                                                        <i class="fa fa-clock-o"></i>
+
+                                                        Hatama
+
+                                                    </button>
+
+
+                                                </form>
+
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                 STOP
+                                            ================================================== -->
+
+                                            <td class="text-center">
+
+
+                                                <a
+                                                    href="{% url 'runningagenda_stop' pk=obj.pk %}"
+                                                    class="btn btn-stop-agenda btn-sm"
+                                                    onclick="return confirm('Ita hakarak hapara ajenda ida ne agora?')">
+
+                                                    <i class="fa fa-stop-circle"></i>
+
+                                                    Hapara
+
+                                                </a>
+
+
+                                            </td>
+
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+
+                                </tr>
+
+
+                                {% empty %}
+
+
+                                <tr>
+
+                                    <td
+                                        colspan="9"
+                                        class="text-center text-muted">
+
+                                        La iha ajenda ne'ebé lao hela.
+
+                                    </td>
+
+                                </tr>
+
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+
+<!-- =========================================================
+     DATATABLE JS
+========================================================= -->
+
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+
+    // =====================================================
+    // DATATABLE
+    // =====================================================
+
+    if (
+        $.fn.DataTable &&
+        !$.fn.DataTable.isDataTable('#example')
+    ) {
+
+
+        $('#example').DataTable({
+
+            responsive: true,
+
+            autoWidth: false,
+
+            pageLength: 10,
+
+            lengthMenu: [
+
+                [10, 25, 50, 100, -1],
+
+                [10, 25, 50, 100, "Hotu"]
+
+            ],
+
+            order: [],
+
+
+            language: {
+
+                search:
+                    "Buka:",
+
+
+                lengthMenu:
+                    "Hatudu _MENU_ dadus",
+
+
+                info:
+                    "Hatudu _START_ to'o _END_ husi _TOTAL_ dadus",
+
+
+                infoEmpty:
+                    "La iha dadus",
+
+
+                infoFiltered:
+                    "(filtra husi total _MAX_ dadus)",
+
+
+                zeroRecords:
+                    "Dadus la hetan",
+
+
+                emptyTable:
+                    "La iha dadus",
+
+
+                loadingRecords:
+                    "Dadus karrega hela...",
+
+
+                processing:
+                    "Prosesa hela...",
+
+
+                paginate: {
+
+                    first:
+                        "Primeiru",
+
+                    last:
+                        "Ikus",
+
+                    next:
+                        "Oin",
+
+                    previous:
+                        "Kotuk"
+
+                }
+
+            }
+
+        });
+
+
+    }
+
+
+    // =====================================================
+    // TOOLTIP
+    // =====================================================
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+
+
+</script>
+
+
+{% endblock %}
