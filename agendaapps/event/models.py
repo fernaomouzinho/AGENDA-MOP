@@ -10,7 +10,7 @@ from tinymce.models import HTMLField
 
 import datetime
 from django.template.defaultfilters import slugify
-
+import uuid
 class TypeAgenda(models.Model):
     """ Tipu agenda model """
 
@@ -93,6 +93,13 @@ class AgendaRecipient(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True
     )
+    
+    uuid = models.UUIDField(
+            default=uuid.uuid4,
+            editable=False,
+            unique=True,
+            db_index=True
+        )
 
     class Meta:
         ordering = ["name"]
@@ -103,9 +110,9 @@ class AgendaRecipient(models.Model):
         return f"{self.name} - {self.email}"
     
     
-
 class Agenda(models.Model):
     """ Event model """
+    
     title = models.CharField(
         max_length=255, unique=True, verbose_name='Ajenda')
     title_slug = models.SlugField(
@@ -143,6 +150,14 @@ class Agenda(models.Model):
         related_name="agendas",
         verbose_name="Receptor Email"
     )
+    
+    uuid = models.UUIDField(
+         default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True
+    )
+    
 
     class Meta:
         # managed = True

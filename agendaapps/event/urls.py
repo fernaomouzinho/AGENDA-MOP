@@ -11,8 +11,8 @@ urlpatterns = [
          views.categoryagenda_delete, name='categoryagenda_delete'),
     path('agenda/', views.agenda_list, name='agenda_list'),
     path('agenda/add/', views.agenda_add, name='agenda_add'),
-    path('agenda/edit=?<int:pk>', views.agenda_edit, name='agenda_edit'),
-    path('agenda/delete=?<int:pk>', views.agenda_delete, name='agenda_delete'),
+    path('agenda/<uuid:uuid>/edit/', views.agenda_edit, name='agenda_edit'),
+    path('agenda/<uuid:uuid>/delete/', views.agenda_delete, name='agenda_delete'),
 
     path('completed-agenda/', views.completedAgenda_list,
          name='completedAgenda_list'),
@@ -119,7 +119,7 @@ urlpatterns = [
     
     path("recipient/",views.recipient_list,name="recipient_list"),
     path("recipient/add/",views.recipient_add,name="recipient_add"),
-    path("recipient/<int:pk>/edit/",views.recipient_edit,name="recipient_edit"),
-    path("recipient/<int:pk>/delete/",views.recipient_delete,name="recipient_delete"),
+    path("recipient/<uuid:uuid>/edit/",views.recipient_edit,name="recipient_edit"),
+    path("recipient/<uuid:uuid>/delete/",views.recipient_delete,name="recipient_delete"),
     
 ]

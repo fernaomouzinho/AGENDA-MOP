@@ -130,11 +130,7 @@
     white-space: nowrap;
 
     padding: 11px 8px;
-}
 
-
-/* Default header center */
-.recipient-table thead th {
     text-align: center !important;
 }
 
@@ -163,11 +159,6 @@
 
     padding: 10px 8px;
 }
-
-
-/* IMPORTANT:
-   Do not put text-align:center on all TDs here.
-*/
 
 
 /* LEFT COLUMNS */
@@ -324,49 +315,105 @@
 
 /* =========================================================
    ACTION BUTTONS
+   SAME STYLE AS AGENDA LIST
 ========================================================= */
 
-.btn-edit-recipient {
-    background: #fff4d6;
+.action-buttons {
+    display: flex;
 
-    border: 1px solid #f0c36d;
+    justify-content: center;
 
-    color: #856404;
+    align-items: center;
 
-    border-radius: 5px;
+    gap: 7px;
+
+    white-space: nowrap;
+}
+
+
+/* HADIA */
+
+.btn-action-edit {
+    background-color: #f4b942 !important;
+
+    border: 1px solid #f4b942 !important;
+
+    color: #222222 !important;
 
     font-size: 12px;
+
+    font-weight: 500;
+
+    padding: 4px 9px;
+
+    border-radius: 4px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none !important;
 }
 
 
-.btn-edit-recipient:hover {
-    background: #ffc107;
+.btn-action-edit:hover,
+.btn-action-edit:focus {
+    background-color: #d99b20 !important;
 
-    border-color: #ffc107;
+    border-color: #d99b20 !important;
 
-    color: #212529;
+    color: #ffffff !important;
+
+    text-decoration: none !important;
 }
 
 
-.btn-delete-recipient {
-    background: #fde8e8;
+/* HAMOS */
 
-    border: 1px solid #f5b7b7;
+.btn-action-delete {
+    background-color: #c82333 !important;
 
-    color: #c82333;
+    border: 1px solid #c82333 !important;
 
-    border-radius: 5px;
+    color: #ffffff !important;
 
     font-size: 12px;
+
+    font-weight: 500;
+
+    padding: 4px 9px;
+
+    border-radius: 4px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none !important;
 }
 
 
-.btn-delete-recipient:hover {
-    background: #dc3545;
+.btn-action-delete:hover,
+.btn-action-delete:focus {
+    background-color: #a71d2a !important;
 
-    border-color: #dc3545;
+    border-color: #a71d2a !important;
 
-    color: #ffffff;
+    color: #ffffff !important;
+
+    text-decoration: none !important;
+}
+
+
+/* ICON SPACE */
+
+.btn-action-edit i,
+.btn-action-delete i {
+    margin-right: 3px;
 }
 
 
@@ -552,6 +599,21 @@
                 role="alert"
             >
 
+                {% if message.tags == "success" %}
+
+                    <i class="fa fa-check-circle mr-1"></i>
+
+                {% elif message.tags == "error" %}
+
+                    <i class="fa fa-times-circle mr-1"></i>
+
+                {% elif message.tags == "warning" %}
+
+                    <i class="fa fa-exclamation-triangle mr-1"></i>
+
+                {% endif %}
+
+
                 {{ message }}
 
 
@@ -710,7 +772,7 @@
 
 
                             <!-- =================================
-                                 NAME - LEFT
+                                 NAME
                             ================================== -->
 
                             <td class="text-left">
@@ -726,7 +788,7 @@
 
 
                             <!-- =================================
-                                 POSITION - LEFT
+                                 POSITION
                             ================================== -->
 
                             <td class="text-left">
@@ -742,7 +804,7 @@
 
 
                             <!-- =================================
-                                 EMAIL - LEFT
+                                 EMAIL
                             ================================== -->
 
                             <td class="text-left">
@@ -841,42 +903,63 @@
 
                             <td class="text-center">
 
-
-                                <!-- EDIT -->
-
-                                <a
-                                    href="{% url 'recipient_edit' recipient.pk %}"
-                                    class="btn btn-sm btn-edit-recipient mr-1"
-                                    data-toggle="tooltip"
-                                    title="Altera receptor"
-                                >
-
-                                    <i class="fa fa-edit"></i>
-
-                                    Altera
-
-                                </a>
+                                <div class="action-buttons">
 
 
+                                    <!-- EDIT -->
 
-                                <!-- DELETE -->
+                                    <a
+                                        href="{% url 'recipient_edit' uuid=recipient.uuid %}"
+                                        class="btn btn-sm btn-action-edit"
+                                        data-toggle="tooltip"
+                                        title="Hadia Receptor"
+                                    >
 
-                                <a
-                                    href="{% url 'recipient_delete' recipient.pk %}"
-                                    class="btn btn-sm btn-delete-recipient"
-                                    data-toggle="tooltip"
-                                    title="Hamos receptor"
-                                >
+                                        <i class="fa fa-edit"></i>
 
-                                    <i class="fa fa-trash"></i>
+                                        Hadia
 
-                                    Hamos
+                                    </a>
 
-                                </a>
 
+
+                                    <!-- DELETE -->
+
+                                    <a
+                                        href="{% url 'recipient_delete' uuid=recipient.uuid %}"
+                                        class="btn btn-sm btn-action-delete"
+                                        data-toggle="tooltip"
+                                        title="Hamos Receptor"
+                                    >
+
+                                        <i class="fa fa-trash"></i>
+
+                                        Hamos
+
+                                    </a>
+
+
+                                </div>
 
                             </td>
 
+
+                        </tr>
+
+
+                        {% empty %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="text-center text-muted"
+                            >
+
+                                Dadus receptor Email seidauk iha.
+
+                            </td>
 
                         </tr>
 
@@ -942,9 +1025,7 @@ $(document).ready(function () {
         $('#recipientTable').DataTable({
 
 
-            /* =============================================
-               RESPONSIVE
-            ============================================== */
+            /* RESPONSIVE */
 
             responsive: true,
 
@@ -952,16 +1033,12 @@ $(document).ready(function () {
             autoWidth: false,
 
 
-            /* =============================================
-               PAGE LENGTH
-            ============================================== */
+            /* PAGE LENGTH */
 
             pageLength: 10,
 
 
-            /* =============================================
-               LENGTH MENU
-            ============================================== */
+            /* LENGTH MENU */
 
             lengthMenu: [
 
@@ -972,19 +1049,7 @@ $(document).ready(function () {
             ],
 
 
-            /* =============================================
-               DEFAULT ORDER
-
-               0 = NU.
-               1 = NARAN
-               2 = KARGU
-               3 = EMAIL
-               4 = AUTOMATIC
-               5 = STATUS
-               6 = ASAUN
-
-               Sort by NARAN
-            ============================================== */
+            /* SORT BY NAME */
 
             order: [
 
@@ -993,17 +1058,12 @@ $(document).ready(function () {
             ],
 
 
-            /* =============================================
-               COLUMN CONFIGURATION
-            ============================================== */
+            /* COLUMN CONFIGURATION */
 
             columnDefs: [
 
 
-                /* -----------------------------------------
-                   NU.
-                   CENTER
-                ----------------------------------------- */
+                /* NU. */
 
                 {
 
@@ -1017,13 +1077,7 @@ $(document).ready(function () {
                 },
 
 
-                /* -----------------------------------------
-                   NARAN
-                   KARGU
-                   EMAIL
-
-                   LEFT
-                ----------------------------------------- */
+                /* NAME / POSITION / EMAIL */
 
                 {
 
@@ -1035,34 +1089,25 @@ $(document).ready(function () {
                 },
 
 
-                /* -----------------------------------------
-                   AUTOMATIC
-                   STATUS
-                   ASAUN
-
-                   CENTER
-                ----------------------------------------- */
+                /* AUTOMATIC / STATUS / ACTION */
 
                 {
 
                     targets: [4, 5, 6],
 
                     className:
-                        'text-center align-middle',
-
-                    orderable: false
+                        'text-center align-middle'
 
                 },
 
 
-                /* -----------------------------------------
-                   ACTION
-                   NOT SEARCHABLE
-                ----------------------------------------- */
+                /* ACTION */
 
                 {
 
                     targets: [6],
+
+                    orderable: false,
 
                     searchable: false
 
@@ -1071,9 +1116,9 @@ $(document).ready(function () {
             ],
 
 
-            /* =============================================
+            /* =================================================
                TETUN LANGUAGE
-            ============================================== */
+            ================================================= */
 
             language: {
 

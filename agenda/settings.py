@@ -79,10 +79,6 @@ AUTH_USER_MODEL = 'authentication.User'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -99,15 +95,15 @@ DATABASES = {
 
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'smartvps04_agenda',
-    #     'USER': 'agendauser',
-    #     'PASSWORD': 'adn*&###3',
+    #     'NAME': 'db26_agendamop',
+    #     'USER': 'admindbmop5',
+    #     'PASSWORD': 'M0pAdmin#2026#',
     #     'HOST': 'localhost',
     #     'PORT': '3306',
     #     'OPTIONS': {
-    #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    #         "init_command": "SET foreign_key_checks = 0;",
     #     },
-    # }
+    # },
 }
 
 # Password validation
@@ -131,14 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-# LANGUAGE_CODE = 'en-us'
-# TIME_ZONE = 'UTC'
-# USE_I18N = True
-# USE_TZ = False
-# DATE_FORMAT = 'd-m-Y'
-# DATETIME_FORMAT = 'd-m-Y H:i'
-
 
 
 LANGUAGE_CODE = 'en-us'

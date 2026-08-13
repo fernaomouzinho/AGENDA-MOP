@@ -1,5 +1,6 @@
 from django.db import models
 from agendaapps.authentication.models import User
+import uuid
 
 # Create your models here.
 
@@ -7,6 +8,12 @@ from agendaapps.authentication.models import User
 class Institution(models.Model):
     name_institution = models.CharField(
         max_length=255, null=True, verbose_name="Naran Instituisaun:")
+    uuid = models.UUIDField(
+                default=uuid.uuid4,
+                editable=False,
+                unique=True,
+                db_index=True
+            )
 
     class Meta:
         # managed = False

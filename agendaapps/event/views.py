@@ -193,9 +193,8 @@ def agenda_add(request):
         else:
 
             # Useful during development
-            print(
-                agenda_form.errors
-            )
+            print("Error: AgendaForm is invalid")
+            
 
     else:
 
@@ -214,36 +213,86 @@ def agenda_add(request):
 
 
 @allowed_users(allowed_roles=['ajenda_admin'])
-def agenda_edit(request, pk):
+def agenda_edit(request, uuid):
+
+    single_agenda = get_object_or_404(
+        Agenda,
+        uuid=uuid
+    )
 
     if request.method == "POST":
-        single_agenda = Agenda.objects.get(pk=pk)
+
         agendaform = AgendaForm(
-            request.POST, request.FILES, instance=single_agenda)
+            request.POST,
+            request.FILES,
+            instance=single_agenda
+        )
+
         if agendaform.is_valid():
+
             agendaform.save()
-        messages.success(request, ("Data is updated"))
-        return redirect('agenda_list')
+
+            messages.success(
+                request,
+                "Ajenda atualiza ho susesu."
+            )
+
+            return redirect(
+                "agenda_list"
+            )
 
     else:
-        single_agenda = Agenda.objects.get(pk=pk)
-        agendaform = AgendaForm(instance=single_agenda)
 
-        context = {
-            'single_agenda': single_agenda,
-            'agendaform': agendaform,
-        }
-        return render(request, 'event/agenda_edit.html', context)
+        agendaform = AgendaForm(
+            instance=single_agenda
+        )
+
+    context = {
+        "single_agenda": single_agenda,
+        "agendaform": agendaform,
+    }
+
+    return render(
+        request,
+        "event/agenda_edit.html",
+        context
+    )
 
 # ============================================= Agenda Delete ================================================================
 
 
 @allowed_users(allowed_roles=['ajenda_admin'])
-def agenda_delete(request, pk):
-    single_agenda = Agenda.objects.get(id=pk)
-    single_agenda.delete()
-    messages.success(request, ("Delete successfully"))
-    return redirect('agenda_list')
+def agenda_delete(request, uuid):
+
+    single_agenda = get_object_or_404(
+        Agenda,
+        uuid=uuid
+    )
+
+    if request.method == "POST":
+
+        title = single_agenda.title
+
+        single_agenda.delete()
+
+        messages.success(
+            request,
+            f'Ajenda "{title}" hamos ho susesu.'
+        )
+
+        return redirect(
+            "agenda_list"
+        )
+
+    context = {
+        "single_agenda": single_agenda,
+    }
+
+    return render(
+        request,
+        "event/agenda_delete.html",
+        context
+    )
 
 
 # ================================================= Completed Agenda ================================================================
@@ -1142,12 +1191,16 @@ def recipient_add(request):
     )
     
     
+# =========================================================
+# EDIT RECIPIENT USING UUID
+# =========================================================
+
 @allowed_users(allowed_roles=['ajenda_admin'])
-def recipient_edit(request, pk):
+def recipient_edit(request, uuid):
 
     recipient = get_object_or_404(
         AgendaRecipient,
-        pk=pk
+        uuid=uuid
     )
 
     if request.method == "POST":
@@ -1187,22 +1240,29 @@ def recipient_edit(request, pk):
         "event/recipient/form.html",
         context
     )
-    
+
+
+# =========================================================
+# DELETE RECIPIENT USING UUID
+# =========================================================
+
 @allowed_users(allowed_roles=['ajenda_admin'])
-def recipient_delete(request, pk):
+def recipient_delete(request, uuid):
 
     recipient = get_object_or_404(
         AgendaRecipient,
-        pk=pk
+        uuid=uuid
     )
 
     if request.method == "POST":
+
+        recipient_name = recipient.name
 
         recipient.delete()
 
         messages.success(
             request,
-            "Receptor hamos ho susesu."
+            f'Receptor "{recipient_name}" hamos ho susesu.'
         )
 
         return redirect(

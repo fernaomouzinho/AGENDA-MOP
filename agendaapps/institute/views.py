@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Institution, Attendence
@@ -30,7 +30,7 @@ def institution_add(request):
             institutionform = institutionform.save(commit=False)
             institutionform.save()
 
-            messages.success(request, ("New data is added"))
+            messages.success(request, ("Dadus foun rejista ho susesu."))
         return redirect('institution_list')
     else:
         institutionform = InstitutionForm()
@@ -45,39 +45,97 @@ def institution_add(request):
 
 
 @allowed_users(allowed_roles=['ajenda_admin'])
-def institution_edit(request, pk):
+def institution_edit(request, uuid):
+
     roles = get_roles(request)
+
+    single_institution = get_object_or_404(
+        Institution,
+        uuid=uuid
+    )
+
     if request.method == "POST":
-        single_institution = Institution.objects.get(pk=pk)
+
         institutionform = InstitutionForm(
-            request.POST, request.FILES, instance=single_institution)
+            request.POST,
+            request.FILES,
+            instance=single_institution
+        )
+
         if institutionform.is_valid():
+
             institutionform.save()
-        messages.success(request, ("Data is updated"))
-        return redirect('institution_list')
+
+            messages.success(
+                request,
+                f'Instituisaun "{single_institution.name_institution}" '
+                f'atualiza ho susesu.'
+            )
+
+            return redirect(
+                'institution_list'
+            )
 
     else:
-        single_institution = Institution.objects.get(pk=pk)
-        institutionform = InstitutionForm(instance=single_institution)
 
-        context = {
-            'single_institution': single_institution,
-            'institutionform': institutionform,
-            'roles': roles
-        }
-        return render(request, 'institute/institution_edit.html', context)
+        institutionform = InstitutionForm(
+            instance=single_institution
+        )
+
+    context = {
+        'single_institution': single_institution,
+        'institutionform': institutionform,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'institute/institution_edit.html',
+        context
+    )
+
+
 
 # ============================================= Institute Delete ================================================================
 
-
 @allowed_users(allowed_roles=['ajenda_admin'])
-def institution_delete(request, pk):
-    roles = get_roles(request)
-    single_institute = Institution.objects.get(id=pk)
-    single_institute.delete()
-    messages.success(request, ("Delete successfully"))
-    return redirect('institution_list')
+def institution_delete(request, uuid):
 
+    roles = get_roles(request)
+
+    single_institution = get_object_or_404(
+        Institution,
+        uuid=uuid
+    )
+
+    if request.method == "POST":
+
+        # Save name before deleting
+        institution_name = single_institution.name_institution
+
+        # Delete institution
+        single_institution.delete()
+
+        # Success message in Tetun
+        messages.success(
+            request,
+            f'Instituisaun "{institution_name}" hamos ho susesu.'
+        )
+
+        return redirect(
+            'institution_list'
+        )
+
+    context = {
+        'single_institution': single_institution,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'institute/institution_delete.html',
+        context
+    )
 
 # Create your views here.
 

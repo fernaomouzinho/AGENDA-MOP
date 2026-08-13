@@ -1,0 +1,251 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+    .delete-wrapper {
+        min-height: 65vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .delete-card {
+        width: 100%;
+        max-width: 560px;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+    }
+
+
+    .delete-header {
+        background: linear-gradient(
+            135deg,
+            #b91c1c,
+            #dc3545
+        );
+
+        color: #ffffff;
+        padding: 16px 20px;
+    }
+
+
+    .delete-header h5 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+
+    .delete-body {
+        padding: 25px;
+        background: #ffffff;
+    }
+
+
+    .delete-question {
+        color: #334155;
+        font-size: 14px;
+        margin-bottom: 18px;
+    }
+
+
+    .institution-info {
+        background-color: #fff6f6;
+        border: 1px solid #f3c7c7;
+        border-left: 4px solid #dc3545;
+        border-radius: 7px;
+        padding: 15px;
+        margin-bottom: 18px;
+    }
+
+
+    .institution-label {
+        color: #6b7d8c;
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+
+    .institution-name {
+        color: #17324d;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+
+    .delete-warning {
+        color: #6f5a27;
+        background-color: #fff8e7;
+        border: 1px solid #f0dfb0;
+        border-radius: 7px;
+        padding: 12px 14px;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+
+
+    .delete-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+
+    .btn-cancel,
+    .btn-delete-confirm {
+        min-width: 110px;
+        font-size: 13px;
+    }
+
+
+    .btn-delete-confirm {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: #ffffff;
+    }
+
+
+    .btn-delete-confirm:hover {
+        background-color: #a71d2a;
+        border-color: #a71d2a;
+        color: #ffffff;
+    }
+
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="delete-wrapper">
+
+        <div class="card delete-card">
+
+
+            <!-- ==========================================
+                 HEADER
+            =========================================== -->
+
+            <div class="delete-header">
+
+                <h5>
+
+                    <i class="fa fa-trash mr-2"></i>
+
+                    Konfirmasaun Hamos Instituisaun
+
+                </h5>
+
+            </div>
+
+
+            <!-- ==========================================
+                 BODY
+            =========================================== -->
+
+            <div class="delete-body">
+
+
+                <div class="delete-question">
+
+                    Ita hakarak duni hamos instituisaun ida ne'e?
+
+                </div>
+
+
+                <!-- ======================================
+                     INSTITUTION INFORMATION
+                ======================================= -->
+
+                <div class="institution-info">
+
+                    <div class="institution-label">
+
+                        Naran Instituisaun
+
+                    </div>
+
+                    <div class="institution-name">
+
+                        {{ single_institution.name_institution }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ======================================
+                     WARNING
+                ======================================= -->
+
+                <div class="delete-warning">
+
+                    <i class="fa fa-exclamation-triangle mr-1"></i>
+
+                    <strong>Atensaun:</strong>
+
+                    Asaun ida ne'e sei hamos instituisaun permanentemente.
+                    Dadus ne'ebé hamos ona la bele restaura fali.
+
+                </div>
+
+
+                <!-- ======================================
+                     DELETE FORM
+                ======================================= -->
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <div class="delete-actions">
+
+
+                        <!-- CANCEL -->
+
+                        <a
+                            href="{% url 'institution_list' %}"
+                            class="btn btn-secondary btn-cancel"
+                        >
+
+                            <i class="fa fa-times mr-1"></i>
+
+                            Kansela
+
+                        </a>
+
+
+                        <!-- CONFIRM DELETE -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-delete-confirm"
+                        >
+
+                            <i class="fa fa-trash mr-1"></i>
+
+                            Hamos
+
+                        </button>
+
+
+                    </div>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

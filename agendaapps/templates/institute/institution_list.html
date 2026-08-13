@@ -27,6 +27,12 @@
     }
 
 
+    .institution-header h6 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+
     .institution-btn-add {
         background-color: #0f4c81;
         border-color: #0f4c81;
@@ -43,6 +49,17 @@
     }
 
 
+    /* =========================================================
+       MESSAGE
+    ========================================================= */
+
+    .institution-message {
+        border-radius: 8px;
+        font-size: 13px;
+        border: none;
+    }
+
+
     /* ============================
        TABLE
     ============================ */
@@ -55,12 +72,9 @@
     .institution-table thead th {
         background-color: #eaf2f8;
         color: #17324d;
-
         font-weight: 600;
-
         text-align: center !important;
         vertical-align: middle !important;
-
         white-space: nowrap;
     }
 
@@ -91,7 +105,6 @@
         background-color: #f4b942;
         border-color: #f4b942;
         color: #222;
-
         font-size: 12px;
     }
 
@@ -107,7 +120,6 @@
         background-color: #c82333;
         border-color: #c82333;
         color: #ffffff;
-
         font-size: 12px;
     }
 
@@ -138,18 +150,14 @@
     .dataTables_wrapper .dataTables_filter input {
         border: 1px solid #ced9e2;
         border-radius: 5px;
-
         padding: 5px 8px;
-
         margin-left: 6px;
-
         outline: none;
     }
 
 
     .dataTables_wrapper .dataTables_filter input:focus {
         border-color: #1976b9;
-
         box-shadow:
             0 0 0 2px rgba(25, 118, 185, 0.10);
     }
@@ -158,18 +166,14 @@
     .dataTables_wrapper .dataTables_length select {
         border: 1px solid #ced9e2;
         border-radius: 5px;
-
         padding: 4px 6px;
-
         margin: 0 4px;
     }
 
 
     .dataTables_wrapper .dataTables_info {
         padding-top: 12px !important;
-
         color: #6b7d8c;
-
         font-size: 12px;
     }
 
@@ -188,53 +192,127 @@
 </style>
 
 
-
 <div class="container-fluid">
+
+
+    <!-- =====================================================
+         DJANGO MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="mb-3">
+
+            {% for message in messages %}
+
+                <div
+                    class="
+                        alert
+
+                        {% if message.tags == 'success' %}
+                            alert-success
+
+                        {% elif message.tags == 'error' %}
+                            alert-danger
+
+                        {% elif message.tags == 'warning' %}
+                            alert-warning
+
+                        {% else %}
+                            alert-info
+                        {% endif %}
+
+                        alert-dismissible
+                        fade
+                        show
+                        shadow-sm
+                        institution-message
+                    "
+                    role="alert"
+                >
+
+                    {% if message.tags == 'success' %}
+
+                        <i class="fa fa-check-circle mr-2"></i>
+
+                    {% elif message.tags == 'error' %}
+
+                        <i class="fa fa-times-circle mr-2"></i>
+
+                    {% elif message.tags == 'warning' %}
+
+                        <i class="fa fa-exclamation-triangle mr-2"></i>
+
+                    {% else %}
+
+                        <i class="fa fa-info-circle mr-2"></i>
+
+                    {% endif %}
+
+
+                    {{ message }}
+
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="alert"
+                        aria-label="Close"
+                    >
+
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
 
 
     <div class="row justify-content-center">
 
-
         <div class="col-12">
 
-
             <div class="card shadow-sm border-0 institution-card">
-
 
                 <div class="card-body">
 
 
                     <!-- BUTTON AREA -->
-                    <div class="row align-items-center mb-3">
 
+                    <div class="row align-items-center mb-3">
 
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
 
-
-                            <a href="{% url 'institution_add' %}"
-                               class="btn btn-sm institution-btn-add">
-
+                            <a
+                                href="{% url 'institution_add' %}"
+                                class="btn btn-sm institution-btn-add"
+                            >
 
                                 <i class="fa fa-plus mr-1"></i>
 
                                 Aumenta Instituisaun
 
-
                             </a>
 
-
                         </div>
-
 
                     </div>
 
 
 
                     <!-- HEADER -->
+
                     <div class="institution-header mb-3">
 
-
-                        <h6 class="mb-0">
+                        <h6>
 
                             <i class="fa fa-list mr-1"></i>
 
@@ -242,65 +320,56 @@
 
                         </h6>
 
-
                     </div>
 
 
 
                     <!-- TABLE -->
+
                     <div class="table-responsive">
 
-
                         <table
-                            class="table table-bordered table-sm table-hover institution-table"
+                            class="
+                                table
+                                table-bordered
+                                table-sm
+                                table-hover
+                                institution-table
+                            "
                             id="example"
-                            width="100%">
-
+                            width="100%"
+                        >
 
                             <thead>
 
-
                                 <tr>
 
-
                                     <th style="width:70px;">
-
                                         NU.
-
                                     </th>
-
 
                                     <th>
-
                                         NARAN INSTITUISAUN
-
                                     </th>
-
 
                                     <th style="width:200px;">
-
                                         ASAUN
-
                                     </th>
 
-
                                 </tr>
-
 
                             </thead>
 
 
-
                             <tbody>
 
-
                                 {% for obj in institution_list %}
-
 
                                 <tr>
 
 
                                     <!-- NUMBER -->
+
                                     <td>
 
                                         {{ forloop.counter }}
@@ -310,6 +379,7 @@
 
 
                                     <!-- INSTITUTION -->
+
                                     <td>
 
                                         {{ obj.name_institution }}
@@ -319,37 +389,50 @@
 
 
                                     <!-- ACTION -->
+
                                     <td>
 
 
+                                        <!-- EDIT USING UUID -->
+
                                         <a
-                                            href="{% url 'institution_edit' pk=obj.id %}"
+                                            href="{% url 'institution_edit' uuid=obj.uuid %}"
                                             data-toggle="tooltip"
                                             title="Hadia"
-                                            class="btn btn-sm btn-action-edit mb-1 mr-1">
-
+                                            class="
+                                                btn
+                                                btn-sm
+                                                btn-action-edit
+                                                mb-1
+                                                mr-1
+                                            "
+                                        >
 
                                             <i class="fa fa-edit"></i>
 
                                             Hadia
 
-
                                         </a>
 
 
 
+                                        <!-- DELETE USING UUID -->
+
                                         <a
-                                            href="{% url 'institution_delete' pk=obj.id %}"
+                                            href="{% url 'institution_delete' uuid=obj.uuid %}"
                                             data-toggle="tooltip"
                                             title="Hamos"
-                                            class="btn btn-sm btn-action-delete mb-1"
-                                            onclick="return confirm('Ita hakarak hamos instituisaun ida ne?')">
-
+                                            class="
+                                                btn
+                                                btn-sm
+                                                btn-action-delete
+                                                mb-1
+                                            "
+                                        >
 
                                             <i class="fa fa-trash"></i>
 
                                             Hamos
-
 
                                         </a>
 
@@ -360,14 +443,28 @@
                                 </tr>
 
 
-                                {% endfor %}
+                                {% empty %}
 
+
+                                <tr>
+
+                                    <td
+                                        colspan="3"
+                                        class="text-center text-muted"
+                                    >
+
+                                        Lista instituisaun seidauk iha.
+
+                                    </td>
+
+                                </tr>
+
+
+                                {% endfor %}
 
                             </tbody>
 
-
                         </table>
-
 
                     </div>
                     <!-- END TABLE -->
@@ -375,18 +472,13 @@
 
                 </div>
 
-
             </div>
-
 
         </div>
 
-
     </div>
 
-
 </div>
-
 
 {% endblock %}
 
@@ -398,6 +490,7 @@
 
 
 <!-- DATATABLE JS -->
+
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
@@ -440,8 +533,11 @@ $(document).ready(function () {
 
 
             /* SORT BY INSTITUTION NAME */
+
             order: [
+
                 [1, 'asc']
+
             ],
 
 
@@ -449,7 +545,9 @@ $(document).ready(function () {
 
 
                 /* CENTER NUMBER AND ACTION */
+
                 {
+
                     targets: [
                         0,
                         2
@@ -457,31 +555,37 @@ $(document).ready(function () {
 
                     className:
                         'text-center align-middle'
+
                 },
 
 
                 /* NUMBER + ACTION NOT SORTABLE */
+
                 {
+
                     targets: [
                         0,
                         2
                     ],
 
                     orderable: false
+
                 },
 
 
                 /* ACTION NOT SEARCHABLE */
+
                 {
+
                     targets: [
                         2
                     ],
 
                     searchable: false
+
                 }
 
             ],
-
 
 
             language: {
@@ -559,18 +663,13 @@ $(document).ready(function () {
 
                         "Kotuk"
 
-
                 }
-
 
             }
 
-
         });
 
-
     }
-
 
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -579,6 +678,5 @@ $(document).ready(function () {
 });
 
 </script>
-
 
 {% endblock %}

@@ -14,38 +14,54 @@ from agendaapps.event.email_service import (
 
 
 # ============================================================
-# CONFIGURATION
+# REMINDER CONFIGURATION
 # ============================================================
-
-# Windows Task Scheduler will run every 5 minutes.
-#
-# We use a 10 minute matching window for a little
-# extra protection against small scheduling delays.
-REMINDER_WINDOW = timedelta(
-    minutes=10
-)
-
 
 REMINDERS = [
 
-    # ========================================================
-    # 1 DAY BEFORE
-    # ========================================================
+    # --------------------------------------------------------
+    # 1 DAY REMINDER
+    #
+    # Send between:
+    # 24 hours before
+    # and
+    # 23 hours 30 minutes before
+    # --------------------------------------------------------
 
     {
         "type": AgendaNotification.REMINDER_1_DAY,
-        "target": timedelta(days=1),
-        "text": "1 day",
+
+        "max_remaining": timedelta(days=1),
+
+        "min_remaining": timedelta(
+            hours=23,
+            minutes=30
+        ),
+
+        "text": "loron 1",
     },
 
-    # ========================================================
-    # 2 HOURS BEFORE
-    # ========================================================
+
+    # --------------------------------------------------------
+    # 2 HOURS REMINDER
+    #
+    # Send between:
+    # 2 hours before
+    # and
+    # 1 hour 30 minutes before
+    # --------------------------------------------------------
 
     {
         "type": AgendaNotification.REMINDER_2_HOURS,
-        "target": timedelta(hours=2),
-        "text": "2 hours",
+
+        "max_remaining": timedelta(hours=2),
+
+        "min_remaining": timedelta(
+            hours=1,
+            minutes=30
+        ),
+
+        "text": "oras 2",
     },
 
 ]
@@ -54,45 +70,26 @@ REMINDERS = [
 class Command(BaseCommand):
 
     help = (
-        "Send automatic Agenda email reminders "
-        "1 day and 2 hours before meetings."
+        "Send automatic Agenda email reminders."
     )
 
-    # ========================================================
-    # TEST ARGUMENT
-    # ========================================================
 
-    def add_arguments(
-        self,
-        parser
-    ):
+    def add_arguments(self, parser):
 
         parser.add_argument(
             "--test",
             type=int,
-            help=(
-                "Agenda ID to send immediately "
-                "for testing."
-            ),
+            help="Send test email for Agenda ID."
         )
 
-    # ========================================================
-    # MAIN
-    # ========================================================
 
-    def handle(
-        self,
-        *args,
-        **options
-    ):
+    def handle(self, *args, **options):
 
         # ====================================================
         # TEST MODE
         # ====================================================
 
-        test_agenda_id = options.get(
-            "test"
-        )
+        test_agenda_id = options.get("test")
 
         if test_agenda_id:
 
@@ -102,24 +99,23 @@ class Command(BaseCommand):
 
             return
 
+
         # ====================================================
-        # CURRENT TIME
+        # NORMAL AUTOMATIC MODE
         # ====================================================
 
         now = timezone.now()
 
-        local_now = timezone.localtime(
-            now
-        )
+        local_now = timezone.localtime(now)
+
 
         self.stdout.write("")
-
         self.stdout.write(
             "=" * 70
         )
 
         self.stdout.write(
-            f"Checking Agenda email reminders at: "
+            "Checking Agenda email reminders at: "
             f"{local_now.strftime('%d/%m/%Y %H:%M:%S')}"
         )
 
@@ -127,17 +123,16 @@ class Command(BaseCommand):
             "=" * 70
         )
 
+
         # ====================================================
-        # QUERY AGENDA
-        #
-        # Maximum reminder is 1 day.
+        # Only need to search approximately 1 day ahead
         # ====================================================
 
         maximum_time = (
             now
             + timedelta(days=1)
-            + REMINDER_WINDOW
         )
+
 
         agendas = (
             Agenda.objects
@@ -147,11 +142,6 @@ class Command(BaseCommand):
                 is_active=True,
                 is_cancel=False,
             )
-            .select_related(
-                "institution",
-                "catagenda",
-                "meeting_type",
-            )
             .prefetch_related(
                 "recipients"
             )
@@ -160,59 +150,56 @@ class Command(BaseCommand):
             )
         )
 
+
         self.stdout.write(
-            f"Agenda found: "
-            f"{agendas.count()}"
+            f"Agenda found: {agendas.count()}"
         )
+
 
         total_sent = 0
         total_failed = 0
 
+
         # ====================================================
-        # EACH AGENDA
+        # CHECK EACH AGENDA
         # ====================================================
 
         for agenda in agendas:
 
             remaining = (
-                agenda.start_time
-                - now
+                agenda.start_time - now
             )
 
-            local_start = (
-                timezone.localtime(
-                    agenda.start_time
-                )
+            local_start = timezone.localtime(
+                agenda.start_time
             )
+
 
             self.stdout.write("")
-
             self.stdout.write(
                 "-" * 70
             )
 
             self.stdout.write(
-                f"Checking Agenda: "
-                f"{agenda.title}"
+                f"Checking Agenda: {agenda.title}"
             )
 
             self.stdout.write(
-                f"Agenda ID: "
-                f"{agenda.id}"
+                f"Agenda ID: {agenda.id}"
             )
 
             self.stdout.write(
-                f"Start Time: "
+                "Start Time: "
                 f"{local_start.strftime('%d/%m/%Y %H:%M')}"
             )
 
             self.stdout.write(
-                f"Remaining: "
-                f"{remaining}"
+                f"Remaining: {remaining}"
             )
 
+
             # =================================================
-            # RECIPIENTS
+            # ACTIVE RECIPIENTS
             # =================================================
 
             recipients = (
@@ -223,267 +210,243 @@ class Command(BaseCommand):
                 )
             )
 
+
             self.stdout.write(
-                f"Active recipients: "
-                f"{recipients.count()}"
+                f"Active recipients: {recipients.count()}"
             )
+
 
             if not recipients.exists():
 
                 self.stdout.write(
-                    self.style.WARNING(
-                        "No active email recipients."
-                    )
+                    "No active recipients. Skipping."
                 )
 
                 continue
 
-            reminder_found = False
+
+            matched_any_reminder = False
+
 
             # =================================================
-            # CHECK 1 DAY / 2 HOURS
+            # CHECK REMINDER RANGES
             # =================================================
 
             for reminder in REMINDERS:
 
-                target = reminder[
-                    "target"
-                ]
-
-                lower_bound = (
-                    target
-                    - REMINDER_WINDOW
+                max_remaining = (
+                    reminder["max_remaining"]
                 )
 
-                upper_bound = (
-                    target
+                min_remaining = (
+                    reminder["min_remaining"]
                 )
+
 
                 self.stdout.write(
-                    f"Checking reminder: "
-                    f"{reminder['text']} "
-                    f"| target={target}"
+                    "Checking reminder: "
+                    f"{reminder['text']} | "
+                    f"Range: "
+                    f"{min_remaining} - "
+                    f"{max_remaining}"
                 )
 
+
+                # =============================================
+                # IMPORTANT RANGE CHECK
+                #
+                # Example for 2 hours:
+                #
+                # 1:30 <= remaining <= 2:00
+                # =============================================
+
                 if not (
-                    lower_bound
+                    min_remaining
                     <= remaining
-                    <= upper_bound
+                    <= max_remaining
                 ):
 
                     continue
 
-                reminder_found = True
+
+                matched_any_reminder = True
+
 
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"Reminder matched: "
+                        "Reminder MATCHED: "
                         f"{reminder['text']}"
                     )
                 )
 
+
                 # =============================================
-                # EACH RECIPIENT
+                # SEND TO EACH RECIPIENT
                 # =============================================
 
                 for recipient in recipients:
 
-                    result = (
-                        self.send_reminder(
+
+                    # =========================================
+                    # CHECK IF ALREADY SENT
+                    # =========================================
+
+                    already_sent = (
+                        AgendaNotification.objects
+                        .filter(
                             agenda=agenda,
                             recipient=recipient,
-                            reminder=reminder,
+                            reminder_type=reminder["type"],
+                            success=True,
+                        )
+                        .exists()
+                    )
+
+
+                    if already_sent:
+
+                        self.stdout.write(
+                            self.style.WARNING(
+                                "Already sent: "
+                                f"{recipient.name} "
+                                f"({recipient.email})"
+                            )
+                        )
+
+                        continue
+
+
+                    # =========================================
+                    # CREATE / GET NOTIFICATION RECORD
+                    # =========================================
+
+                    notification, created = (
+                        AgendaNotification.objects
+                        .get_or_create(
+                            agenda=agenda,
+                            recipient=recipient,
+                            reminder_type=reminder["type"],
                         )
                     )
 
-                    if result == "sent":
+
+                    # =========================================
+                    # SEND EMAIL
+                    # =========================================
+
+                    try:
+
+                        self.stdout.write(
+                            "Sending email to: "
+                            f"{recipient.name} "
+                            f"<{recipient.email}>"
+                        )
+
+
+                        send_agenda_email(
+                            agenda=agenda,
+                            recipient=recipient,
+                            reminder_text=reminder["text"],
+                        )
+
+
+                        # =====================================
+                        # SUCCESS
+                        # =====================================
+
+                        notification.success = True
+
+                        notification.sent_at = (
+                            timezone.now()
+                        )
+
+                        notification.error_message = ""
+
+                        notification.save(
+                            update_fields=[
+                                "success",
+                                "sent_at",
+                                "error_message",
+                            ]
+                        )
+
+
                         total_sent += 1
 
-                    elif result == "failed":
+
+                        self.stdout.write(
+                            self.style.SUCCESS(
+                                "Email sent successfully: "
+                                f"{recipient.name}"
+                            )
+                        )
+
+
+                    except Exception as exc:
+
+                        # =====================================
+                        # FAILED
+                        # =====================================
+
+                        notification.success = False
+
+                        notification.error_message = (
+                            str(exc)
+                        )
+
+                        notification.save(
+                            update_fields=[
+                                "success",
+                                "error_message",
+                            ]
+                        )
+
+
                         total_failed += 1
 
-            if not reminder_found:
+
+                        self.stderr.write(
+                            self.style.ERROR(
+                                "Email failed: "
+                                f"{recipient.name} | "
+                                f"{exc}"
+                            )
+                        )
+
+
+            # =================================================
+            # NO REMINDER MATCH
+            # =================================================
+
+            if not matched_any_reminder:
 
                 self.stdout.write(
-                    "Not currently inside the "
-                    "1-day or 2-hour reminder window."
+                    "Not currently inside a reminder range."
                 )
 
+
         # ====================================================
-        # FINISH
+        # FINISHED
         # ====================================================
 
         self.stdout.write("")
-
         self.stdout.write(
             "=" * 70
         )
 
         self.stdout.write(
-            self.style.SUCCESS(
-                f"Completed | "
-                f"Sent: {total_sent} | "
-                f"Failed: {total_failed}"
-            )
+            f"Completed | "
+            f"Sent: {total_sent} | "
+            f"Failed: {total_failed}"
         )
 
         self.stdout.write(
             "=" * 70
         )
 
-        self.stdout.write("")
-
-    # ========================================================
-    # SEND REAL REMINDER
-    # ========================================================
-
-    def send_reminder(
-        self,
-        agenda,
-        recipient,
-        reminder,
-    ):
-
-        # ====================================================
-        # SAFETY CHECK
-        # ====================================================
-
-        if agenda.is_cancel:
-
-            return "cancelled"
-
-        if not agenda.is_active:
-
-            return "inactive"
-
-        if not recipient.is_active:
-
-            return "inactive"
-
-        # ====================================================
-        # ALREADY SENT?
-        # ====================================================
-
-        already_sent = (
-            AgendaNotification.objects
-            .filter(
-                agenda=agenda,
-                recipient=recipient,
-                reminder_type=reminder["type"],
-                success=True,
-            )
-            .exists()
-        )
-
-        if already_sent:
-
-            self.stdout.write(
-                self.style.WARNING(
-                    f"Already sent: "
-                    f"{recipient.name} "
-                    f"({reminder['text']})"
-                )
-            )
-
-            return "already_sent"
-
-        # ====================================================
-        # CREATE / GET NOTIFICATION
-        # ====================================================
-
-        notification, created = (
-            AgendaNotification.objects
-            .get_or_create(
-                agenda=agenda,
-                recipient=recipient,
-                reminder_type=reminder["type"],
-            )
-        )
-
-        # ====================================================
-        # SEND
-        # ====================================================
-
-        self.stdout.write(
-            f"Sending email to: "
-            f"{recipient.name} "
-            f"<{recipient.email}>"
-        )
-
-        try:
-
-            result = send_agenda_email(
-                agenda=agenda,
-                recipient=recipient,
-                reminder_text=reminder["text"],
-            )
-
-            # Django normally returns 1
-            # when one email is sent.
-
-            if result != 1:
-
-                raise Exception(
-                    f"Email backend returned {result}"
-                )
-
-            notification.success = True
-
-            notification.sent_at = (
-                timezone.now()
-            )
-
-            notification.error_message = ""
-
-            notification.save(
-                update_fields=[
-                    "success",
-                    "sent_at",
-                    "error_message",
-                ]
-            )
-
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Email sent successfully "
-                    f"to {recipient.email}"
-                )
-            )
-
-            return "sent"
-
-        except Exception as exc:
-
-            notification.success = False
-
-            notification.error_message = (
-                str(exc)
-            )
-
-            notification.save(
-                update_fields=[
-                    "success",
-                    "error_message",
-                ]
-            )
-
-            self.stderr.write(
-                self.style.ERROR(
-                    f"Email failed for "
-                    f"{recipient.email}: "
-                    f"{exc}"
-                )
-            )
-
-            return "failed"
 
     # ========================================================
     # TEST MODE
-    #
-    # Example:
-    # python manage.py send_agenda_email_reminders --test 16
-    #
-    # Does NOT create real reminder history.
     # ========================================================
 
     def run_test(
@@ -492,34 +455,23 @@ class Command(BaseCommand):
     ):
 
         self.stdout.write("")
-
         self.stdout.write(
             "=" * 70
         )
 
         self.stdout.write(
-            self.style.WARNING(
-                "AGENDA EMAIL TEST MODE"
-            )
+            "AGENDA EMAIL TEST MODE"
         )
 
         self.stdout.write(
             "=" * 70
         )
 
-        # ====================================================
-        # FIND AGENDA
-        # ====================================================
 
         try:
 
             agenda = (
                 Agenda.objects
-                .select_related(
-                    "institution",
-                    "catagenda",
-                    "meeting_type",
-                )
                 .prefetch_related(
                     "recipients"
                 )
@@ -532,16 +484,13 @@ class Command(BaseCommand):
 
             self.stderr.write(
                 self.style.ERROR(
-                    f"Agenda ID "
-                    f"{agenda_id} not found."
+                    f"Agenda ID {agenda_id} "
+                    "does not exist."
                 )
             )
 
             return
 
-        # ====================================================
-        # RECIPIENTS
-        # ====================================================
 
         recipients = (
             agenda
@@ -551,14 +500,13 @@ class Command(BaseCommand):
             )
         )
 
+
         self.stdout.write(
-            f"Agenda: "
-            f"{agenda.title}"
+            f"Agenda: {agenda.title}"
         )
 
         self.stdout.write(
-            f"Agenda ID: "
-            f"{agenda.id}"
+            f"Agenda ID: {agenda.id}"
         )
 
         self.stdout.write(
@@ -566,15 +514,15 @@ class Command(BaseCommand):
             f"{recipients.count()}"
         )
 
+
         if not recipients.exists():
 
             self.stdout.write(
-                self.style.WARNING(
-                    "No active recipients."
-                )
+                "No active recipients."
             )
 
             return
+
 
         # ====================================================
         # SEND TEST
@@ -583,60 +531,45 @@ class Command(BaseCommand):
         for recipient in recipients:
 
             self.stdout.write("")
-
             self.stdout.write(
-                f"Sending test email to:"
+                "Sending test email to:"
             )
 
             self.stdout.write(
-                f"Name : "
-                f"{recipient.name}"
+                f"Name : {recipient.name}"
             )
 
             self.stdout.write(
-                f"Email: "
-                f"{recipient.email}"
+                f"Email: {recipient.email}"
             )
+
 
             try:
 
-                result = send_agenda_email(
+                send_agenda_email(
                     agenda=agenda,
                     recipient=recipient,
-                    reminder_text=(
-                        "TEST MESSAGE"
-                    ),
+                    reminder_text="TESTE",
                 )
 
-                if result == 1:
 
-                    self.stdout.write(
-                        self.style.SUCCESS(
-                            "Test email sent "
-                            "successfully."
-                        )
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        "Test email sent successfully."
                     )
+                )
 
-                else:
-
-                    self.stdout.write(
-                        self.style.WARNING(
-                            f"Email backend "
-                            f"returned {result}"
-                        )
-                    )
 
             except Exception as exc:
 
                 self.stderr.write(
                     self.style.ERROR(
-                        f"Test email failed: "
-                        f"{exc}"
+                        f"Test email failed: {exc}"
                     )
                 )
 
-        self.stdout.write("")
 
+        self.stdout.write("")
         self.stdout.write(
             "=" * 70
         )
