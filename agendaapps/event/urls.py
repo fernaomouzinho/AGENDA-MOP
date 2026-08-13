@@ -117,4 +117,9 @@ urlpatterns = [
     
     path('notification/read/',views.agenda_notification_read,name='agenda_notification_read'),
     
+    path("recipient/",views.recipient_list,name="recipient_list"),
+    path("recipient/add/",views.recipient_add,name="recipient_add"),
+    path("recipient/<int:pk>/edit/",views.recipient_edit,name="recipient_edit"),
+    path("recipient/<int:pk>/delete/",views.recipient_delete,name="recipient_delete"),
+    
 ]

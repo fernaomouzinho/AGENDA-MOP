@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
-from .models import TypeAgenda, CatAgenda, Agenda, RequestAgenda, Informative, CommentInformative
+from .models import TypeAgenda, CatAgenda, Agenda,AgendaRecipient, RequestAgenda, Informative, CommentInformative
 from tinymce.widgets import TinyMCE
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button, HTML
@@ -19,12 +19,84 @@ class CategoryAgendaForm(forms.ModelForm):
         exclude = ('id',)
 
 class AgendaForm(forms.ModelForm):
+
     class Meta:
         model = Agenda
-        exclude = ( 'title_slug', 'is_cancel','is_active', 'status', 'observation')
+
+        exclude = (
+            'title_slug',
+            'is_cancel',
+            'is_active',
+            'status',
+            'observation',
+        )
+
         widgets = {
             "start_time": DateTimePickerInput(),
-            "end_time": DateTimePickerInput(range_from="start_time"),
+
+            "end_time": DateTimePickerInput(
+                range_from="start_time"
+            ),
+
+            "recipients": forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["recipients"].queryset = (
+            AgendaRecipient.objects
+            .filter(is_active=True)
+            .order_by("position", "name")
+        )
+        
+        
+class AgendaRecipientForm(forms.ModelForm):
+
+    class Meta:
+        model = AgendaRecipient
+
+        fields = [
+            "name",
+            "position",
+            "email",
+            "is_default",
+            "is_active",
+        ]
+
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Naran kompletu",
+                }
+            ),
+
+            "position": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ez: Director, Minister",
+                }
+            ),
+
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "email@example.com",
+                }
+            ),
+
+            "is_default": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
         }
 
 class PostponedAgendaForm(forms.ModelForm):

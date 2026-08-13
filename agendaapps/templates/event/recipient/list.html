@@ -6,6 +6,7 @@
 <!-- =========================================================
      DATATABLE CSS
 ========================================================= -->
+
 <link rel="stylesheet"
       href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
 
@@ -72,6 +73,7 @@
         rgba(15, 76, 129, 0.10);
 }
 
+
 .recipient-card-header {
     background:
         linear-gradient(
@@ -85,12 +87,14 @@
     padding: 13px 18px;
 }
 
+
 .recipient-card-header h6 {
     margin: 0;
 
     font-size: 15px;
     font-weight: 600;
 }
+
 
 .recipient-card-body {
     padding: 18px;
@@ -107,7 +111,10 @@
 }
 
 
-/* HEADER CENTER */
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
 .recipient-table thead th {
     background-color: #eaf2f8;
 
@@ -115,7 +122,6 @@
 
     border-color: #dbe6ef;
 
-    text-align: center !important;
     vertical-align: middle !important;
 
     font-size: 12px;
@@ -127,18 +133,59 @@
 }
 
 
-/* BODY CENTER */
+/* Default header center */
+.recipient-table thead th {
+    text-align: center !important;
+}
+
+
+/* NAME / POSITION / EMAIL HEADER LEFT */
+
+.recipient-table thead th:nth-child(2),
+.recipient-table thead th:nth-child(3),
+.recipient-table thead th:nth-child(4) {
+    text-align: left !important;
+}
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
 .recipient-table tbody td {
     color: #334e68;
 
     border-color: #e4ebf1;
 
-    text-align: center !important;
     vertical-align: middle !important;
 
     font-size: 13px;
 
     padding: 10px 8px;
+}
+
+
+/* IMPORTANT:
+   Do not put text-align:center on all TDs here.
+*/
+
+
+/* LEFT COLUMNS */
+
+.recipient-table tbody td:nth-child(2),
+.recipient-table tbody td:nth-child(3),
+.recipient-table tbody td:nth-child(4) {
+    text-align: left !important;
+}
+
+
+/* CENTER COLUMNS */
+
+.recipient-table tbody td:nth-child(1),
+.recipient-table tbody td:nth-child(5),
+.recipient-table tbody td:nth-child(6),
+.recipient-table tbody td:nth-child(7) {
+    text-align: center !important;
 }
 
 
@@ -148,37 +195,95 @@
 
 
 /* =========================================================
-   AGENDA
+   NAME
 ========================================================= */
 
-.agenda-name {
+.recipient-name {
     color: #0f4c81;
 
     font-weight: 600;
+
+    display: inline-block;
 }
 
 
 /* =========================================================
-   PHONE NUMBER
+   POSITION
 ========================================================= */
 
-.phone-number {
+.recipient-position {
+    color: #52697d;
+
+    font-weight: 500;
+
+    display: inline-block;
+}
+
+
+/* =========================================================
+   EMAIL
+========================================================= */
+
+.recipient-email {
     white-space: nowrap;
 
     font-weight: 500;
+
+    display: inline-block;
 }
 
-.whatsapp-icon {
-    color: #25D366;
 
-    margin-right: 4px;
+.email-icon {
+    color: #0f4c81;
 
-    font-size: 15px;
+    margin-right: 5px;
+
+    font-size: 14px;
 }
 
 
 /* =========================================================
-   STATUS
+   AUTOMATIC STATUS
+========================================================= */
+
+.status-automatic {
+    display: inline-block;
+
+    min-width: 85px;
+
+    background: #e8f2ff;
+
+    color: #0f4c81;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.status-manual {
+    display: inline-block;
+
+    min-width: 85px;
+
+    background: #f1f3f5;
+
+    color: #6c757d;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIVE STATUS
 ========================================================= */
 
 .status-active {
@@ -233,6 +338,7 @@
     font-size: 12px;
 }
 
+
 .btn-edit-recipient:hover {
     background: #ffc107;
 
@@ -254,6 +360,7 @@
     font-size: 12px;
 }
 
+
 .btn-delete-recipient:hover {
     background: #dc3545;
 
@@ -273,11 +380,13 @@
 
 
 /* SHOW ENTRIES */
+
 .dataTables_wrapper .dataTables_length {
     margin-bottom: 12px;
 
     color: #52697d;
 }
+
 
 .dataTables_wrapper .dataTables_length select {
     border: 1px solid #ced9e2;
@@ -291,12 +400,16 @@
 }
 
 
-/* SEARCH */
+/* =========================================================
+   SEARCH
+========================================================= */
+
 .dataTables_wrapper .dataTables_filter {
     margin-bottom: 12px;
 
     color: #52697d;
 }
+
 
 .dataTables_wrapper .dataTables_filter input {
     border: 1px solid #ced9e2;
@@ -311,7 +424,19 @@
 }
 
 
-/* INFORMATION */
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: #1976b9;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(25, 118, 185, 0.10);
+}
+
+
+/* =========================================================
+   INFORMATION
+========================================================= */
+
 .dataTables_wrapper .dataTables_info {
     padding-top: 12px !important;
 
@@ -321,10 +446,14 @@
 }
 
 
-/* PAGINATION */
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .dataTables_wrapper .dataTables_paginate {
     padding-top: 8px;
 }
+
 
 .dataTables_wrapper
 .dataTables_paginate
@@ -343,13 +472,14 @@
         display: block !important;
     }
 
-    .recipient-header
-    .btn-add-recipient {
+
+    .recipient-header .btn-add-recipient {
         margin-top: 12px;
     }
 
+
     .recipient-table {
-        min-width: 850px;
+        min-width: 900px;
     }
 
 }
@@ -357,6 +487,10 @@
 </style>
 
 
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
 
 <div class="container-fluid">
 
@@ -372,9 +506,9 @@
 
             <h4 class="recipient-page-title">
 
-                <i class="fa fa-whatsapp text-success mr-1"></i>
+                <i class="fa fa-envelope mr-1"></i>
 
-                Receptor WhatsApp
+                Receptor Email
 
             </h4>
 
@@ -388,9 +522,11 @@
         </div>
 
 
+
         <a
-            href="{% url 'whatsapp_recipient_add' %}"
-            class="btn btn-add-recipient">
+            href="{% url 'recipient_add' %}"
+            class="btn btn-add-recipient"
+        >
 
             <i class="fa fa-plus mr-1"></i>
 
@@ -412,9 +548,9 @@
         {% for message in messages %}
 
             <div
-                class="alert alert-{{ message.tags }} alert-dismissible fade show"
-                role="alert">
-
+                class="alert alert-{{ message.tags|default:'success' }} alert-dismissible fade show"
+                role="alert"
+            >
 
                 {{ message }}
 
@@ -423,14 +559,14 @@
                     type="button"
                     class="close"
                     data-dismiss="alert"
-                    aria-label="Close">
+                    aria-label="Close"
+                >
 
                     <span aria-hidden="true">
                         &times;
                     </span>
 
                 </button>
-
 
             </div>
 
@@ -448,70 +584,99 @@
 
 
         <!-- CARD HEADER -->
-        <div class="recipient-card-header">
 
+        <div class="recipient-card-header">
 
             <h6>
 
                 <i class="fa fa-list mr-1"></i>
 
-                LISTA RECEPTOR WHATSAPP
+                LISTA RECEPTOR EMAIL
 
             </h6>
-
 
         </div>
 
 
 
-        <!-- CARD BODY -->
+        <!-- =================================================
+             CARD BODY
+        ================================================== -->
+
         <div class="recipient-card-body">
 
 
             <div class="table-responsive">
 
 
-                <!-- =================================================
-                     DATATABLE
-                ================================================== -->
+                <!-- =============================================
+                     TABLE
+                ============================================== -->
 
                 <table
                     id="recipientTable"
                     class="table table-bordered table-sm table-hover recipient-table"
-                    width="100%">
+                    width="100%"
+                >
 
 
-                    <!-- =============================================
+                    <!-- =========================================
                          TABLE HEADER
-                    ============================================== -->
+                    ========================================== -->
 
                     <thead>
 
                         <tr>
 
+
+                            <!-- 0 -->
+
                             <th style="width:60px;">
                                 NU.
                             </th>
 
-                            <th>
-                                AJENDA
-                            </th>
+
+                            <!-- 1 -->
 
                             <th>
                                 NARAN
                             </th>
 
-                            <th style="width:190px;">
-                                NUMERU WHATSAPP
+
+                            <!-- 2 -->
+
+                            <th>
+                                KARGU
                             </th>
+
+
+                            <!-- 3 -->
+
+                            <th style="width:230px;">
+                                EMAIL
+                            </th>
+
+
+                            <!-- 4 -->
+
+                            <th style="width:120px;">
+                                AUTOMATIC
+                            </th>
+
+
+                            <!-- 5 -->
 
                             <th style="width:110px;">
                                 STATUS
                             </th>
 
+
+                            <!-- 6 -->
+
                             <th style="width:190px;">
                                 ASAUN
                             </th>
+
 
                         </tr>
 
@@ -519,9 +684,9 @@
 
 
 
-                    <!-- =============================================
+                    <!-- =========================================
                          TABLE BODY
-                    ============================================== -->
+                    ========================================== -->
 
                     <tbody>
 
@@ -532,8 +697,11 @@
                         <tr>
 
 
-                            <!-- NU -->
-                            <td>
+                            <!-- =================================
+                                 NUMBER
+                            ================================== -->
+
+                            <td class="text-center">
 
                                 {{ forloop.counter }}
 
@@ -541,39 +709,15 @@
 
 
 
-                            <!-- AGENDA -->
-                            <td>
+                            <!-- =================================
+                                 NAME - LEFT
+                            ================================== -->
 
-                                <span class="agenda-name">
+                            <td class="text-left">
 
-                                    {{ recipient.agenda.title }}
+                                <span class="recipient-name">
 
-                                </span>
-
-                            </td>
-
-
-
-                            <!-- NAME -->
-                            <td>
-
-                                {{ recipient.name }}
-
-                            </td>
-
-
-
-                            <!-- WHATSAPP -->
-                            <td>
-
-                                <span class="phone-number">
-
-
-                                    <i class="fa fa-whatsapp whatsapp-icon"></i>
-
-
-                                    {{ recipient.phone_number }}
-
+                                    {{ recipient.name }}
 
                                 </span>
 
@@ -581,8 +725,83 @@
 
 
 
-                            <!-- STATUS -->
-                            <td>
+                            <!-- =================================
+                                 POSITION - LEFT
+                            ================================== -->
+
+                            <td class="text-left">
+
+                                <span class="recipient-position">
+
+                                    {{ recipient.position|default:"-" }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 EMAIL - LEFT
+                            ================================== -->
+
+                            <td class="text-left">
+
+                                <span class="recipient-email">
+
+                                    <i class="fa fa-envelope email-icon"></i>
+
+                                    {{ recipient.email }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 AUTOMATIC
+                            ================================== -->
+
+                            <td class="text-center">
+
+
+                                {% if recipient.is_default %}
+
+
+                                    <span class="status-automatic">
+
+                                        <i class="fa fa-bell mr-1"></i>
+
+                                        SIM
+
+                                    </span>
+
+
+                                {% else %}
+
+
+                                    <span class="status-manual">
+
+                                        <i class="fa fa-ban mr-1"></i>
+
+                                        LAE
+
+                                    </span>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 STATUS
+                            ================================== -->
+
+                            <td class="text-center">
 
 
                                 {% if recipient.is_active %}
@@ -616,40 +835,42 @@
 
 
 
-                            <!-- ACTION -->
-                            <td>
+                            <!-- =================================
+                                 ACTION
+                            ================================== -->
+
+                            <td class="text-center">
 
 
                                 <!-- EDIT -->
+
                                 <a
-                                    href="{% url 'whatsapp_recipient_edit' recipient.pk %}"
+                                    href="{% url 'recipient_edit' recipient.pk %}"
                                     class="btn btn-sm btn-edit-recipient mr-1"
                                     data-toggle="tooltip"
-                                    title="Altera receptor">
-
+                                    title="Altera receptor"
+                                >
 
                                     <i class="fa fa-edit"></i>
 
                                     Altera
-
 
                                 </a>
 
 
 
                                 <!-- DELETE -->
+
                                 <a
-                                    href="{% url 'whatsapp_recipient_delete' recipient.pk %}"
+                                    href="{% url 'recipient_delete' recipient.pk %}"
                                     class="btn btn-sm btn-delete-recipient"
                                     data-toggle="tooltip"
                                     title="Hamos receptor"
-                                    onclick="return confirm('Ita boot hakarak hamos receptor ida ne?');">
-
+                                >
 
                                     <i class="fa fa-trash"></i>
 
                                     Hamos
-
 
                                 </a>
 
@@ -679,7 +900,6 @@
 
 
 </div>
-
 
 {% endblock %}
 
@@ -722,14 +942,26 @@ $(document).ready(function () {
         $('#recipientTable').DataTable({
 
 
+            /* =============================================
+               RESPONSIVE
+            ============================================== */
+
             responsive: true,
 
 
             autoWidth: false,
 
 
+            /* =============================================
+               PAGE LENGTH
+            ============================================== */
+
             pageLength: 10,
 
+
+            /* =============================================
+               LENGTH MENU
+            ============================================== */
 
             lengthMenu: [
 
@@ -740,44 +972,108 @@ $(document).ready(function () {
             ],
 
 
-            /* AGENDA SORT */
+            /* =============================================
+               DEFAULT ORDER
+
+               0 = NU.
+               1 = NARAN
+               2 = KARGU
+               3 = EMAIL
+               4 = AUTOMATIC
+               5 = STATUS
+               6 = ASAUN
+
+               Sort by NARAN
+            ============================================== */
+
             order: [
+
                 [1, 'asc']
+
             ],
 
 
+            /* =============================================
+               COLUMN CONFIGURATION
+            ============================================== */
+
             columnDefs: [
 
-                /* ALL COLUMNS CENTER */
+
+                /* -----------------------------------------
+                   NU.
+                   CENTER
+                ----------------------------------------- */
+
                 {
-                    targets: '_all',
+
+                    targets: [0],
+
                     className:
-                        'text-center align-middle'
-                },
-
-
-                /* NU + STATUS + ACTION NOT SORTABLE */
-                {
-                    targets: [
-                        0,
-                        4,
-                        5
-                    ],
+                        'text-center align-middle',
 
                     orderable: false
+
                 },
 
 
-                /* ACTION NOT SEARCHABLE */
+                /* -----------------------------------------
+                   NARAN
+                   KARGU
+                   EMAIL
+
+                   LEFT
+                ----------------------------------------- */
+
                 {
-                    targets: [5],
+
+                    targets: [1, 2, 3],
+
+                    className:
+                        'text-left align-middle'
+
+                },
+
+
+                /* -----------------------------------------
+                   AUTOMATIC
+                   STATUS
+                   ASAUN
+
+                   CENTER
+                ----------------------------------------- */
+
+                {
+
+                    targets: [4, 5, 6],
+
+                    className:
+                        'text-center align-middle',
+
+                    orderable: false
+
+                },
+
+
+                /* -----------------------------------------
+                   ACTION
+                   NOT SEARCHABLE
+                ----------------------------------------- */
+
+                {
+
+                    targets: [6],
 
                     searchable: false
+
                 }
 
             ],
 
 
+            /* =============================================
+               TETUN LANGUAGE
+            ============================================== */
 
             language: {
 
@@ -811,7 +1107,7 @@ $(document).ready(function () {
 
 
                 emptyTable:
-                    "Dadus receptor WhatsApp seidauk iha",
+                    "Dadus receptor Email seidauk iha",
 
 
                 loadingRecords:
@@ -824,14 +1120,18 @@ $(document).ready(function () {
 
                 paginate: {
 
+
                     first:
                         "Primeiru",
+
 
                     last:
                         "Ikus",
 
+
                     next:
                         "Oin",
+
 
                     previous:
                         "Kotuk"

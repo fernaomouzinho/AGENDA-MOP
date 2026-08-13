@@ -58,6 +58,52 @@ class CatAgenda(models.Model):
         return super(CatAgenda, self).save(*args, **kwargs)
 
 
+class AgendaRecipient(models.Model):
+
+    name = models.CharField(
+        max_length=150,
+        verbose_name="Naran"
+    )
+
+    position = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="Kargu"
+    )
+
+    email = models.EmailField(
+        unique=True,
+        verbose_name="Email"
+    )
+
+    is_default = models.BooleanField(
+        default=False,
+        verbose_name="Simu Ajenda Automaticamente"
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Ativu"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Agenda Recipient"
+        verbose_name_plural = "Agenda Recipients"
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"
+    
+    
+
 class Agenda(models.Model):
     """ Event model """
     title = models.CharField(
@@ -90,6 +136,13 @@ class Agenda(models.Model):
     status = models.CharField(max_length=20, choices=STATUS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    recipients = models.ManyToManyField(
+        "AgendaRecipient",
+        blank=True,
+        related_name="agendas",
+        verbose_name="Receptor Email"
+    )
 
     class Meta:
         # managed = True
@@ -281,3 +334,73 @@ class CommentInformative(models.Model):
 
     def __str__(self):
         return self.results[:60]
+
+  
+class AgendaNotification(models.Model):
+
+    REMINDER_1_DAY = "1_day"
+    REMINDER_2_HOURS = "2_hours"
+
+    REMINDER_CHOICES = (
+        (
+            REMINDER_1_DAY,
+            "1 Day Before"
+        ),
+        (
+            REMINDER_2_HOURS,
+            "2 Hours Before"
+        ),
+    )
+
+    agenda = models.ForeignKey(
+        Agenda,
+        on_delete=models.CASCADE,
+        related_name="email_notifications"
+    )
+
+    recipient = models.ForeignKey(
+        AgendaRecipient,
+        on_delete=models.CASCADE,
+        related_name="notifications"
+    )
+
+    reminder_type = models.CharField(
+        max_length=20,
+        choices=REMINDER_CHOICES
+    )
+
+    sent_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    success = models.BooleanField(
+        default=False
+    )
+
+    error_message = models.TextField(
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "agenda",
+                    "recipient",
+                    "reminder_type",
+                ],
+                name="unique_agenda_email_reminder"
+            )
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.agenda.title} - "
+            f"{self.recipient.name} - "
+            f"{self.reminder_type}"
+        )

@@ -1,0 +1,556 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================================
+       DELETE CARD
+    ========================================================= */
+
+    .delete-card {
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .delete-card-header {
+        background: linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+        color: #ffffff;
+
+        padding: 13px 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+    .delete-card-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+
+    .delete-card-header i {
+        margin-right: 6px;
+    }
+
+
+    /* =========================================================
+       BODY
+    ========================================================= */
+
+    .delete-card-body {
+        background: #f6f9fc;
+        padding: 25px;
+    }
+
+
+    /* =========================================================
+       WARNING ICON
+    ========================================================= */
+
+    .delete-warning {
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+
+    .delete-icon {
+        width: 62px;
+        height: 62px;
+
+        margin: 0 auto 12px auto;
+
+        border-radius: 50%;
+
+        background: #fde8e8;
+        color: #dc3545;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 25px;
+    }
+
+
+    .delete-warning h5 {
+        margin-bottom: 6px;
+
+        color: #17324d;
+
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+
+    .delete-warning p {
+        margin: 0;
+
+        color: #6b7d8c;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       RECIPIENT INFORMATION
+    ========================================================= */
+
+    .recipient-information {
+        background: #ffffff;
+
+        border: 1px solid #dce6ef;
+        border-radius: 8px;
+
+        overflow: hidden;
+
+        margin-bottom: 18px;
+    }
+
+
+    .recipient-info-title {
+        background: #eaf2f8;
+
+        color: #17324d;
+
+        padding: 9px 14px;
+
+        font-size: 13px;
+        font-weight: 600;
+
+        border-bottom: 1px solid #dce6ef;
+    }
+
+
+    .recipient-info-body {
+        padding: 5px 15px;
+    }
+
+
+    .recipient-info-row {
+        display: flex;
+        align-items: center;
+
+        padding: 10px 0;
+
+        border-bottom: 1px solid #edf1f5;
+    }
+
+
+    .recipient-info-row:last-child {
+        border-bottom: none;
+    }
+
+
+    .recipient-info-label {
+        width: 110px;
+        min-width: 110px;
+
+        color: #6b7d8c;
+
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .recipient-info-value {
+        color: #17324d;
+
+        font-size: 13px;
+        font-weight: 500;
+
+        word-break: break-word;
+    }
+
+
+    .recipient-info-value i {
+        color: #0f4c81;
+        margin-right: 5px;
+    }
+
+
+    /* =========================================================
+       DANGER MESSAGE
+    ========================================================= */
+
+    .danger-message {
+        display: flex;
+        align-items: flex-start;
+
+        background: #fff3f3;
+
+        border: 1px solid #f5c2c7;
+        border-radius: 6px;
+
+        padding: 11px 13px;
+
+        color: #842029;
+
+        font-size: 12px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .danger-message i {
+        margin-right: 8px;
+        margin-top: 2px;
+        color: #dc3545;
+    }
+
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    .delete-footer {
+        border-top: 1px solid #dfe7ee;
+
+        padding-top: 16px;
+
+        display: flex;
+        justify-content: flex-end;
+
+        gap: 7px;
+    }
+
+
+    /* CANCEL */
+
+    .btn-delete-cancel {
+        min-width: 110px;
+
+        background: #6c757d;
+        border-color: #6c757d;
+
+        color: #ffffff;
+
+        border-radius: 5px;
+
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+
+    .btn-delete-cancel:hover {
+        background: #5a6268;
+        border-color: #545b62;
+        color: #ffffff;
+    }
+
+
+    /* DELETE */
+
+    .btn-delete-confirm {
+        min-width: 110px;
+
+        background: #dc3545;
+        border-color: #dc3545;
+
+        color: #ffffff;
+
+        border-radius: 5px;
+
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+
+    .btn-delete-confirm:hover {
+        background: #b02a37;
+        border-color: #b02a37;
+        color: #ffffff;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media(max-width: 576px) {
+
+        .delete-card-body {
+            padding: 18px 15px;
+        }
+
+        .recipient-info-row {
+            display: block;
+        }
+
+        .recipient-info-label {
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+        .delete-footer {
+            display: block;
+        }
+
+        .delete-footer .btn {
+            width: 100%;
+            margin-bottom: 7px;
+        }
+
+    }
+
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7 col-md-9 col-sm-12">
+
+
+            <div class="card delete-card">
+
+
+                <!-- =================================================
+                     HEADER
+                ================================================== -->
+
+                <div class="delete-card-header">
+
+                    <h5>
+
+                        <i class="fa fa-trash"></i>
+
+                        Hamos Receptor Email
+
+                    </h5>
+
+                </div>
+
+
+                <!-- =================================================
+                     BODY
+                ================================================== -->
+
+                <div class="delete-card-body">
+
+
+                    <!-- WARNING -->
+
+                    <div class="delete-warning">
+
+                        <div class="delete-icon">
+
+                            <i class="fa fa-trash"></i>
+
+                        </div>
+
+
+                        <h5>
+                            Konfirma Hamos Receptor
+                        </h5>
+
+
+                        <p>
+                            Ita boot hakarak duni hamos receptor ida ne'e?
+                        </p>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         RECIPIENT INFORMATION
+                    ================================================== -->
+
+                    <div class="recipient-information">
+
+
+                        <div class="recipient-info-title">
+
+                            <i class="fa fa-user mr-1"></i>
+
+                            Informasaun Receptor
+
+                        </div>
+
+
+                        <div class="recipient-info-body">
+
+
+                            <!-- NAME -->
+
+                            <div class="recipient-info-row">
+
+                                <div class="recipient-info-label">
+                                    Naran
+                                </div>
+
+                                <div class="recipient-info-value">
+
+                                    <i class="fa fa-user"></i>
+
+                                    {{ recipient.name }}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- POSITION -->
+
+                            <div class="recipient-info-row">
+
+                                <div class="recipient-info-label">
+                                    Kargu
+                                </div>
+
+                                <div class="recipient-info-value">
+
+                                    <i class="fa fa-briefcase"></i>
+
+                                    {{ recipient.position|default:"-" }}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="recipient-info-row">
+
+                                <div class="recipient-info-label">
+                                    Email
+                                </div>
+
+                                <div class="recipient-info-value">
+
+                                    <i class="fa fa-envelope"></i>
+
+                                    {{ recipient.email }}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- STATUS -->
+
+                            <div class="recipient-info-row">
+
+                                <div class="recipient-info-label">
+                                    Status
+                                </div>
+
+                                <div class="recipient-info-value">
+
+                                    {% if recipient.is_active %}
+
+                                        <span class="badge badge-success">
+                                            Ativu
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge badge-secondary">
+                                            La Ativu
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         WARNING MESSAGE
+                    ================================================== -->
+
+                    <div class="danger-message">
+
+                        <i class="fa fa-exclamation-triangle"></i>
+
+                        <div>
+
+                            Receptor ida ne'e sei hamos husi sistema.
+                            Favor konfirma molok kontinua.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         FORM
+                    ================================================== -->
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div class="delete-footer">
+
+
+                            <!-- CANCEL -->
+
+                            <a
+                                href="{% url 'recipient_list' %}"
+                                class="btn btn-delete-cancel"
+                            >
+
+                                <i class="fa fa-times mr-1"></i>
+
+                                Kansela
+
+                            </a>
+
+
+                            <!-- DELETE -->
+
+                            <button
+                                type="submit"
+                                class="btn btn-delete-confirm"
+                            >
+
+                                <i class="fa fa-trash mr-1"></i>
+
+                                Hamos
+
+                            </button>
+
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import CatAgenda, Agenda, RequestAgenda, HistAgenda, Informative, CommentInformative
-from .form import CategoryAgendaForm, AgendaForm,  PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
+from .models import CatAgenda, Agenda,AgendaRecipient, RequestAgenda, HistAgenda, Informative, CommentInformative
+from .form import CategoryAgendaForm, AgendaForm, AgendaRecipientForm,  PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
 from django.contrib.auth.models import User
 from agendaapps.authentication.models import User
 from datetime import datetime
@@ -12,7 +12,8 @@ import os
 from agendaapps.authentication.decorators import allowed_users
 from agenda.utils import get_roles
 from django.db.models import Q
-current_datetime = datetime.now()
+from django.utils import timezone
+current_datetime = timezone.now()
 
 
 # Create your views here.
@@ -82,38 +83,133 @@ def agenda_list(request):
 
 @allowed_users(allowed_roles=['ajenda_admin'])
 def agenda_add(request):
+
     if request.method == "POST":
-        agendaform = AgendaForm(request.POST, request.FILES)
-        if agendaform.is_valid():
-            agendaform = agendaform.save(commit=False)
-        
-            if agendaform.start_time >= current_datetime:
-                agendaform.status = "Pending"
 
-            elif agendaform.start_time <= current_datetime and agendaform.end_time >= current_datetime:
-                agendaform.status = "Read"
+        form = AgendaForm(
+            request.POST,
+            request.FILES
+        )
 
-            elif agendaform.end_time < current_datetime:
-                agendaform.status = "Read"
-                
-            agendaform.save()
-            last_hist = HistAgenda.objects.all().first()
+        if form.is_valid():
 
-            ha = HistAgenda(id=agendaform.id, title=agendaform.title, title_slug=agendaform.title_slug, catagenda=agendaform.catagenda.name_category, institution=agendaform.institution.name_institution, start_time=agendaform.start_time, start_time_new=agendaform.start_time, end_time=agendaform.end_time, end_time_new=agendaform.end_time,
-                            location=agendaform.location, meeting_type=agendaform.meeting_type.name_type,location_new=agendaform.location, observation=agendaform.observation, is_cancel=agendaform.is_cancel, is_active=agendaform.is_active, status=agendaform.status, created_at=agendaform.created_at, updated_at=agendaform.updated_at)
+            agenda = form.save(
+                commit=False
+            )
+
+            # ==========================================
+            # Set Agenda status
+            # ==========================================
+
+            if agenda.start_time >= current_datetime:
+
+                agenda.status = "Pending"
+
+            elif (
+                agenda.start_time <= current_datetime
+                and
+                agenda.end_time >= current_datetime
+            ):
+
+                agenda.status = "Read"
+
+            elif agenda.end_time < current_datetime:
+
+                agenda.status = "Read"
+
+            # ==========================================
+            # Save Agenda first
+            # ==========================================
+
+            agenda.save()
+
+            # ==========================================
+            # IMPORTANT:
+            # Save selected Director / Minister
+            # from ManyToMany "recipients"
+            # ==========================================
+
+            form.save_m2m()
+
+            # ==========================================
+            # Create Agenda History
+            # ==========================================
+
+            ha = HistAgenda(
+                id=agenda.id,
+
+                title=agenda.title,
+
+                title_slug=agenda.title_slug,
+
+                catagenda=(
+                    agenda.catagenda.name_category
+                ),
+
+                institution=(
+                    agenda.institution.name_institution
+                ),
+
+                start_time=agenda.start_time,
+
+                start_time_new=agenda.start_time,
+
+                end_time=agenda.end_time,
+
+                end_time_new=agenda.end_time,
+
+                location=agenda.location,
+
+                location_new=agenda.location,
+
+                meeting_type=(
+                    agenda.meeting_type.name_type
+                ),
+
+                observation=agenda.observation,
+
+                is_cancel=agenda.is_cancel,
+
+                is_active=agenda.is_active,
+
+                status=agenda.status,
+
+                created_at=agenda.created_at,
+
+                updated_at=agenda.updated_at,
+            )
+
             ha.save()
 
-            
-            messages.success(request, ("New Data Added"))
-        return redirect('agenda_list')
+            messages.success(
+                request,
+                "New Data Added"
+            )
+
+            return redirect(
+                'agenda_list'
+            )
+
+        else:
+
+            # Useful during development
+            print(
+                agenda_form.errors
+            )
+
     else:
-        agendaform = AgendaForm()
-        context = {
-            'agendaform': agendaform,
-        }
 
-    return render(request, 'event/agenda_add.html', context)
+        form = AgendaForm()
 
+    context = {
+        'agendaform': form,
+    }
+
+    return render(
+        request,
+        'event/agenda_add.html',
+        context
+    )
 # ============================================= Agenda Edit ================================================================
 
 
@@ -985,32 +1081,35 @@ def agenda_notification_read(request):
 
     return redirect('home')
 
-#============================================= WhatsApp Recipient Management ================================================================
+#=============================================  Recipient Management ================================================================
 @allowed_users(allowed_roles=['ajenda_admin'])
-def whatsapp_recipient_list(request):
+def recipient_list(request):
 
-    recipients = (AgendaWhatsAppRecipient.objects
-        .select_related('agenda')
+    recipients = (
+        AgendaRecipient.objects
         .all()
-        .order_by('-created_at')
+        .order_by(
+            "position",
+            "name"
+        )
     )
 
     context = {
-        'recipients': recipients
+        "recipients": recipients,
     }
 
     return render(
         request,
-        'event/whatsapp_recipient/list.html',
+        "event/recipient/list.html",
         context
     )
     
 @allowed_users(allowed_roles=['ajenda_admin'])
-def whatsapp_recipient_add(request):
+def recipient_add(request):
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        form = AgendaWhatsAppRecipientForm(
+        form = AgendaRecipientForm(
             request.POST
         )
 
@@ -1020,42 +1119,40 @@ def whatsapp_recipient_add(request):
 
             messages.success(
                 request,
-                'Receptor WhatsApp aumenta ho susesu.'
+                "Receptor aumenta ho susesu."
             )
 
             return redirect(
-                'whatsapp_recipient_list'
+                "recipient_list"
             )
 
     else:
 
-        form = AgendaWhatsAppRecipientForm()
+        form = AgendaRecipientForm()
 
     context = {
-        'form': form,
-        'title': 'Aumenta Receptor WhatsApp'
+        "form": form,
+        "page_title": "Aumenta Receptor Email",
     }
 
     return render(
         request,
-        'event/whatsapp_recipient/form.html',
+        "event/recipient/form.html",
         context
     )
     
-allowed_users(allowed_roles=['ajenda_admin'])
-def whatsapp_recipient_edit(
-    request,
-    pk
-):
+    
+@allowed_users(allowed_roles=['ajenda_admin'])
+def recipient_edit(request, pk):
 
     recipient = get_object_or_404(
-        AgendaWhatsAppRecipient,
+        AgendaRecipient,
         pk=pk
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        form = AgendaWhatsAppRecipientForm(
+        form = AgendaRecipientForm(
             request.POST,
             instance=recipient
         )
@@ -1066,61 +1163,58 @@ def whatsapp_recipient_edit(
 
             messages.success(
                 request,
-                'Dadus receptor WhatsApp altera ho susesu.'
+                "Receptor atualiza ho susesu."
             )
 
             return redirect(
-                'whatsapp_recipient_list'
+                "recipient_list"
             )
 
     else:
 
-        form = AgendaWhatsAppRecipientForm(
+        form = AgendaRecipientForm(
             instance=recipient
         )
 
     context = {
-        'form': form,
-        'recipient': recipient,
-        'title': 'Altera Receptor WhatsApp'
+        "form": form,
+        "recipient": recipient,
+        "page_title": "Edita Receptor Email",
     }
 
     return render(
         request,
-        'event/whatsapp_recipient/form.html',
+        "event/recipient/form.html",
         context
     )
     
 @allowed_users(allowed_roles=['ajenda_admin'])
-def whatsapp_recipient_delete(
-    request,
-    pk
-):
+def recipient_delete(request, pk):
 
     recipient = get_object_or_404(
-        AgendaWhatsAppRecipient,
+        AgendaRecipient,
         pk=pk
     )
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         recipient.delete()
 
         messages.success(
             request,
-            'Receptor WhatsApp hamos ho susesu.'
+            "Receptor hamos ho susesu."
         )
 
         return redirect(
-            'whatsapp_recipient_list'
+            "recipient_list"
         )
 
     context = {
-        'recipient': recipient
+        "recipient": recipient,
     }
 
     return render(
         request,
-        'event/whatsapp_recipient/delete.html',
+        "event/recipient/delete.html",
         context
     )

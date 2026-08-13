@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="tet">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Lembransa Ajenda
+    </title>
+
+</head>
+
+
+<body style="
+    margin:0;
+    padding:0;
+    background:#eef3f7;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#334e68;
+">
+
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        width:100%;
+        background:#eef3f7;
+    "
+>
+
+    <tr>
+
+        <td
+            align="center"
+            style="
+                padding:32px 14px;
+            "
+        >
+
+
+            <!-- MAIN CONTAINER -->
+
+            <table
+                width="620"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                style="
+                    width:100%;
+                    max-width:620px;
+                    background:#ffffff;
+                    border:1px solid #dce5ed;
+                    border-radius:12px;
+                    overflow:hidden;
+                    box-shadow:0 5px 18px rgba(15,76,129,0.08);
+                "
+            >
+
+
+                <!-- =========================================
+                     HEADER
+                ========================================== -->
+
+                <tr>
+
+                    <td
+                        style="
+                            background:#0f4c81;
+                            padding:14px 10px;
+                            text-align:center;
+                        "
+                    >
+
+                      
+
+
+                        <div
+                            style="
+                                color:#ffffff;
+                                font-size:14px;
+                                font-weight:700;
+                                line-height:1.4;
+                            "
+                        >
+
+                            MINISTÉRIU DAS OBRAS PÚBLICAS
+
+                        </div>
+                          <div
+                            style="
+                                color:#dcecf7;
+                                font-size:11px;
+                                font-weight:700;
+                                letter-spacing:1.4px;
+                                text-transform:uppercase;
+                                margin-bottom:7px;
+                            "
+                        >
+
+                            REPÚBLICA DEMOCRÁTICA DE TIMOR-LESTE
+
+                        </div>
+
+                        <div
+                            style="
+                                color:#ffffff;
+                                font-size:10px;
+                                font-weight:600;
+                                line-height:1.3;
+                            "
+                        >
+
+                            Sistema Rejistu Ajenda-MOP
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+
+                <!-- =========================================
+                     BODY
+                ========================================== -->
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:10px;
+                        "
+                    >
+
+
+                        <!-- GREETING -->
+
+                        <p
+                            style="
+                                margin:0 0 14px 0;
+                                color:#334e68;
+                                font-size:15px;
+                                line-height:1.7;
+                            "
+                        >
+
+                            Prezado/a
+                            <strong style="color:#17324d;">
+                                {{ recipient.name }}
+                            </strong>,
+
+                        </p>
+
+
+                        <p
+                            style="
+                                margin:0 0 22px 0;
+                                color:#5f7487;
+                                font-size:14px;
+                                line-height:1.75;
+                            "
+                        >
+
+                            Ne'e mak notifikasaun automátika husi
+                            Sistema Rejistu Ajenda atu fó-hanoin
+                            kona-ba ajenda tuir mai.
+
+                        </p>
+
+
+
+                        <!-- =====================================
+                             REMINDER
+                        ====================================== -->
+
+                        <table
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="
+                                width:100%;
+                                margin-bottom:25px;
+                                background:#edf7fd;
+                                border:1px solid #cbe5f5;
+                                border-left:5px solid #1976b9;
+                                border-radius:7px;
+                            "
+                        >
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:10px 12px;
+                                    "
+                                >
+
+                                    <div
+                                        style="
+                                            color:#668399;
+                                            font-size:14px;
+                                            font-weight:700;
+                                            letter-spacing:1px;
+                                            margin-bottom:5px;
+                                        "
+                                    >
+
+                                        DETALLU AJENDA
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+                        <!-- =====================================
+                             DETAIL TABLE
+                        ====================================== -->
+
+                        <table
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="
+                                width:100%;
+                                border:1px solid #dce5ed;
+                                border-radius:8px;
+                                background:#ffffff;
+                                overflow:hidden;
+                            "
+                        >
+
+
+                            <!-- AGENDA -->
+
+                            <tr>
+
+                                <td
+                                    width="185"
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                        vertical-align:top;
+                                    "
+                                >
+
+                                    Ajenda
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#17324d;
+                                        font-size:14px;
+                                        font-weight:700;
+                                        vertical-align:top;
+                                    "
+                                >
+
+                                    {{ agenda.title }}
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- DATE -->
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                    "
+                                >
+
+                                    Data
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#334e68;
+                                        font-size:14px;
+                                    "
+                                >
+
+                                    {{ local_start|date:"d/m/Y" }}
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- START -->
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                    "
+                                >
+
+                                    Oras Hahú
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#334e68;
+                                        font-size:14px;
+                                    "
+                                >
+
+                                    {{ local_start|date:"H:i" }}
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- END -->
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                    "
+                                >
+
+                                    Oras Remata
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#334e68;
+                                        font-size:14px;
+                                    "
+                                >
+
+                                    {{ local_end|date:"H:i" }}
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- LOCATION -->
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                    "
+                                >
+
+                                    Fatin
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        border-bottom:1px solid #e5ecf1;
+                                        color:#334e68;
+                                        font-size:14px;
+                                    "
+                                >
+
+                                    {% if agenda.location %}
+
+                                        {{ agenda.location }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <!-- INSTITUTION -->
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        background:#f5f8fa;
+                                        color:#6c7f90;
+                                        font-size:13px;
+                                        font-weight:700;
+                                        vertical-align:top;
+                                    "
+                                >
+
+                                    Instituisaun ne'ebé kria Ajenda
+
+                                </td>
+
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        color:#334e68;
+                                        font-size:14px;
+                                        vertical-align:top;
+                                    "
+                                >
+
+                                    {{ agenda.institution }}
+
+                                </td>
+
+                            </tr>
+
+
+                        </table>
+
+
+
+                        <!-- =====================================
+                             NOTICE
+                        ====================================== -->
+
+                        <table
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="
+                                width:100%;
+                                margin-top:24px;
+                                background:#fffaf0;
+                                border:1px solid #f3dfb0;
+                                border-radius:6px;
+                            "
+                        >
+
+                            <tr>
+
+                                <td
+                                    style="
+                                        padding:11px 13px;
+                                        color:#6f5a27;
+                                        font-size:13px;
+                                        line-height:1.7;
+                                    "
+                                >
+
+                                    Favor prepara no partisipa
+                                    tuir data, oras no fatin
+                                    ne'ebé determina ona.
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+
+                        <!-- =====================================
+                             SIGNATURE
+                        ====================================== -->
+
+                        <p
+                            style="
+                                margin:25px 0 0 0;
+                                color:#455f73;
+                                font-size:14px;
+                                line-height:1.7;
+                            "
+                        >
+                    </td>
+
+                </tr>
+
+
+
+                <!-- =========================================
+                     FOOTER
+                ========================================== -->
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:17px 25px;
+                            background:#f5f8fa;
+                            border-top:1px solid #dfe7ee;
+                            text-align:center;
+                        "
+                    >
+
+                        <div
+                            style="
+                                color:#7b8d9d;
+                                font-size:11px;
+                                line-height:1.6;
+                            "
+                        >
+
+                            Mensajen ida ne'e haruka automatikamente
+                            husi Sistema Rejistu Ajenda.
+
+                            <br>
+
+                            Favor la responde diretamente
+                            ba email ida ne'e.
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+            </table>
+
+
+            <!-- SMALL FOOTER OUTSIDE CARD -->
+
+            <div
+                style="
+                    max-width:620px;
+                    padding-top:12px;
+                    color:#96a5b2;
+                    font-size:10px;
+                    text-align:center;
+                "
+            >
+
+                Ministériu das Obras Públicas · República Democrática Timor-Leste
+
+            </div>
+
+
+        </td>
+
+    </tr>
+
+</table>
+
+
+</body>
+
+</html>
