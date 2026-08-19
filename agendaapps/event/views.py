@@ -35,6 +35,7 @@ def categoryagenda_list(request):
         context = {
             'categoryagendaform': categoryagendaform,
             'catagendalist': catagendalist,
+            'roles':roles
         }
     return render(request, 'event/category_agenda_list.html', context)
 
@@ -75,7 +76,9 @@ def categoryagenda_delete(request, pk):
 # ======================================== List All Agenda ================================================================
 @allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_list(request):
+    roles = get_roles(request)
     context = {
+        'roles':roles
     }
     return render(request, 'event/agenda_list.html', context)
 
@@ -1130,7 +1133,7 @@ def agenda_notification_read(request):
 #=============================================  Recipient Management ================================================================
 @allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def recipient_list(request):
-
+    roles = get_roles(request)
     recipients = (
         AgendaRecipient.objects
         .all()
@@ -1142,6 +1145,7 @@ def recipient_list(request):
 
     context = {
         "recipients": recipients,
+        "roles":roles
     }
 
     return render(

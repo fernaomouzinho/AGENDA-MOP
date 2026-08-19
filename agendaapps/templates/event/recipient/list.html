@@ -569,7 +569,9 @@
         </div>
 
 
-
+          {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
+                           
+                            
         <a
             href="{% url 'recipient_add' %}"
             class="btn btn-add-recipient"
@@ -580,6 +582,7 @@
             Aumenta Receptor
 
         </a>
+        {% endif %}
 
 
     </div>
@@ -734,10 +737,11 @@
 
 
                             <!-- 6 -->
-
+                            {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
                             <th style="width:190px;">
                                 ASAUN
                             </th>
+                            {% endif %}
 
 
                         </tr>
@@ -900,7 +904,8 @@
                             <!-- =================================
                                  ACTION
                             ================================== -->
-
+                            
+                             {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
                             <td class="text-center">
 
                                 <div class="action-buttons">
@@ -943,7 +948,7 @@
 
                             </td>
 
-
+                        {% endif %}
                         </tr>
 
 

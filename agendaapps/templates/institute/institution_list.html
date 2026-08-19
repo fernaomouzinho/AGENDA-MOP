@@ -286,7 +286,8 @@
 
 
                     <!-- BUTTON AREA -->
-
+                    {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
+                                 
                     <div class="row align-items-center mb-3">
 
                         <div class="col-12 col-md-6 mb-2 mb-md-0">
@@ -305,6 +306,8 @@
                         </div>
 
                     </div>
+
+                    {% endif %}
 
 
 
@@ -351,11 +354,12 @@
                                     <th>
                                         NARAN INSTITUISAUN
                                     </th>
-
-                                    <th style="width:200px;">
+                                    {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
+                                    <th>
                                         ASAUN
                                     </th>
-
+                                    {% endif %}
+                                    
                                 </tr>
 
                             </thead>
@@ -389,7 +393,7 @@
 
 
                                     <!-- ACTION -->
-
+                                    {% if 'sii_admin' in roles or 'ajenda_admin' in roles %}
                                     <td>
 
 
@@ -418,26 +422,21 @@
 
                                         <!-- DELETE USING UUID -->
 
-                                        <a
-                                            href="{% url 'institution_delete' uuid=obj.uuid %}"
-                                            data-toggle="tooltip"
-                                            title="Hamos"
-                                            class="
-                                                btn
-                                                btn-sm
-                                                btn-action-delete
-                                                mb-1
-                                            "
-                                        >
-
-                                            <i class="fa fa-trash"></i>
-
-                                            Hamos
-
-                                        </a>
+                                
+                                    <a
+                                        href="{% url 'institution_delete' uuid=obj.uuid %}"
+                                        data-toggle="tooltip"
+                                        title="Hamos"
+                                        class="btn btn-sm btn-action-delete mb-1"
+                                    >
+                                        <i class="fa fa-trash"></i>
+                                        Hamos
+                                    </a>
+                                
 
 
                                     </td>
+                                    {% endif %}
 
 
                                 </tr>
