@@ -18,7 +18,7 @@ current_datetime = timezone.now()
 
 # Create your views here.
 # ======================================== Category Agenda Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def categoryagenda_list(request):
     roles = get_roles(request)
     catagendalist = CatAgenda.objects.all()
@@ -40,7 +40,7 @@ def categoryagenda_list(request):
 
 # ============================================= Category Agenda Edit ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def categoryagenda_edit(request, pk):
     catagendalist = CatAgenda.objects.all()
 
@@ -65,7 +65,7 @@ def categoryagenda_edit(request, pk):
         return render(request, 'event/category_agenda_edit.html', context)
 
 # ============================================= Category Agenda Delete ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def categoryagenda_delete(request, pk):
     single_categoryagenda = CatAgenda.objects.get(id=pk)
     single_categoryagenda.delete()
@@ -73,7 +73,7 @@ def categoryagenda_delete(request, pk):
     return redirect('categoryagenda_list')
 
 # ======================================== List All Agenda ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_list(request):
     context = {
     }
@@ -81,7 +81,7 @@ def agenda_list(request):
 
 # ============================================= Agenda Add ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_add(request):
 
     if request.method == "POST":
@@ -212,7 +212,7 @@ def agenda_add(request):
 # ============================================= Agenda Edit ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_edit(request, uuid):
 
     single_agenda = get_object_or_404(
@@ -261,7 +261,7 @@ def agenda_edit(request, uuid):
 # ============================================= Agenda Delete ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_delete(request, uuid):
 
     single_agenda = get_object_or_404(
@@ -296,7 +296,7 @@ def agenda_delete(request, uuid):
 
 
 # ================================================= Completed Agenda ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def completedAgenda_list(request):
     context = {
     }
@@ -304,14 +304,14 @@ def completedAgenda_list(request):
 
 
 # ================================================= Concluded Agenda ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def concludedAgenda_list(request):
     context = {
     }
     return render(request, 'event/concluded_agenda.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def concludedAgenda_list_detail(request, title_slug):
     single_agenda = Agenda.objects.get(title_slug=title_slug)
     all_agenda = Agenda.objects.all()
@@ -324,14 +324,14 @@ def concludedAgenda_list_detail(request, title_slug):
 # ======================================== Canceled ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def canceledAgenda_list(request):
     context = {
     }
     return render(request, 'event/canceled_agenda.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def canceledAgenda_list_detail(request, title_slug):
     single_agenda = Agenda.objects.get(title_slug=title_slug)
     all_agenda = Agenda.objects.all()
@@ -344,7 +344,7 @@ def canceledAgenda_list_detail(request, title_slug):
 # ========================================= Running ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def runningAgenda_list(request):
     current_datetime = datetime.now()
     context = {
@@ -353,14 +353,14 @@ def runningAgenda_list(request):
     return render(request, 'event/running_agenda.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def runningAgenda_list_detail(request, title_slug):
     context = {
     }
     return render(request, 'event/running_agenda_detail.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def runningagenda_change(request, pk):
 
     if request.method == 'POST':
@@ -372,7 +372,7 @@ def runningagenda_change(request, pk):
     return redirect('runningAgenda_list')
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def runningagenda_stop(request, pk):
     ag = Agenda.objects.get(id=pk)
     current_datetime = datetime.now()
@@ -383,14 +383,14 @@ def runningagenda_stop(request, pk):
 # ======================================== Upcoming ============================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def upcomingAgenda_list(request):
     context = {
     }
     return render(request, 'event/upcoming_agenda.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def upcomingAgenda_list_detail(request, title_slug):
     single_agenda = Agenda.objects.get(title_slug=title_slug)
     all_agenda = Agenda.objects.all()
@@ -401,7 +401,7 @@ def upcomingAgenda_list_detail(request, title_slug):
     return render(request, 'event/upcoming_agenda_detail.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def upcomingAgenda_edit(request, pk):
     single_agenda = Agenda.objects.get(id=pk)
     context = {
@@ -410,7 +410,7 @@ def upcomingAgenda_edit(request, pk):
     return render(request, 'event/upcoming_agenda_edit.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def upcomingAgenda_delete(request, pk):
 
     single_agenda = Agenda.objects.get(id=pk)
@@ -419,15 +419,14 @@ def upcomingAgenda_delete(request, pk):
     return redirect('upcoming_view')
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def upcomingAgenda_cancel(request, pk):
     single_agenda = Agenda.objects.get(id=pk)
     single_agenda.is_cancel = "True"
     single_agenda.save()
     return redirect('canceledAgenda_list')
 
-
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def upcomingAgenda_read(request):
     all_agenda = Agenda.objects.all()
     for a in all_agenda:
@@ -438,7 +437,7 @@ def upcomingAgenda_read(request):
 
 
 # ======================================== Postpone ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def postponeAgenda_list(request, pk):
 
     if request.method == "POST":
@@ -469,7 +468,7 @@ def postponeAgenda_list(request, pk):
 
 
 # ============================================= Comment Conclude Agenda Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def commentCoAgenda_add(request, pk):
 
     # ==========================================
@@ -617,7 +616,7 @@ def commentCoAgenda_add(request, pk):
 
 
 # ============================================= Comment Canceled Agenda Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def commentCaAgenda_add(request, pk):
 
     single_agenda = get_object_or_404(Agenda, pk=pk)
@@ -696,7 +695,7 @@ def commentCaAgenda_add(request, pk):
 
 
 # ============================================= Comment running Agenda Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def commentRuAgenda_add(request, pk):
     
     # single_informative = request.POST.get('informative_id')
@@ -748,7 +747,7 @@ def commentRuAgenda_add(request, pk):
 
 # ======================================== List Request Agenda ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def requestedagenda_list(request):
     context = {
     }
@@ -756,7 +755,7 @@ def requestedagenda_list(request):
 
 
 # ============================================= Request Agenda Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def requestedagenda_add(request):
     if request.method == "POST":
         requestedagendaform = RequestedAgendaForm(request.POST)
@@ -781,7 +780,7 @@ def requestedagenda_add(request):
 
 # ============================================= Requeste Agenda Edit ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def requestedagenda_edit(request, pk):
 
     if request.method == "POST":
@@ -806,8 +805,7 @@ def requestedagenda_edit(request, pk):
 
 # ======================================== Delete Requesting Agenda ================================================================
 
-
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def requestedagenda_delete(request, pk):
     single_requestedagenda = RequestAgenda.objects.get(id=pk)
     single_requestedagenda.delete()
@@ -817,7 +815,7 @@ def requestedagenda_delete(request, pk):
 # ========================================  Requesting Agenda Read ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def requestedagenda_read(request):
     all_requestedagenda = RequestAgenda.objects.all()
     for a in all_requestedagenda:
@@ -829,7 +827,7 @@ def requestedagenda_read(request):
 # ======================================== Waitting Requesting Agenda ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def waitting_requestedagenda_list(request, pk):
 
     context = {
@@ -837,28 +835,27 @@ def waitting_requestedagenda_list(request, pk):
     return render(request, 'event/request_waitting_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def waitting_requestedagendauga_list(request):
     context = {
     }
     return render(request, 'event/waitting/request_waittinguga_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def waitting_requestedagendauap_list(request):
     context = {
     }
     return render(request, 'event/waitting/request_waittinguap_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def waitting_requestedagendaucvq_list(request):
     context = {
     }
     return render(request, 'event/waitting/request_waittingucvq_list.html', context)
 
-
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def waitting_requestedagendauedc_list(request):
     context = {
     }
@@ -867,28 +864,28 @@ def waitting_requestedagendauedc_list(request):
 
 
 # ======================================== Waitting Requesting Agenda ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def approved_requestedagendauga_list(request):
     context = {
     }
     return render(request, 'event/approve/request_approveuga_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def approved_requestedagendauap_list(request):
     context = {
     }
     return render(request, 'event/approve/request_approveuap_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def approved_requestedagendaucvq_list(request):
     context = {
     }
     return render(request, 'event/approve/request_approveucvq_list.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def approved_requestedagendauedc_list(request):
     context = {
     }
@@ -899,7 +896,7 @@ def approved_requestedagendauedc_list(request):
 # ======================================== Aprove Request Agenda ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def requestedagenda_approve(request, pk):
     all_requestedagenda = RequestAgenda.objects.get(id=pk)
     all_requestedagenda.is_active = "True"
@@ -920,7 +917,7 @@ def requestedagenda_approve(request, pk):
 # ======================================== List All Informative ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def informative_list(request):
     context = {
     }
@@ -928,7 +925,7 @@ def informative_list(request):
 
 
 # ============================================= Informative Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def informative_add(request):
     
     if request.method == "POST":
@@ -950,7 +947,7 @@ def informative_add(request):
 # ============================================= Agenda Edit ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def informative_edit(request, pk):
     if request.method == "POST":
         single_informative = Informative.objects.get(pk=pk)
@@ -974,7 +971,7 @@ def informative_edit(request, pk):
 # ============================================= Agenda Delete ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def informative_delete(request, pk):
 
     single_informative = Informative.objects.get(id=pk)
@@ -984,7 +981,7 @@ def informative_delete(request, pk):
 
 
 # ================================================= Concluded ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def executedInformative_list(request):
    
     context = {
@@ -992,7 +989,7 @@ def executedInformative_list(request):
     return render(request, 'event/executed_informative.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def executedInformative_list_detail(request, title_slug):
    
     single_informative = Informative.objects.get(title_slug=title_slug)
@@ -1009,7 +1006,7 @@ def executedInformative_list_detail(request, title_slug):
     return render(request, 'event/executed_informative_detail.html', context)
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def executeInformative_change(request, pk):
     single_informative = Informative.objects.get(id=pk)
     single_informative.is_done = True
@@ -1017,7 +1014,7 @@ def executeInformative_change(request, pk):
     return redirect('executedInformative_list')
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def unexecutedInformative_list(request):
     context = {
     }
@@ -1026,7 +1023,7 @@ def unexecutedInformative_list(request):
 # ================================================= Completed Informative ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def completedInformative_list(request):
     context = {
     }
@@ -1035,7 +1032,7 @@ def completedInformative_list(request):
 # ============================================= Comment Executed Informative Add ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def commentExInformative_add(request, pk):
     
     single_informative = Informative.objects.get(id=pk)
@@ -1073,7 +1070,7 @@ def commentExInformative_add(request, pk):
 
 
 # ============================================= Comment Executed Informative Add ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def commentExInformative_edit(request, pk):
     single_informative = Informative.objects.get(id=pk)
     single_commentinformative = CommentInformative.objects.filter(
@@ -1117,7 +1114,7 @@ def commentExInformative_edit(request, pk):
 
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def agenda_notification_read(request):
 
     Agenda.objects.filter(
@@ -1131,7 +1128,7 @@ def agenda_notification_read(request):
     return redirect('home')
 
 #=============================================  Recipient Management ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def recipient_list(request):
 
     recipients = (
@@ -1153,7 +1150,7 @@ def recipient_list(request):
         context
     )
     
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def recipient_add(request):
 
     if request.method == "POST":
@@ -1195,7 +1192,7 @@ def recipient_add(request):
 # EDIT RECIPIENT USING UUID
 # =========================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def recipient_edit(request, uuid):
 
     recipient = get_object_or_404(
@@ -1246,7 +1243,7 @@ def recipient_edit(request, uuid):
 # DELETE RECIPIENT USING UUID
 # =========================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def recipient_delete(request, uuid):
 
     recipient = get_object_or_404(

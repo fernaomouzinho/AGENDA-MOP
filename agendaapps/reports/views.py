@@ -9,6 +9,8 @@ from .form import CalendarPickerForm,AgendaSearchForm
 from agendaapps.reports.models import Semestral, Trimestral, Mensual
 import os
 from pathlib import Path
+from agendaapps.authentication.decorators import allowed_users
+from agenda.utils import get_roles
 # from reportlab.pdfgen    import canvas
 # from reportlab.lib.utils import ImageReader
 # from datetime            import datetime
@@ -17,7 +19,7 @@ from pathlib import Path
 
 # Create your views here.
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_agenda(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -29,7 +31,7 @@ def report_agenda(request):
 
     return render(request, 'report/report_home.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_year(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -42,7 +44,7 @@ def report_based_year(request, year):
 
 
 #======================================= ANUAL ========================================#
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_anual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -59,7 +61,7 @@ def report_based_anual(request, year):
 
 #=================================== SEMESTRAL ========================================#
 # Semestral Annual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -71,7 +73,7 @@ def report_based_semestral(request, year):
     return render(request, 'report/report_semestral.html', context)
 
 # Semestral Annual Detail
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -104,7 +106,7 @@ def report_based_semestral_detail(request, year, name_slug):
     return render(request, 'report/report_semestral_detail.html', context)
 
 # Semestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_category_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -142,7 +144,7 @@ def report_based_semestral_category_detail(request, year, name_slug, name_cat_sl
 
 
 # Semestral Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_concluded_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -172,7 +174,7 @@ def report_based_semestral_concluded_detail(request, year, name_slug):
 
 
 # Semestral Category Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_canceled_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -201,7 +203,7 @@ def report_based_semestral_canceled_detail(request, year, name_slug):
 
 
 # Semestral category Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_category_concluded_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -238,7 +240,7 @@ def report_based_semestral_category_concluded_detail(request, year, name_slug, n
     return render(request, 'report/report_semestral_category_concluded_detail.html', context)
 
 # Semestral Category Canceled
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_semestral_category_canceled_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -277,7 +279,7 @@ def report_based_semestral_category_canceled_detail(request, year, name_slug, na
 
 #======================================= TRIMESTRAL ========================================#
 # Trimestral Annual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -288,7 +290,7 @@ def report_based_trimestral(request, year):
     return render(request, 'report/report_trimestral.html', context)
 
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -328,7 +330,7 @@ def report_based_trimestral_detail(request, year, name_slug):
 
 
 # Trimestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_category_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -377,7 +379,7 @@ def report_based_trimestral_category_detail(request, year, name_slug, name_cat_s
     return render(request, 'report/report_trimestral_category_detail.html', context)
 
 # Trimestral Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_concluded_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -417,7 +419,7 @@ def report_based_trimestral_concluded_detail(request, year, name_slug):
 
 
 # Trimestral Canceled
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_canceled_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -457,7 +459,7 @@ def report_based_trimestral_canceled_detail(request, year, name_slug):
 
 
 # Trimestral Category Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_category_concluded_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -507,7 +509,7 @@ def report_based_trimestral_category_concluded_detail(request, year, name_slug, 
     return render(request, 'report/report_trimestral_category_concluded_detail.html', context)
 
 # Trimestral Category Canceled
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_trimestral_category_canceled_detail(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -558,7 +560,7 @@ def report_based_trimestral_category_canceled_detail(request, year, name_slug, n
 
 #=================================== MENSAL ======================================#
 #Mensal Anual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -572,7 +574,7 @@ def report_based_mensual(request, year):
     return render(request, 'report/report_mensual.html', context)
 
 #Mensal Anual Detail
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -592,7 +594,7 @@ def report_based_mensual_detail(request, year, name_slug):
 
 
 #Mensal Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_concluded_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -612,7 +614,7 @@ def report_based_mensual_concluded_detail(request, year, name_slug):
 
 
 #Mensal Canceled
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_canceled_detail(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -631,7 +633,7 @@ def report_based_mensual_canceled_detail(request, year, name_slug):
     return render(request, 'report/report_mensual_canceled_detail.html', context)
 
 #Mensal Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_category_detail(request, year, name_slug, name_cat_slug ):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -653,7 +655,7 @@ def report_based_mensual_category_detail(request, year, name_slug, name_cat_slug
 
 
 #Mensal Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_category_concluded_detail(request, year, name_slug, name_cat_slug ):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -675,7 +677,7 @@ def report_based_mensual_category_concluded_detail(request, year, name_slug, nam
 
 
 #Mensal Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_mensual_category_canceled_detail(request, year, name_slug, name_cat_slug ):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -697,7 +699,7 @@ def report_based_mensual_category_canceled_detail(request, year, name_slug, name
 
 
 # Category Annual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_catagenda_annual(request, year, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -714,7 +716,7 @@ def report_based_catagenda_annual(request, year, name_cat_slug):
     return render(request, 'report/report_catagenda_annual.html', context)
 
 #Concluded Annual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_concludedagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -730,7 +732,7 @@ def report_based_concludedagenda_annual(request, year):
     return render(request, 'report/report_concludedagenda_annual.html', context)
 
 #Canceled Annual
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_canceledagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -744,7 +746,7 @@ def report_based_canceledagenda_annual(request, year):
     }
     return render(request, 'report/report_canceledagenda_annual.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_upcomingagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -762,7 +764,7 @@ def report_based_upcomingagenda_annual(request, year):
 
 #=================================== DAILY ======================================#
 #Daily
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def report_based_daily(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -791,7 +793,7 @@ def report_based_daily(request):
 
 #===================================================== PRINT REPORT ================================================
 # Report all Agenda Anual except upcoming agenda
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -806,7 +808,7 @@ def print_all_reportagenda_annual(request, year):
     return render(request, 'report/print/print_all_reportagenda_annual.html', context)
 
 # Report all Agenda based Semestre except upcoming agenda
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -839,7 +841,7 @@ def print_all_reportagenda_semestral(request, year, name_slug):
 
 
 # Report all Agenda based Semestre except upcoming agenda
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral_concluded(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -871,7 +873,7 @@ def print_all_reportagenda_semestral_concluded(request, year, name_slug):
     return render(request, 'report/print/print_all_reportagenda_semestral_concluded.html', context)
 
 # Report all Agenda based Semestre except upcoming agenda
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral_canceled(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -902,7 +904,7 @@ def print_all_reportagenda_semestral_canceled(request, year, name_slug):
 
 
 # Trimestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral_category(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -940,7 +942,7 @@ def print_all_reportagenda_semestral_category(request, year, name_slug, name_cat
     return render(request, 'report/print/print_all_reportagenda_semestral_category.html', context)
 
 # Trimestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral_category_concluded(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -979,7 +981,7 @@ def print_all_reportagenda_semestral_category_concluded(request, year, name_slug
 
 
 # Trimestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_semestral_category_canceled(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1019,7 +1021,7 @@ def print_all_reportagenda_semestral_category_canceled(request, year, name_slug,
 
 #================================= Report all Agenda based Trimester except upcoming agenda =================
 # Print Report Trimestral
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1060,7 +1062,7 @@ def print_all_reportagenda_trimestral(request, year, name_slug):
 
 
 # Print Report Trimestral Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral_concluded(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1099,7 +1101,7 @@ def print_all_reportagenda_trimestral_concluded(request, year, name_slug):
     return render(request, 'report/print/print_all_reportagenda_trimestral_concluded.html', context)
 
 # Print Report Trimestral Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral_canceled(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1138,7 +1140,7 @@ def print_all_reportagenda_trimestral_canceled(request, year, name_slug):
     return render(request, 'report/print/print_all_reportagenda_trimestral_canceled.html', context)
 
 # Print Report Trimestral Category
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral_category(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1187,7 +1189,7 @@ def print_all_reportagenda_trimestral_category(request, year, name_slug, name_ca
     return render(request, 'report/print/print_all_reportagenda_trimestral_category.html', context)
 
 # Print Report Trimestral Category Concluded
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral_category_concluded(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1237,7 +1239,7 @@ def print_all_reportagenda_trimestral_category_concluded(request, year, name_slu
     return render(request, 'report/print/print_all_reportagenda_trimestral_category_concluded.html', context)
 
 # Print Report Trimestral Category Canceled
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_trimestral_category_canceled(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1286,7 +1288,7 @@ def print_all_reportagenda_trimestral_category_canceled(request, year, name_slug
     return render(request, 'report/print/print_all_reportagenda_trimestral_category_canceled.html', context)
 
 # ==============================  Report all Agenda based Mensual except upcoming agenda ================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1302,7 +1304,7 @@ def print_all_reportagenda_mensual(request, year, name_slug):
     }
     return render(request, 'report/print/print_all_reportagenda_mensual.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual_concluded(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1320,7 +1322,7 @@ def print_all_reportagenda_mensual_concluded(request, year, name_slug):
     }
     return render(request, 'report/print/print_all_reportagenda_mensual_concluded.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual_canceled(request, year, name_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1339,7 +1341,7 @@ def print_all_reportagenda_mensual_canceled(request, year, name_slug):
     return render(request, 'report/print/print_all_reportagenda_mensual_canceled.html', context)
 
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual_category(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1359,7 +1361,7 @@ def print_all_reportagenda_mensual_category(request, year, name_slug, name_cat_s
     }
     return render(request, 'report/print/print_all_reportagenda_mensual_category.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual_category_concluded(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1379,7 +1381,7 @@ def print_all_reportagenda_mensual_category_concluded(request, year, name_slug, 
     }
     return render(request, 'report/print/print_all_reportagenda_mensual_category_concluded.html', context)
 
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_mensual_category_canceled(request, year, name_slug, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1400,7 +1402,7 @@ def print_all_reportagenda_mensual_category_canceled(request, year, name_slug, n
     return render(request, 'report/print/print_all_reportagenda_mensual_category_canceled.html', context)
 
 # ==============================  Report all Agenda based Category Anual except upcoming agenda ================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportagenda_category(request, year, name_cat_slug):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1417,7 +1419,7 @@ def print_all_reportagenda_category(request, year, name_cat_slug):
 
 
 # ==============================  Report all Agenda based Concluded Anual except upcoming agenda ================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportconcludedagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1432,7 +1434,7 @@ def print_all_reportconcludedagenda_annual(request, year):
     return render(request, 'report/print/print_all_reportconcludedagenda_annual.html', context)
 
 # ==============================  Report all Agenda based Canceled Annual except upcoming agenda ================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportcanceledagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1446,7 +1448,7 @@ def print_all_reportcanceledagenda_annual(request, year):
     return render(request, 'report/print/print_all_reportcanceledagenda_annual.html', context)
 
 # ==============================  Report all Agenda based Upcoming Annual  ================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_all_reportupcomingagenda_annual(request, year):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -1460,7 +1462,7 @@ def print_all_reportupcomingagenda_annual(request, year):
     return render(request, 'report/print/print_all_reportupcomingagenda_annual.html', context)
 
 # ======================================  Report Daily Agenda  =====================================================
-@login_required(login_url="/login/")
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def print_each_reportagenda_daily(request, title_slug):
     if not request.user.is_authenticated:
         return redirect('login')

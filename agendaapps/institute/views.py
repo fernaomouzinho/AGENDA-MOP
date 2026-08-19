@@ -10,7 +10,7 @@ from agenda.utils import get_roles
 
 # Create your views here.
 # ======================================== List All Institute ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def institution_list(request):
     roles = get_roles(request)
     context = {
@@ -20,7 +20,7 @@ def institution_list(request):
 
 # ============================================= Institute Add ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def institution_add(request):
     roles = get_roles(request)
 
@@ -44,7 +44,7 @@ def institution_add(request):
 # ============================================= Institute Edit ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def institution_edit(request, uuid):
 
     roles = get_roles(request)
@@ -98,7 +98,7 @@ def institution_edit(request, uuid):
 
 # ============================================= Institute Delete ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def institution_delete(request, uuid):
 
     roles = get_roles(request)
@@ -140,7 +140,7 @@ def institution_delete(request, uuid):
 # Create your views here.
 
 # ======================================== List All Attendence ================================================================
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def attendence_list(request):
     roles = get_roles(request)
     context = {
@@ -151,7 +151,7 @@ def attendence_list(request):
 # ============================================= Attendence Add ================================================================
 
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def attendence_add(request):
     roles = get_roles(request)
 
@@ -174,7 +174,7 @@ def attendence_add(request):
 
 # ============================================= Attendence Edit ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
 def attendence_edit(request, pk):
     roles = get_roles(request)
     if request.method == "POST":
@@ -199,7 +199,7 @@ def attendence_edit(request, pk):
 
 # ============================================= Attendence Delete ================================================================
 
-@allowed_users(allowed_roles=['ajenda_admin'])
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
 def attendence_delete(request, pk):
     roles = get_roles(request)
     single_attendence = Attendence.objects.get(id=pk)

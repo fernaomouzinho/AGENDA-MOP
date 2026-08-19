@@ -75,6 +75,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'agenda.wsgi.application'
 AUTH_USER_MODEL = 'authentication.User'
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://agenda.mop1.gov.tl",
+    "https://mop1.gov.tl",
+]
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
