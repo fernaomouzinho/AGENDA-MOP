@@ -1,95 +1,1064 @@
 {% load static %}
+
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% if title %}
-<title>MOP AGENDA - {{ title }}</title>
-{% else %}
-<title>MOP AGENDA</title>
-{% endif %}
+    <meta charset="utf-8">
 
-<link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
-<link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
-<link rel="icon" href="{% static 'main/images/favicon.png' %}">
-<link rel="stylesheet" href="{% static 'main/css/layout.css' %}">
-<script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <meta
+        name="viewport"
+        content="
+            width=device-width,
+            initial-scale=1
+        "
+    >
+
+
+    {% if title %}
+
+        <title>
+            MOP AGENDA - {{ title }}
+        </title>
+
+    {% else %}
+
+        <title>
+            MOP AGENDA
+        </title>
+
+    {% endif %}
+
+
+    <!-- Bootstrap -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'main/css/bootstrap.min.css' %}"
+    >
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'main/font-awesome/css/font-awesome.min.css' %}"
+    >
+
+
+    <!-- Favicon -->
+
+    <link
+        rel="icon"
+        href="{% static 'main/images/favicon.png' %}"
+    >
+
+
+    <!-- Main Layout -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'main/css/layouts.css' %}"
+    >
+
+
+    <!-- JQuery -->
+
+    <script
+        src="{% static 'main/js/jquery.min.js' %}"
+    ></script>
+
+
+    <style>
+
+        /* Your existing sidebar CSS */
+
+        .submenu-link {
+            padding-left: 42px !important;
+            font-size: 15px;
+        }
+
+        .active-submenu {
+            background-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            font-weight: 700;
+        }
+
+        .agenda-arrow {
+            transition:
+                transform
+                0.25s ease;
+        }
+
+        .agenda-menu[aria-expanded="true"]
+        .agenda-arrow {
+            transform:
+                rotate(
+                    180deg
+                );
+        }
+
+
+        /*
+         * PASTE COMPLETE
+         * NOTIFICATION CSS HERE
+         */
+
+    </style>
+
 </head>
+
+
 <body>
 
-<!-- HEADER -->
-{% include 'includes/header.html' %}
-<!-- SIDEBAR -->
-{% include 'includes/sidebar.html' %}
-<!-- PAGE -->
-<div class="page-wrapper">
-    <!-- CONTENT -->
-    <div class="main-content">
-        {% block content %}
-        {% endblock %}
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    {% include 'includes/header.html' %}
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    {% include 'includes/sidebar.html' %}
+
+
+    <!-- =====================================================
+         PAGE
+    ====================================================== -->
+
+    <div class="page-wrapper">
+
+        <div class="main-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
     </div>
 
-</div>
-<!-- FIXED FOOTER -->
-{% include 'includes/footer.html' %}
 
-<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-<script>
-function toggleSidebar(){
-    document.getElementById("sidebar").classList.toggle("show");
-}
-</script>
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
 
-{% block scripts %}{% endblock %}
-
-{% block extrascripts %}
+    {% include 'includes/footer.html' %}
 
 
-<script> 
-    (function () {
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
 
-    let running = false;
+    <script
+        src="{% static 'main/js/bootstrap.min.js' %}"
+    ></script>
 
-    const LOGIN_URL = "http://localhost:5173/login";
-    const INTERVAL = 10000;
 
-    async function checkPortalSession() {
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-        if (running) return;
-        running = true;
+    <script>
 
-        try {
-            const res = await fetch("/api/agenda-auth-status/", {
-                method: "GET",
-                credentials: "include",
-                cache: "no-store"
-            });
+        function toggleSidebar() {
 
-            if (!res.ok) return;
+            document
+                .getElementById(
+                    "sidebar"
+                )
+                .classList
+                .toggle(
+                    "show"
+                );
+        }
 
-            const data = await res.json();
+    </script>
 
-            //  ONLY TRUST BACKEND RESULT
-            if (data.active === false) {
-                window.location.replace(LOGIN_URL);
+
+    <!-- =====================================================
+         PAGE SCRIPTS
+    ====================================================== -->
+
+    {% block scripts %}
+    {% endblock %}
+
+
+    {% block extrascripts %}
+
+
+        <!-- =================================================
+             SSO SESSION CHECK
+        ================================================== -->
+
+        <script>
+
+        (function () {
+
+            let running =
+                false;
+
+            const LOGIN_URL =
+                "http://localhost:5173/login";
+
+            const INTERVAL =
+                10000;
+
+
+            async function checkPortalSession() {
+
+                if (running) {
+                    return;
+                }
+
+                running =
+                    true;
+
+
+                try {
+
+                    const res =
+                        await fetch(
+                            "/api/agenda-auth-status/",
+                            {
+                                method:
+                                    "GET",
+
+                                credentials:
+                                    "include",
+
+                                cache:
+                                    "no-store"
+                            }
+                        );
+
+
+                    if (!res.ok) {
+                        return;
+                    }
+
+
+                    const data =
+                        await res.json();
+
+
+                    if (
+                        data.active
+                        ===
+                        false
+                    ) {
+
+                        window.location.replace(
+                            LOGIN_URL
+                        );
+
+                    }
+
+                }
+
+                catch (e) {
+
+                    // Ignore temporary
+                    // network errors.
+
+                }
+
+                finally {
+
+                    running =
+                        false;
+
+                }
+
             }
 
-        } catch (e) {
-            // ignore
-        } finally {
-            running = false;
+
+            checkPortalSession();
+
+
+            setInterval(
+                checkPortalSession,
+                INTERVAL
+            );
+
+        })();
+
+        </script>
+
+
+        <!-- =================================================
+             LIVE NOTIFICATION
+        ================================================== -->
+
+        <script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        // =====================================================
+        // URL
+        // =====================================================
+
+        const liveUrl =
+            "{% url 'notification_live' %}";
+
+
+        // =====================================================
+        // ELEMENTS
+        // =====================================================
+
+        const notificationBox =
+            document.getElementById(
+                "notificationBox"
+            );
+
+
+        const bell =
+            document.getElementById(
+                "notificationBell"
+            );
+
+
+        const dropdown =
+            document.getElementById(
+                "notificationDropdown"
+            );
+
+
+        const countElement =
+            document.getElementById(
+                "notificationCount"
+            );
+
+
+        const headerCount =
+            document.getElementById(
+                "notificationHeaderCount"
+            );
+
+
+        const notificationBody =
+            document.getElementById(
+                "notificationDropdownBody"
+            );
+
+
+        // =====================================================
+        // SAFETY CHECK
+        // =====================================================
+
+        if (
+            !notificationBox
+            ||
+            !bell
+            ||
+            !dropdown
+        ) {
+
+            return;
         }
+
+
+        // =====================================================
+        // CURRENT UNREAD COUNT
+        // =====================================================
+
+        let previousCount = 0;
+
+
+        if (
+            countElement
+            &&
+            countElement.textContent
+        ) {
+
+            const rawCount =
+                countElement
+                .textContent
+                .trim()
+                .replace(
+                    "+",
+                    ""
+                );
+
+
+            previousCount =
+                parseInt(
+                    rawCount
+                )
+                ||
+                0;
+        }
+
+
+        // =====================================================
+        // ESCAPE HTML
+        // =====================================================
+
+        function escapeHtml(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value || "";
+
+            return div.innerHTML;
+        }
+
+
+        // =====================================================
+        // OPEN DROPDOWN
+        // =====================================================
+
+        function openDropdown() {
+
+            dropdown.classList.add(
+                "show"
+            );
+
+
+            bell.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+
+            loadNotifications();
+        }
+
+
+        // =====================================================
+        // CLOSE DROPDOWN
+        // =====================================================
+
+        function closeDropdown() {
+
+            dropdown.classList.remove(
+                "show"
+            );
+
+
+            bell.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+
+
+        // =====================================================
+        // BELL CLICK
+        // =====================================================
+
+        bell.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                if (
+                    dropdown.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    closeDropdown();
+
+                }
+
+                else {
+
+                    openDropdown();
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // CLICK INSIDE
+        // =====================================================
+
+        dropdown.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        // =====================================================
+        // CLICK OUTSIDE
+        // =====================================================
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !notificationBox.contains(
+                        event.target
+                    )
+                ) {
+
+                    closeDropdown();
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // ESC KEY
+        // =====================================================
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeDropdown();
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // NOTIFICATION STYLE
+        // =====================================================
+
+        function notificationStyle(type) {
+
+            if (
+                type === "AGENDA_NEW"
+            ) {
+
+                return {
+
+                    ball:
+                        "notification-ball-new",
+
+                    icon:
+                        "fa-calendar-plus-o",
+                };
+            }
+
+
+            if (
+                type === "AGENDA_UPDATE"
+            ) {
+
+                return {
+
+                    ball:
+                        "notification-ball-update",
+
+                    icon:
+                        "fa-pencil",
+                };
+            }
+
+
+            if (
+                type === "DELEGATION"
+            ) {
+
+                return {
+
+                    ball:
+                        "notification-ball-delegation",
+
+                    icon:
+                        "fa-share",
+                };
+            }
+
+
+            if (
+                type === "REMINDER"
+            ) {
+
+                return {
+
+                    ball:
+                        "notification-ball-reminder",
+
+                    icon:
+                        "fa-clock-o",
+                };
+            }
+
+
+            return {
+
+                ball:
+                    "notification-ball-new",
+
+                icon:
+                    "fa-bell",
+            };
+        }
+
+
+        // =====================================================
+        // UPDATE COUNT
+        // =====================================================
+
+        function updateCount(count) {
+
+            count =
+                Number(
+                    count
+                )
+                ||
+                0;
+
+
+            // RED BALL
+
+            if (
+                countElement
+            ) {
+
+                if (
+                    count > 0
+                ) {
+
+                    countElement.style.display =
+                        "flex";
+
+
+                    countElement.textContent =
+                        count > 99
+                        ?
+                        "99+"
+                        :
+                        count;
+
+                }
+
+                else {
+
+                    countElement.style.display =
+                        "none";
+
+                }
+
+            }
+
+
+            // HEADER COUNT
+
+            if (
+                headerCount
+            ) {
+
+                if (
+                    count > 0
+                ) {
+
+                    headerCount.style.display =
+                        "inline-flex";
+
+
+                    headerCount.textContent =
+                        count
+                        +
+                        " Foun";
+
+                }
+
+                else {
+
+                    headerCount.style.display =
+                        "none";
+
+                }
+
+            }
+
+        }
+
+
+        // =====================================================
+        // BELL ANIMATION
+        // =====================================================
+
+        function animateBell() {
+
+            bell.classList.remove(
+                "notification-bell-live"
+            );
+
+
+            void bell.offsetWidth;
+
+
+            bell.classList.add(
+                "notification-bell-live"
+            );
+        }
+
+
+        // =====================================================
+        // RENDER NOTIFICATIONS
+        // =====================================================
+
+        function renderNotifications(
+            notifications
+        ) {
+
+            if (
+                !notificationBody
+            ) {
+
+                return;
+            }
+
+
+            if (
+                !notifications
+                ||
+                notifications.length === 0
+            ) {
+
+                notificationBody.innerHTML = `
+
+                    <div class="notification-empty">
+
+                        <div class="notification-empty-icon">
+
+                            <i class="fa fa-bell-o"></i>
+
+                        </div>
+
+                        <strong>
+                            La iha notifikasaun
+                        </strong>
+
+                        <small>
+                            Notifikasaun foun sei mosu iha ne'e.
+                        </small>
+
+                    </div>
+                `;
+
+
+                return;
+            }
+
+
+            let html = "";
+
+
+            notifications.forEach(
+                function (item) {
+
+                    const style =
+                        notificationStyle(
+                            item.type
+                        );
+
+
+                    const unreadClass =
+                        item.is_read
+                        ?
+                        ""
+                        :
+                        "notification-unread";
+
+
+                    const unreadDot =
+                        item.is_read
+                        ?
+                        ""
+                        :
+                        `
+                            <span
+                                class="notification-new-dot"
+                            ></span>
+                        `;
+
+
+                    html += `
+
+                        <a
+                            href="${escapeHtml(
+                                item.open_url
+                            )}"
+                            class="
+                                notification-item
+                                ${unreadClass}
+                            "
+                        >
+
+                            <div
+                                class="
+                                    notification-icon-ball
+                                    ${style.ball}
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa
+                                        ${style.icon}
+                                    "
+                                ></i>
+
+                            </div>
+
+
+                            <div
+                                class="notification-item-content"
+                            >
+
+                                <div
+                                    class="notification-item-title"
+                                >
+
+                                    ${escapeHtml(
+                                        item.title
+                                    )}
+
+                                    ${unreadDot}
+
+                                </div>
+
+
+                                <div
+                                    class="notification-item-message"
+                                >
+
+                                    ${escapeHtml(
+                                        item.message
+                                    )}
+
+                                </div>
+
+
+                                <div
+                                    class="notification-item-time"
+                                >
+
+                                    <i class="fa fa-clock-o"></i>
+
+                                    ${escapeHtml(
+                                        item.created_at
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                        </a>
+                    `;
+
+                }
+            );
+
+
+            notificationBody.innerHTML =
+                html;
+
+        }
+
+
+        // =====================================================
+        // LOAD NOTIFICATIONS
+        // =====================================================
+
+        async function loadNotifications() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        liveUrl,
+                        {
+                            method:
+                                "GET",
+
+                            credentials:
+                                "same-origin",
+
+                            cache:
+                                "no-store",
+
+                            headers: {
+
+                                "X-Requested-With":
+                                    "XMLHttpRequest",
+
+                                "Accept":
+                                    "application/json",
+                            },
+                        }
+                    );
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    console.error(
+                        "Notification HTTP Error:",
+                        response.status
+                    );
+
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !data.authenticated
+                ) {
+
+                    return;
+                }
+
+
+                const count =
+                    Number(
+                        data.unread_count
+                    )
+                    ||
+                    0;
+
+
+                // NEW NOTIFICATION
+
+                if (
+                    count
+                    >
+                    previousCount
+                ) {
+
+                    animateBell();
+
+                }
+
+
+                updateCount(
+                    count
+                );
+
+
+                renderNotifications(
+                    data.notifications
+                    ||
+                    []
+                );
+
+
+                previousCount =
+                    count;
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Notification Live Error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // INITIAL LOAD
+        // =====================================================
+
+        loadNotifications();
+
+
+        // =====================================================
+        // LIVE EVERY 10 SECONDS
+        // =====================================================
+
+        setInterval(
+            loadNotifications,
+            10000
+        );
+
+
+        // =====================================================
+        // RETURN TO TAB
+        // =====================================================
+
+        document.addEventListener(
+            "visibilitychange",
+            function () {
+
+                if (
+                    document.visibilityState
+                    ===
+                    "visible"
+                ) {
+
+                    loadNotifications();
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // WINDOW FOCUS
+        // =====================================================
+
+        window.addEventListener(
+            "focus",
+            function () {
+
+                loadNotifications();
+
+            }
+        );
+
     }
+);
 
-    checkPortalSession();
-    setInterval(checkPortalSession, INTERVAL);
+</script>
 
-    })();
-</script> 
 
-{% endblock %}
+    {% endblock %}
+
 
 </body>
+
 </html>

@@ -1,282 +1,1011 @@
 {% extends "layouts/base.html" %}
+
 {% load static %}
 
 {% block content %}
 
 <style>
-    .agenda-detail-card {
-        background: #ffffff;
-        border: none;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.agenda-detail-wrapper {
+    background: #f6f9fc;
+    padding: 18px;
+    border-radius: 14px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.agenda-detail-header {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    padding: 16px 18px;
+
+    border-radius: 10px;
+
+    margin-bottom: 18px;
+}
+
+
+.agenda-detail-header h5 {
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+.agenda-detail-header small {
+    opacity: .85;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.detail-card {
+    border: none;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 3px 14px
+        rgba(15, 76, 129, .08);
+}
+
+
+.detail-card-header {
+    padding: 12px 16px;
+
+    background: #eaf2f8;
+
+    color: #17324d;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    border-bottom:
+        1px solid #dbe6ef;
+}
+
+
+/* =========================================================
+   INFO ROW
+========================================================= */
+
+.detail-row {
+    padding: 10px 0;
+
+    border-bottom:
+        1px solid #edf1f5;
+}
+
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+
+.detail-label {
+    color: #607486;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.detail-value {
+    color: #17324d;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+.agenda-status {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+
+.status-read {
+    background: #d4edda;
+    color: #155724;
+}
+
+
+/* =========================================================
+   DELEGATION
+========================================================= */
+
+.delegation-card {
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    border: none;
+
+    box-shadow:
+        0 3px 14px
+        rgba(15, 76, 129, .08);
+}
+
+
+.delegation-header {
+    padding: 12px 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #14844f,
+            #20a967
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.delegation-form-header {
+    padding: 12px 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.delegation-form label {
+    color: #52687a;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.delegation-form .form-control {
+    border-radius: 6px;
+
+    border:
+        1px solid #ced9e2;
+
+    font-size: 13px;
+}
+
+
+.delegation-form textarea {
+    resize: vertical;
+}
+
+
+/* =========================================================
+   DELEGATED NOTICE
+========================================================= */
+
+.delegated-box {
+    background: #edf9f2;
+
+    border-left:
+        4px solid #20a967;
+
+    padding: 14px 16px;
+
+    border-radius: 8px;
+
+    color: #235c3c;
+}
+
+
+.delegated-icon {
+    width: 42px;
+
+    min-width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #20a967;
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    margin-right: 12px;
+}
+
+
+/* =========================================================
+   VIEW ONLY
+========================================================= */
+
+.view-only-box {
+    background: #eaf5fb;
+
+    color: #24556f;
+
+    border-left:
+        4px solid #17a2b8;
+
+    padding: 14px 16px;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+.history-table thead th {
+    background: #eef4f8;
+
+    color: #17324d;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+.history-table td {
+    font-size: 12px;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.page-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom: 15px;
+}
+
+
+.page-actions .btn {
+    font-size: 12px;
+
+    border-radius: 6px;
+}
+
+
+/* =========================================================
+   DOCUMENT
+========================================================= */
+
+.document-box {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 10px;
+
+    background: #eef5fa;
+
+    border-radius: 7px;
+
+    color: #0f4c81;
+
+    text-decoration: none;
+}
+
+
+.document-box:hover {
+    text-decoration: none;
+
+    background: #e1eef7;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 767px) {
+
+    .agenda-detail-wrapper {
+        padding: 10px;
     }
 
-    .agenda-detail-body {
-        background-color: #f6f9fc;
-        padding: 22px;
+    .detail-label {
+        margin-bottom: 4px;
     }
 
-    .agenda-detail-header {
-        background: linear-gradient(135deg, #0f4c81, #1976b9);
-        color: #ffffff;
-        padding: 14px 18px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+}
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .agenda-detail-header h5 {
-        margin: 0;
-        font-size: 17px;
-        font-weight: 600;
-    }
-
-    .info-card {
-        background: #ffffff;
-        border: 1px solid #dbe6ef;
-        border-radius: 10px;
-        padding: 18px;
-        height: 100%;
-    }
-
-    .info-label {
-        display: block;
-        margin-bottom: 6px;
-        color: #6b7d8c;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
-    .info-value {
-        margin: 0;
-        color: #17324d;
-        font-size: 14px;
-        font-weight: 500;
-        word-break: break-word;
-    }
-
-    .agenda-title-value {
-        color: #0f4c81;
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    .observation-box {
-        min-height: 150px;
-        background: #ffffff;
-        border: 1px solid #dbe6ef;
-        border-radius: 10px;
-        padding: 18px;
-    }
-
-    .action-section {
-        margin-top: 22px;
-        padding: 16px 18px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #14844f, #20a967);
-        color: #ffffff;
-    }
-
-    .action-section h5 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-    }
-
-    .back-button {
-        font-size: 13px;
-        border-radius: 6px;
-    }
 </style>
 
 
 <div class="container-fluid">
 
-    <div class="row justify-content-center">
-
-        <div class="col-12">
-
-            <div class="card agenda-detail-card">
-
-                <div class="agenda-detail-body">
+    <div class="agenda-detail-wrapper">
 
 
-                    <!-- HEADER -->
-                    <div class="agenda-detail-header">
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
-                        <h5>
-                            <i class="fa fa-calendar-o mr-2"></i>
-                            AJENDA ENKONTRU
-                        </h5>
+        <div class="agenda-detail-header">
 
-                        <button
-                            type="button"
-                            class="btn btn-light btn-sm back-button"
-                            onclick="window.history.back();">
+            <div
+                class="
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    flex-wrap
+                "
+            >
 
-                            <i class="fa fa-arrow-left"></i>
-                            Fila
+                <div>
 
-                        </button>
+                    <h5>
+
+                        <i class="fa fa-calendar mr-2"></i>
+
+                        Detallu Ajenda
+
+                    </h5>
+
+                    <small>
+
+                        {{ single_agenda.title }}
+
+                    </small>
+
+                </div>
+
+
+                <div class="mt-2 mt-md-0">
+
+                    {% if single_agenda.status == "Pending" %}
+
+                        <span class="agenda-status status-pending">
+
+                            PENDING
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="agenda-status status-read">
+
+                            READ
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ACTIONS
+        ====================================================== -->
+
+        <div class="page-actions">
+
+            <a
+                href="{% url 'upcomingAgenda_list' %}"
+                class="btn btn-secondary btn-sm"
+            >
+
+                <i class="fa fa-arrow-left"></i>
+
+                Fila
+
+            </a>
+
+
+            {% if "ajenda_vmn" not in roles %}
+
+                <a
+                    href="{% url 'agenda_edit' uuid=single_agenda.uuid %}"
+                    class="btn btn-warning btn-sm"
+                >
+
+                    <i class="fa fa-pencil"></i>
+
+                    Edita
+
+                </a>
+
+            {% endif %}
+
+
+            {% if "sii_admin" in roles or "ajenda_admin" in roles %}
+
+                <a
+                    href="{% url 'agenda_delete' uuid=single_agenda.uuid %}"
+                    class="btn btn-danger btn-sm"
+                >
+
+                    <i class="fa fa-trash"></i>
+
+                    Hamos
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="row">
+
+
+            <!-- =================================================
+                 LEFT - AGENDA DETAIL
+            ================================================== -->
+
+            <div class="col-12 col-lg-7 mb-3">
+
+                <div class="card detail-card">
+
+                    <div class="detail-card-header">
+
+                        <i class="fa fa-info-circle mr-1"></i>
+
+                        Informasaun Ajenda
 
                     </div>
 
 
-                    <!-- TITLE -->
-                    <div class="row mb-3">
+                    <div class="card-body">
 
-                        <div class="col-12">
 
-                            <div class="info-card">
+                        <div class="row detail-row">
 
-                                <span class="info-label">
-                                    Titulu Enkontru
-                                </span>
+                            <div class="col-md-4 detail-label">
 
-                                <p class="info-value agenda-title-value">
-                                    {{ single_agenda.title }}
-                                </p>
+                                Ajenda
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {{ single_agenda.title }}
 
                             </div>
 
                         </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Kategoria Ajenda
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {{ single_agenda.catagenda }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Tipu Ajenda
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {{ single_agenda.meeting_type }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Instituisaun
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {{ single_agenda.institution }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Oras Hahu
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                <i class="fa fa-calendar text-primary mr-1"></i>
+
+                                {{ single_agenda.start_time|date:"d/m/Y H:i" }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Oras Remata
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                <i class="fa fa-clock-o text-primary mr-1"></i>
+
+                                {{ single_agenda.end_time|date:"d/m/Y H:i" }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Fatin
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                <i class="fa fa-map-marker text-danger mr-1"></i>
+
+                                {% if single_agenda.location %}
+
+                                    {{ single_agenda.location }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Observasaun
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {% if single_agenda.observation %}
+
+                                    {{ single_agenda.observation|safe }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Dokumentu
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {% if single_agenda.attachment %}
+
+                                    <a
+                                        href="{{ single_agenda.attachment.url }}"
+                                        target="_blank"
+                                        class="document-box"
+                                    >
+
+                                        <i class="fa fa-paperclip"></i>
+
+                                        Haree Dokumentu
+
+                                    </a>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+
+                                        La iha dokumentu.
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Kria Husi
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {% if single_agenda.central_username %}
+
+                                    <i class="fa fa-user mr-1"></i>
+
+                                    {{ single_agenda.central_username }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row detail-row">
+
+                            <div class="col-md-4 detail-label">
+
+                                Data Kria
+
+                            </div>
+
+                            <div class="col-md-8 detail-value">
+
+                                {{ single_agenda.created_at|date:"d/m/Y H:i" }}
+
+                            </div>
+
+                        </div>
+
 
                     </div>
 
+                </div>
 
-                    <!-- BASIC INFORMATION -->
-                    <div class="row">
-
-                        <div class="col-md-4 mb-3">
-
-                            <div class="info-card">
-
-                                <span class="info-label">
-                                    Kategoria Ajenda
-                                </span>
-
-                                <p class="info-value">
-                                    {{ single_agenda.catagenda }}
-                                </p>
-
-                            </div>
-
-                        </div>
+            </div>
 
 
-                        <div class="col-md-4 mb-3">
+            <!-- =================================================
+                 RIGHT - DELEGATION
+            ================================================== -->
 
-                            <div class="info-card">
+            <div class="col-12 col-lg-5 mb-3">
 
-                                <span class="info-label">
-                                    Tipu Enkontru
-                                </span>
 
-                                <p class="info-value">
-                                    {{ single_agenda.meeting_type }}
-                                </p>
+                <!-- =============================================
+                     CAN DELEGATE
+                ============================================== -->
 
-                            </div>
+                {% if can_delegate %}
+
+                    <div class="card delegation-card">
+
+                        <div class="delegation-form-header">
+
+                            <i class="fa fa-share mr-1"></i>
+
+                            Delega Ajenda
 
                         </div>
 
 
-                        <div class="col-md-4 mb-3">
+                        <div class="card-body">
 
-                            <div class="info-card">
+                            <form
+                                method="POST"
+                                class="delegation-form"
+                            >
 
-                                <span class="info-label">
-                                    Ajenda Kria Husi
-                                </span>
-
-                                <p class="info-value">
-                                    {{ single_agenda.institution }}
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                                {% csrf_token %}
 
 
-                    <!-- DATE AND LOCATION -->
-                    <div class="row">
+                                <!-- FORM ERRORS -->
 
-                        <div class="col-md-4 mb-3">
+                                {% if delegation_form.non_field_errors %}
 
-                            <div class="info-card">
+                                    <div class="alert alert-danger">
 
-                                <span class="info-label">
-                                    Data no Oras Hahu
-                                </span>
+                                        {{ delegation_form.non_field_errors }}
 
-                                <p class="info-value">
+                                    </div>
 
-                                    <i class="fa fa-calendar text-primary mr-1"></i>
-                                    {{ single_agenda.start_time|date:"d/m/Y" }}
-
-                                    <br>
-
-                                    <i class="fa fa-clock-o text-primary mr-1"></i>
-                                    {{ single_agenda.start_time|date:"H:i" }}
-
-                                </p>
-
-                            </div>
-
-                        </div>
+                                {% endif %}
 
 
-                        <div class="col-md-4 mb-3">
+                                <!-- PARTICIPANTE -->
 
-                            <div class="info-card">
+                                <div class="form-group">
 
-                                <span class="info-label">
-                                    Data no Oras Remata
-                                </span>
+                                    <label>
 
-                                <p class="info-value">
+                                        <i class="fa fa-user mr-1"></i>
 
-                                    <i class="fa fa-calendar text-primary mr-1"></i>
-                                    {{ single_agenda.end_time|date:"d/m/Y" }}
+                                        Partisipante
 
-                                    <br>
+                                    </label>
 
-                                    <i class="fa fa-clock-o text-primary mr-1"></i>
-                                    {{ single_agenda.end_time|date:"H:i" }}
+                                    {{ delegation_form.delegated_to }}
 
-                                </p>
+                                    {% if delegation_form.delegated_to.errors %}
 
-                            </div>
+                                        <small class="text-danger">
 
-                        </div>
+                                            {{ delegation_form.delegated_to.errors }}
 
+                                        </small>
 
-                        <div class="col-md-4 mb-3">
-
-                            <div class="info-card">
-
-                                <span class="info-label">
-                                    Fatin
-                                </span>
-
-                                <p class="info-value">
-
-                                    <i class="fa fa-map-marker text-danger mr-1"></i>
-
-                                    {% if single_agenda.location %}
-                                        {{ single_agenda.location }}
-                                    {% else %}
-                                        -
                                     {% endif %}
 
-                                </p>
+                                </div>
+
+
+                                <!-- NOTE -->
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        <i class="fa fa-sticky-note-o mr-1"></i>
+
+                                        Nota
+
+                                    </label>
+
+                                    {{ delegation_form.note }}
+
+                                    {% if delegation_form.note.errors %}
+
+                                        <small class="text-danger">
+
+                                            {{ delegation_form.note.errors }}
+
+                                        </small>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-block"
+                                >
+
+                                    <i class="fa fa-share mr-1"></i>
+
+                                    Delega Ajenda
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- =============================================
+                     ALREADY DELEGATED
+                ============================================== -->
+
+                {% elif active_delegation %}
+
+
+                    <div class="card delegation-card">
+
+                        <div class="delegation-header">
+
+                            <i class="fa fa-check-circle mr-1"></i>
+
+                            Ajenda Delega Ona
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="delegated-box">
+
+                                <div class="d-flex">
+
+                                    <div class="delegated-icon">
+
+                                        <i class="fa fa-check"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+
+                                            Delegasaun Ativu
+
+                                        </strong>
+
+
+                                        <div class="mt-2">
+
+                                            Husi:
+
+                                            <strong>
+
+                                                {{ active_delegation.delegated_from.name }}
+
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            Ba:
+
+                                            <strong>
+
+                                                {{ active_delegation.delegated_to.name }}
+
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="mt-1">
+
+                                            <small>
+
+                                                <i class="fa fa-calendar"></i>
+
+                                                {{ active_delegation.delegated_at|date:"d/m/Y H:i" }}
+
+                                            </small>
+
+                                        </div>
+
+
+                                        {% if active_delegation.note %}
+
+                                            <div class="mt-2">
+
+                                                <strong>
+                                                    Nota:
+                                                </strong>
+
+                                                {{ active_delegation.note }}
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mt-3">
+
+                                <a
+                                    href="{% url 'agenda_delegation_detail' uuid=active_delegation.uuid %}"
+                                    class="btn btn-outline-success btn-sm btn-block"
+                                >
+
+                                    <i class="fa fa-eye"></i>
+
+                                    Haree Detallu Delegasaun
+
+                                </a>
 
                             </div>
 
@@ -285,30 +1014,46 @@
                     </div>
 
 
-                    <!-- OBSERVATION -->
-                    <div class="row">
+                <!-- =============================================
+                     VMN VIEW ONLY
+                ============================================== -->
 
-                        <div class="col-12">
+                {% elif "ajenda_vmn" in roles %}
 
-                            <div class="observation-box">
 
-                                <span class="info-label">
-                                    Observasaun
-                                </span>
+                    <div class="view-only-box">
 
-                                <div class="info-value">
+                        <div class="d-flex">
 
-                                    {% if single_agenda.observation %}
+                            <div class="mr-3">
 
-                                        {{ single_agenda.observation|safe }}
+                                <i
+                                    class="fa fa-info-circle"
+                                    style="font-size:25px;"
+                                ></i>
 
-                                    {% else %}
+                            </div>
 
-                                        <span class="text-muted">
-                                            La iha observasaun.
-                                        </span>
 
-                                    {% endif %}
+                            <div>
+
+                                <strong>
+                                    Aksesu Leitura
+                                </strong>
+
+                                <div class="mt-1">
+
+                                    Ita nia role mak
+                                    <strong>
+                                        Vice Ministro
+                                    </strong>.
+
+                                </div>
+
+                                <div>
+
+                                    Ita bele haree informasaun Ajenda,
+                                    maibé la iha permisaun atu halo delegasaun.
 
                                 </div>
 
@@ -319,33 +1064,201 @@
                     </div>
 
 
-                    <!-- INVITE / DELEGATE -->
-                    <div class="action-section">
+                {% endif %}
 
-                        {% if single_agenda.catagenda.name_category == "Internal" %}
 
-                            <h5>
-                                <i class="fa fa-users mr-2"></i>
-                                KONVIDA BA ENKONTRU
-                            </h5>
+            </div>
 
-                        {% else %}
 
-                            <h5>
-                                <i class="fa fa-user-plus mr-2"></i>
-                                DELEGA BA TUIR ENKONTRU
-                            </h5>
+        </div>
 
-                        {% endif %}
+
+        <!-- =====================================================
+             DELEGATION HISTORY
+        ====================================================== -->
+
+        {% if delegation_history %}
+
+            <div class="card detail-card mt-2">
+
+                <div class="detail-card-header">
+
+                    <i class="fa fa-history mr-1"></i>
+
+                    Istoriku Delegasaun
+
+                </div>
+
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="
+                                table
+                                table-bordered
+                                table-hover
+                                table-sm
+                                history-table
+                                mb-0
+                            "
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        NU.
+                                    </th>
+
+                                    <th>
+                                        DELEGA HUSI
+                                    </th>
+
+                                    <th>
+                                        DELEGA BA
+                                    </th>
+
+                                    <th>
+                                        DATA
+                                    </th>
+
+                                    <th>
+                                        NOTA
+                                    </th>
+
+                                    <th>
+                                        STATUS
+                                    </th>
+
+                                    <th>
+                                        #
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for obj in delegation_history %}
+
+                                    <tr>
+
+                                        <td class="text-center">
+
+                                            {{ forloop.counter }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.delegated_from.name }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.delegated_to.name }}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {{ obj.delegated_at|date:"d/m/Y H:i" }}
+
+                                        </td>
+
+
+                                        <td>
+
+                                            {% if obj.note %}
+
+                                                {{ obj.note }}
+
+                                            {% else %}
+
+                                                -
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            {% if obj.is_active %}
+
+                                                <span class="badge badge-success">
+
+                                                    ATIVU
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="badge badge-secondary">
+
+                                                    LA ATIVU
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            <a
+                                                href="{% url 'agenda_delegation_detail' uuid=obj.uuid %}"
+                                                class="btn btn-sm btn-outline-primary"
+                                                title="Haree"
+                                            >
+
+                                                <i class="fa fa-eye"></i>
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% empty %}
+
+                                    <tr>
+
+                                        <td
+                                            colspan="7"
+                                            class="text-center text-muted"
+                                        >
+
+                                            La iha istoriku delegasaun.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
 
                     </div>
-
 
                 </div>
 
             </div>
 
-        </div>
+        {% endif %}
+
 
     </div>
 

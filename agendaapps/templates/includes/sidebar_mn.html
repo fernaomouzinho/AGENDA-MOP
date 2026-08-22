@@ -1,19 +1,9 @@
- <div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar">
+
     <div class="menu-title">
         Main Menu
     </div>
 
-{% if "ajenda_vmn" in roles %}
-   
-   
-    <!-- DASHBOARD -->
-    <a href="{% url 'agenda_delegation_list' %}">
-        <i class="fa fa-home"></i>
-        Dashboard
-    </a>
-
-
-{% else %}
 
     <!-- DASHBOARD -->
     <a href="{% url 'home' %}">
@@ -168,9 +158,5 @@
         <i class="fa fa-bar-chart"></i>
         Relatoriu
     </a>
-
-
-
-{% endif %}
 
 </div>

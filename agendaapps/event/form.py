@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
-from .models import TypeAgenda, CatAgenda, Agenda,AgendaRecipient, RequestAgenda, Informative, CommentInformative
+from .models import TypeAgenda, CatAgenda, Agenda, AgendaDelegation, AgendaTo, AgendaRecipient, RequestAgenda, Informative, CommentInformative
 from tinymce.widgets import TinyMCE
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, Button, HTML
@@ -9,15 +9,57 @@ from django_summernote.widgets import SummernoteWidget
 
 
 class TypeAgendaForm(forms.ModelForm):
+
     class Meta:
         model = TypeAgenda
-        exclude = ('id',)
+
+        fields = [
+            'name_type',
+        ]
+
+        labels = {
+            'name_type': 'Tipu Ajenda',
+        }
+
+        widgets = {
+            'name_type': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Hakerek Tipu Ajenda...',
+                    'autocomplete': 'off',
+                }
+            ),
+        }
+
+    def clean_name_type(self):
+
+        name_type = self.cleaned_data.get('name_type')
+
+        if name_type:
+            name_type = name_type.strip()
+
+            queryset = TypeAgenda.objects.filter(
+                name_type__iexact=name_type
+            )
+
+            # Important for EDIT
+            if self.instance.pk:
+                queryset = queryset.exclude(
+                    pk=self.instance.pk
+                )
+
+            if queryset.exists():
+                raise forms.ValidationError(
+                    'Tipu Ajenda ida-ne\'e iha ona iha sistema.'
+                )
+
+        return name_type
         
 class CategoryAgendaForm(forms.ModelForm):
     class Meta:
         model = CatAgenda
         exclude = ('id',)
-
+        
 class AgendaForm(forms.ModelForm):
 
     class Meta:
@@ -29,6 +71,8 @@ class AgendaForm(forms.ModelForm):
             'is_active',
             'status',
             'observation',
+            "central_user_id",
+            "central_username",
         )
 
         widgets = {
@@ -98,7 +142,132 @@ class AgendaRecipientForm(forms.ModelForm):
                 }
             ),
         }
+        
+        
+class AgendaToForm(forms.ModelForm):
 
+    class Meta:
+        model = AgendaTo
+
+        fields = [
+            'code',
+            'name',
+            'is_active',
+        ]
+
+        labels = {
+            'code': 'Kodigu',
+            'name': 'Partisipante',
+            'is_active': 'Ativu',
+        }
+
+        widgets = {
+            'code': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ezemplu: MN, VMN',
+                    'autocomplete': 'off',
+                }
+            ),
+
+            'name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ezemplu: Ministro',
+                    'autocomplete': 'off',
+                }
+            ),
+        }
+
+    def clean_code(self):
+        code = self.cleaned_data.get('code')
+
+        if code:
+            code = code.strip().upper()
+
+            queryset = AgendaTo.objects.filter(
+                code__iexact=code
+            )
+
+            if self.instance.pk:
+                queryset = queryset.exclude(
+                    pk=self.instance.pk
+                )
+
+            if queryset.exists():
+                raise forms.ValidationError(
+                    'Kodigu ida-ne\'e iha ona iha sistema.'
+                )
+
+        return code
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+
+        if name:
+            name = name.strip()
+
+            queryset = AgendaTo.objects.filter(
+                name__iexact=name
+            )
+
+            if self.instance.pk:
+                queryset = queryset.exclude(
+                    pk=self.instance.pk
+                )
+
+            if queryset.exists():
+                raise forms.ValidationError(
+                    'Partisipante ida-ne\'e iha ona iha sistema.'
+                )
+
+        return name
+    
+
+        
+class AgendaDelegationForm(forms.ModelForm):
+
+    class Meta:
+        model = AgendaDelegation
+
+        fields = [
+            "delegated_to",
+            "note",
+        ]
+
+        widgets = {
+            "delegated_to": forms.Select(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "note": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Hakerek nota delegasaun..."
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Only Vice-Minister
+        self.fields["delegated_to"].queryset = (
+            AgendaTo.objects.filter(
+                code="VMN",
+                is_active=True
+            )
+        )
+
+        self.fields["delegated_to"].empty_label = (
+            "--- Hili Partisipante ---"
+        )  
+        
+        
+    
 class PostponedAgendaForm(forms.ModelForm):
     class Meta:
         model = Agenda

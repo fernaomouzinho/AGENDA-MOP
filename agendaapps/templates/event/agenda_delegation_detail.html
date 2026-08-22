@@ -1,0 +1,489 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .detail-page {
+        padding-bottom: 25px;
+    }
+
+    .detail-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+    }
+
+    .detail-card-body {
+        background: #f6f9fc;
+        padding: 22px;
+    }
+
+    .detail-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .detail-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .detail-box {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+        height: 100%;
+    }
+
+    .detail-label {
+        display: block;
+        color: #6b7d8c;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .detail-value {
+        color: #17324d;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .agenda-title-value {
+        color: #0f4c81;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .participant-badge {
+        display: inline-block;
+        background: #eef5fa;
+        color: #0f4c81;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .participant-to {
+        background: #e8f7ef;
+        color: #16844f;
+    }
+
+    .status-active {
+        display: inline-block;
+        background: #e8f7ef;
+        color: #16844f;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-inactive {
+        display: inline-block;
+        background: #f2f3f5;
+        color: #7b8793;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .note-box {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+        min-height: 100px;
+    }
+
+    .back-button {
+        font-size: 13px;
+        border-radius: 6px;
+    }
+</style>
+
+
+<div class="container-fluid detail-page">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12">
+
+            <div class="card detail-card">
+
+                <div class="detail-card-body">
+
+
+                    <!-- HEADER -->
+                    <div class="detail-header">
+
+                        <h5>
+                            <i class="fa fa-exchange mr-2"></i>
+                            DETALLU DELEGASAUN AJENDA
+                        </h5>
+
+                        <a
+                            href="{% url 'agenda_delegation_list' %}"
+                            class="btn btn-light btn-sm back-button"
+                        >
+                            <i class="fa fa-arrow-left mr-1"></i>
+                            Fila
+                        </a>
+
+                    </div>
+
+
+                    <!-- AGENDA TITLE -->
+                    <div class="row mb-3">
+
+                        <div class="col-12">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Ajenda
+                                </span>
+
+                                <p class="detail-value agenda-title-value">
+                                    {{ delegation.agenda.title }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AGENDA INFORMATION -->
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Kategoria Ajenda
+                                </span>
+
+                                <p class="detail-value">
+                                    {{ delegation.agenda.catagenda }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Tipu Ajenda
+                                </span>
+
+                                <p class="detail-value">
+                                    {{ delegation.agenda.meeting_type }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Instituisaun
+                                </span>
+
+                                <p class="detail-value">
+                                    {{ delegation.agenda.institution }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MEETING DATE -->
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Data no Oras Hahu
+                                </span>
+
+                                <p class="detail-value">
+
+                                    <i class="fa fa-calendar text-primary mr-1"></i>
+                                    {{ delegation.agenda.start_time|date:"d/m/Y" }}
+
+                                    <br>
+
+                                    <i class="fa fa-clock-o text-primary mr-1"></i>
+                                    {{ delegation.agenda.start_time|date:"H:i" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Data no Oras Remata
+                                </span>
+
+                                <p class="detail-value">
+
+                                    <i class="fa fa-calendar text-primary mr-1"></i>
+                                    {{ delegation.agenda.end_time|date:"d/m/Y" }}
+
+                                    <br>
+
+                                    <i class="fa fa-clock-o text-primary mr-1"></i>
+                                    {{ delegation.agenda.end_time|date:"H:i" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Fatin
+                                </span>
+
+                                <p class="detail-value">
+
+                                    {% if delegation.agenda.location %}
+
+                                        <i class="fa fa-map-marker text-danger mr-1"></i>
+
+                                        {{ delegation.agenda.location }}
+
+                                    {% else %}
+                                        -
+                                    {% endif %}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DELEGATION -->
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Delega Husi
+                                </span>
+
+                                <span class="participant-badge">
+                                    {{ delegation.delegated_from.name }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Delega Ba
+                                </span>
+
+                                <span class="participant-badge participant-to">
+                                    {{ delegation.delegated_to.name }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Data no Oras Delegasaun
+                                </span>
+
+                                <p class="detail-value">
+
+                                    <i class="fa fa-calendar text-primary mr-1"></i>
+
+                                    {{ delegation.delegated_at|date:"d/m/Y" }}
+
+                                    <br>
+
+                                    <i class="fa fa-clock-o text-primary mr-1"></i>
+
+                                    {{ delegation.delegated_at|date:"H:i:s" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SSO USER + STATUS -->
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Regista Delegasaun Husi
+                                </span>
+
+                                <p class="detail-value">
+
+                                    {% if delegation.central_username %}
+
+                                        <i class="fa fa-user mr-1"></i>
+
+                                        {{ delegation.central_username }}
+
+                                    {% else %}
+                                        -
+                                    {% endif %}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="detail-box">
+
+                                <span class="detail-label">
+                                    Estadu Delegasaun
+                                </span>
+
+                                {% if delegation.is_active %}
+
+                                    <span class="status-active">
+
+                                        <i class="fa fa-check-circle mr-1"></i>
+
+                                        Ativu
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-inactive">
+
+                                        <i class="fa fa-times-circle mr-1"></i>
+
+                                        La Ativu
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTE -->
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <div class="note-box">
+
+                                <span class="detail-label">
+                                    Nota Delegasaun
+                                </span>
+
+                                <div class="detail-value">
+
+                                    {% if delegation.note %}
+
+                                        {{ delegation.note }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            La iha nota delegasaun.
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

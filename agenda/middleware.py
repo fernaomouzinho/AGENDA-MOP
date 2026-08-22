@@ -38,7 +38,6 @@ class AgendaSSOMiddleware(MiddlewareMixin):
         "/static/",
         "/media/",
         "/favicon.ico",
-        "/mopportaladmin23/login/",
         "/api/portal-auth-status/",
     )
 
@@ -120,7 +119,7 @@ class AgendaSSOMiddleware(MiddlewareMixin):
             "username": username,
             "roles": roles,
         }
-
+        request.portal_user_id = user_id
         request.portal_user = username
         request.portal_roles = roles
 

@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import TypeAgenda, CatAgenda, Agenda, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
+from .models import TypeAgenda, CatAgenda, AgendaTo, Agenda, AgendaDelegation, RequestAgenda, HistAgenda, Yearagenda, Informative, CommentInformative
 
 
 class TypeAgendaAdmin(admin.ModelAdmin):
@@ -57,6 +57,55 @@ admin.site.register(
     Agenda,
     AgendaAdmin
 )
+
+# ============================================================
+# AGENDA TO
+# ============================================================
+
+@admin.register(AgendaTo)
+class AgendaToAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "uuid",
+        "name",
+        "is_active",
+    ]
+
+    list_filter = [
+        "is_active",
+    ]
+
+    search_fields = [
+        "name"
+    ]
+
+    ordering = [
+        "id",
+    ]
+
+
+# ============================================================
+# AGENDA DELEGATION INLINE
+# ============================================================
+
+class AgendaDelegationInline(admin.TabularInline):
+    model = AgendaDelegation
+
+    extra = 0
+
+    fields = [
+        "delegated_from",
+        "delegated_to",
+        "delegated_at",
+        "note",
+        "central_username",
+        "is_active",
+    ]
+
+    readonly_fields = [
+        "central_username",
+    ]
+
 
 
 class HistAgendaAdmin(admin.ModelAdmin):

@@ -1,0 +1,192 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-sm border-0">
+
+        <div
+            class="
+                card-header
+                text-white
+                d-flex
+                justify-content-between
+                align-items-center
+            "
+            style="
+                background:
+                    linear-gradient(
+                        135deg,
+                        #0f4c81,
+                        #1976b9
+                    );
+            "
+        >
+
+            <h5 class="mb-0">
+
+                <i class="fa fa-bell mr-2"></i>
+
+                Notifikasaun
+
+            </h5>
+
+
+            <a
+                href="{% url 'notification_mark_all_read' %}"
+                class="btn btn-sm btn-light"
+            >
+
+                <i class="fa fa-check mr-1"></i>
+
+                Marka Hotu Le'e
+
+            </a>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+
+            {% for notification in notification_list %}
+
+
+                <a
+                    href="{% url 'notification_open' uuid=notification.uuid %}"
+                    class="
+                        d-flex
+                        align-items-start
+                        p-3
+                        border-bottom
+                        text-decoration-none
+
+                        {% if not notification.user_has_read %}
+                            bg-light
+                        {% endif %}
+                    "
+                >
+
+
+                    <div
+                        class="
+                            notification-icon-ball
+                            mr-3
+
+                            {% if notification.notification_type == 'AGENDA_NEW' %}
+
+                                notification-ball-new
+
+                            {% elif notification.notification_type == 'AGENDA_UPDATE' %}
+
+                                notification-ball-update
+
+                            {% elif notification.notification_type == 'DELEGATION' %}
+
+                                notification-ball-delegation
+
+                            {% elif notification.notification_type == 'REMINDER' %}
+
+                                notification-ball-reminder
+
+                            {% endif %}
+                        "
+                    >
+
+
+                        {% if notification.notification_type == "AGENDA_NEW" %}
+
+                            <i class="fa fa-calendar-plus-o"></i>
+
+                        {% elif notification.notification_type == "AGENDA_UPDATE" %}
+
+                            <i class="fa fa-pencil"></i>
+
+                        {% elif notification.notification_type == "DELEGATION" %}
+
+                            <i class="fa fa-share"></i>
+
+                        {% elif notification.notification_type == "REMINDER" %}
+
+                            <i class="fa fa-clock-o"></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="flex-grow-1">
+
+                        <div>
+
+                            <strong class="text-dark">
+
+                                {{ notification.title }}
+
+                            </strong>
+
+
+                            {% if not notification.user_has_read %}
+
+                                <span class="badge badge-primary ml-1">
+
+                                    Foun
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="text-muted mt-1">
+
+                            {{ notification.message }}
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            <i class="fa fa-clock-o"></i>
+
+                            {{ notification.created_at|date:"d/m/Y H:i" }}
+
+                        </small>
+
+                    </div>
+
+
+                </a>
+
+
+            {% empty %}
+
+
+                <div class="text-center py-5 text-muted">
+
+                    <i
+                        class="fa fa-bell-o"
+                        style="font-size:35px;"
+                    ></i>
+
+                    <p class="mt-3">
+
+                        La iha notifikasaun.
+
+                    </p>
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

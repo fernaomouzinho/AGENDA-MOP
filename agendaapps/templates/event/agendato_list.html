@@ -95,7 +95,6 @@
 
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
     }
 
     .btn-save {
@@ -114,12 +113,6 @@
         background: #0b3b66;
         border-color: #0b3b66;
         color: #ffffff;
-    }
-
-    .btn-cancel {
-        border-radius: 6px;
-        font-size: 13px;
-        padding: 7px 16px;
     }
 
 
@@ -171,7 +164,6 @@
     ===================================================== */
     .number-circle {
         display: inline-flex;
-
         align-items: center;
         justify-content: center;
 
@@ -196,17 +188,36 @@
     .btn-action-edit,
     .btn-action-delete {
         border-radius: 5px;
-
         font-size: 12px;
-
         padding: 5px 9px;
     }
 
     .btn-action-edit i,
     .btn-action-delete i {
         font-size: 12px !important;
-
         margin-right: 3px;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+    .status-active {
+        background: #e8f7ef;
+        color: #16844f;
+        border-radius: 20px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-inactive {
+        background: #f2f3f5;
+        color: #7b8793;
+        border-radius: 20px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
     }
 
 
@@ -227,17 +238,91 @@
             padding: 15px;
         }
     }
-
 </style>
 
 
 <div class="container-fluid category-page">
 
+
+    <!-- =====================================================
+         MESSAGES
+    ====================================================== -->
+    {% if messages %}
+
+        <div class="row">
+
+            <div class="col-12">
+
+                {% for message in messages %}
+
+                    <div
+                        class="
+                            alert
+                            alert-dismissible
+                            fade
+                            show
+
+                            {% if message.tags == 'success' %}
+                                alert-success
+                            {% elif message.tags == 'warning' %}
+                                alert-warning
+                            {% elif message.tags == 'error' %}
+                                alert-danger
+                            {% else %}
+                                alert-info
+                            {% endif %}
+                        "
+                        role="alert"
+                    >
+
+                        {% if message.tags == 'success' %}
+
+                            <i class="fa fa-check-circle mr-2"></i>
+
+                        {% elif message.tags == 'warning' %}
+
+                            <i class="fa fa-exclamation-triangle mr-2"></i>
+
+                        {% elif message.tags == 'error' %}
+
+                            <i class="fa fa-times-circle mr-2"></i>
+
+                        {% else %}
+
+                            <i class="fa fa-info-circle mr-2"></i>
+
+                        {% endif %}
+
+                        {{ message }}
+
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="alert"
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">
+                                &times;
+                            </span>
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+
     <div class="row">
 
 
         <!-- =====================================================
-             LEFT SIDE - EDIT CATEGORY
+             LEFT SIDE - ADD AGENDA TO
         ====================================================== -->
         <div class="col-lg-4 col-md-5 mb-4">
 
@@ -251,9 +336,9 @@
 
                         <h5>
 
-                            <i class="fa fa-edit"></i>
+                            <i class="fa fa-plus-circle"></i>
 
-                            Hadia Kategoria Ajenda
+                            Aumenta Partisipante
 
                         </h5>
 
@@ -263,36 +348,18 @@
                     <!-- FORM -->
                     <div class="form-container">
 
-                        <form
-                            method="POST"
-                            enctype="multipart/form-data"
-                        >
+                        <form method="POST">
 
                             {% csrf_token %}
 
 
-                            {{ categoryagendaform|crispy }}
+                            {{ agendatoform|crispy }}
 
-                            {{ categoryagendaform.media|safe }}
+                            {{ agendatoform.media|safe }}
 
 
                             <div class="form-action">
 
-
-                                <!-- CANCEL -->
-                                <a
-                                    href="{% url 'categoryagenda_list' %}"
-                                    class="btn btn-secondary btn-cancel"
-                                >
-
-                                    <i class="fa fa-arrow-left mr-1"></i>
-
-                                    Kansela
-
-                                </a>
-
-
-                                <!-- SAVE -->
                                 <button
                                     type="submit"
                                     class="btn btn-save"
@@ -303,7 +370,6 @@
                                     Rai
 
                                 </button>
-
 
                             </div>
 
@@ -321,7 +387,7 @@
 
 
         <!-- =====================================================
-             RIGHT SIDE - CATEGORY LIST
+             RIGHT SIDE - AGENDA TO LIST
         ====================================================== -->
         <div class="col-lg-8 col-md-7 mb-4">
 
@@ -337,14 +403,14 @@
 
                             <i class="fa fa-list"></i>
 
-                            Lista Kategoria Ajenda
+                            Lista Partisipante
 
                         </h5>
 
 
                         <span class="badge badge-light">
 
-                            {{ catagendalist|length }}
+                            {{ agendatolist|length }}
 
                         </span>
 
@@ -369,19 +435,33 @@
 
                                         <tr>
 
-
                                             <th
-                                                width="70"
+                                                width="60"
                                                 class="text-center"
                                             >
                                                 NU.
                                             </th>
 
-
-                                            <th>
-                                                KATEGORIA AJENDA
+                                             <th
+                                                width="60"
+                                                class="text-center"
+                                            >
+                                                KODIGU
                                             </th>
 
+
+                                        
+
+                                            <th>
+                                                PARTISIPANTE
+                                            </th>
+
+                                            <th
+                                                width="90"
+                                                class="text-center"
+                                            >
+                                                ESTADU
+                                            </th>
 
                                             <th
                                                 width="190"
@@ -390,7 +470,6 @@
                                                 ASAUN
                                             </th>
 
-
                                         </tr>
 
                                     </thead>
@@ -398,7 +477,7 @@
 
                                     <tbody>
 
-                                        {% for obj in catagendalist %}
+                                        {% for obj in agendatolist %}
 
                                             <tr>
 
@@ -417,17 +496,41 @@
 
                                                 </td>
 
+                                                 <!-- NAME -->
+                                                <td data-title="Ajenda Ba">
 
-                                                <!-- CATEGORY -->
+                                                    {{ obj.code }}
+
+                                                </td>
+                            
+
+                                                <!-- NAME -->
+                                                <td data-title="Ajenda Ba">
+
+                                                    {{ obj.name }}
+
+                                                </td>
+
+
+                                                <!-- STATUS -->
                                                 <td
-                                                    data-title="Kategoria Ajenda"
+                                                    class="text-center"
+                                                    data-title="Estadu"
                                                 >
 
-                                                    <strong>
+                                                    {% if obj.is_active %}
 
-                                                        {{ obj.name_category }}
+                                                        <span class="status-active">
+                                                            Ativu
+                                                        </span>
 
-                                                    </strong>
+                                                    {% else %}
+
+                                                        <span class="status-inactive">
+                                                            La Ativu
+                                                        </span>
+
+                                                    {% endif %}
 
                                                 </td>
 
@@ -441,7 +544,7 @@
 
                                                     <!-- EDIT -->
                                                     <a
-                                                        href="{% url 'categoryagenda_edit' uuid=obj.uuid %}"
+                                                        href="{% url 'agendato_edit' uuid=obj.uuid%}"
                                                         data-toggle="tooltip"
                                                         title="Hadia"
                                                         class="
@@ -461,7 +564,7 @@
 
                                                     <!-- DELETE -->
                                                     <a
-                                                        href="{% url 'categoryagenda_delete' uuid=obj.uuid %}"
+                                                        href="{% url 'agendato_delete' uuid=obj.uuid %}"
                                                         data-toggle="tooltip"
                                                         title="Hamos"
                                                         class="
@@ -481,7 +584,6 @@
 
                                                 </td>
 
-
                                             </tr>
 
 
@@ -490,23 +592,13 @@
                                             <tr>
 
                                                 <td
-                                                    colspan="3"
-                                                    class="
-                                                        text-center
-                                                        text-muted
-                                                        py-4
-                                                    "
+                                                    colspan="5"
+                                                    class="text-center text-muted py-4"
                                                 >
 
-                                                    <i
-                                                        class="
-                                                            fa
-                                                            fa-info-circle
-                                                            mr-1
-                                                        "
-                                                    ></i>
+                                                    <i class="fa fa-info-circle mr-1"></i>
 
-                                                    Seidauk iha Kategoria Ajenda.
+                                                    Seidauk iha dadus Ajenda Ba.
 
                                                 </td>
 
@@ -515,7 +607,6 @@
                                         {% endfor %}
 
                                     </tbody>
-
 
                                 </table>
 

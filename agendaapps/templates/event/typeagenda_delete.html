@@ -1,0 +1,328 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<style>
+    .category-page {
+        padding-bottom: 25px;
+    }
+
+    .category-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+    }
+
+    .category-card-body {
+        padding: 20px;
+    }
+
+    .category-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .category-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .delete-container {
+        background: #f6f9fc;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 25px;
+    }
+
+    .delete-question {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .delete-question h6 {
+        color: #17324d;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .delete-question p {
+        margin: 0;
+        color: #6b7d8c;
+        font-size: 13px;
+    }
+
+    .data-box {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .data-row {
+        display: flex;
+        border-bottom: 1px solid #edf1f5;
+        padding: 13px 15px;
+    }
+
+    .data-row:last-child {
+        border-bottom: none;
+    }
+
+    .data-label {
+        width: 160px;
+        color: #6b7d8c;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .data-value {
+        flex: 1;
+        color: #17324d;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .delete-warning {
+        background: #fff8e1;
+        border: 1px solid #ffe08a;
+        border-radius: 8px;
+        color: #856404;
+        padding: 13px 15px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+    .delete-danger {
+        background: #fff2f3;
+        border: 1px solid #f1c5c9;
+        border-radius: 8px;
+        color: #a71d2a;
+        padding: 13px 15px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+    .form-action {
+        border-top: 1px solid #dbe6ef;
+        padding-top: 18px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .form-action .btn {
+        border-radius: 6px;
+        font-size: 13px;
+        padding: 7px 18px;
+    }
+
+    @media (max-width: 767px) {
+
+        .category-card-body {
+            padding: 15px;
+        }
+
+        .delete-container {
+            padding: 15px;
+        }
+
+        .data-row {
+            display: block;
+        }
+
+        .data-label {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+
+
+<div class="container-fluid category-page">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7 col-md-9 col-sm-12">
+
+            <div class="card category-card">
+
+                <div class="category-card-body">
+
+
+                    <!-- HEADER -->
+                    <div class="category-header">
+
+                        <h5>
+                            <i class="fa fa-trash mr-1"></i>
+                            Hamos Tipu Ajenda
+                        </h5>
+
+
+                        <a
+                            href="{% url 'typeagenda_list' %}"
+                            class="btn btn-light btn-sm"
+                        >
+                            <i class="fa fa-arrow-left mr-1"></i>
+                            Fila
+                        </a>
+
+                    </div>
+
+
+                    <div class="delete-container">
+
+
+                        <!-- QUESTION -->
+                        <div class="delete-question">
+
+                            <h6>
+                                <i class="fa fa-question-circle text-danger mr-1"></i>
+
+                                Konfirmasaun Hamos Dadus
+                            </h6>
+
+                            <p>
+                                Ita hakarak duni hamos Tipu Ajenda ida-ne'e?
+                            </p>
+
+                        </div>
+
+
+                        <!-- DATA -->
+                        <div class="data-box">
+
+                            <div class="data-row">
+
+                                <div class="data-label">
+                                    Tipu Ajenda
+                                </div>
+
+                                <div class="data-value">
+                                    {{ single_typeagenda.name_type }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="data-row">
+
+                                <div class="data-label">
+                                    Slug
+                                </div>
+
+                                <div class="data-value">
+                                    {{ single_typeagenda.name_type_slug }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- USED BY AGENDA -->
+                        {% if usage_count > 0 %}
+
+                            <div class="delete-warning">
+
+                                <i class="fa fa-exclamation-triangle mr-1"></i>
+
+                                <strong>
+                                    Tipu Ajenda ida-ne'e la bele hamos.
+                                </strong>
+
+                                <br>
+
+                                Tipu Ajenda
+
+                                <strong>
+                                    "{{ single_typeagenda.name_type }}"
+                                </strong>
+
+                                uza hela iha
+
+                                <strong>
+                                    {{ usage_count }}
+                                </strong>
+
+                                Ajenda.
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="delete-danger">
+
+                                <i class="fa fa-exclamation-circle mr-1"></i>
+
+                                Depois de hamos dadus ida-ne'e,
+                                informasaun la bele fila fali.
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- FORM -->
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <div class="form-action">
+
+
+                                <a
+                                    href="{% url 'typeagenda_list' %}"
+                                    class="btn btn-secondary"
+                                >
+                                    <i class="fa fa-times mr-1"></i>
+                                    Kansela
+                                </a>
+
+
+                                {% if usage_count == 0 %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                    >
+                                        <i class="fa fa-trash mr-1"></i>
+                                        Hamos
+                                    </button>
+
+                                {% endif %}
+
+                            </div>
+
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -2,27 +2,35 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-
-    path('category-agenda/', views.categoryagenda_list,
-         name='categoryagenda_list'),
-    path('category-agenda/edit=?<int:pk>',
-         views.categoryagenda_edit, name='categoryagenda_edit'),
-    path('category-agenda/delete=?<int:pk>',
-         views.categoryagenda_delete, name='categoryagenda_delete'),
+    path('agenda/type/',views.typeagenda_list, name='typeagenda_list'),
+    path('agenda/type/edit/<uuid:uuid>/',views.typeagenda_edit,name='typeagenda_edit'),
+    path('agenda/type/delete/<uuid:uuid>/',views.typeagenda_delete,name='typeagenda_delete'),
+    path('category-agenda/', views.categoryagenda_list,name='categoryagenda_list'),
+    path('category-agenda/<uuid:uuid>/edit/',views.categoryagenda_edit, name='categoryagenda_edit'),
+    path('category-agenda/<uuid:uuid>/delete/',views.categoryagenda_delete, name='categoryagenda_delete'),
     path('agenda/', views.agenda_list, name='agenda_list'),
     path('agenda/add/', views.agenda_add, name='agenda_add'),
     path('agenda/<uuid:uuid>/edit/', views.agenda_edit, name='agenda_edit'),
     path('agenda/<uuid:uuid>/delete/', views.agenda_delete, name='agenda_delete'),
-
-    path('completed-agenda/', views.completedAgenda_list,
-         name='completedAgenda_list'),
-
-    path('concluded-agenda/', views.concludedAgenda_list,
-         name='concludedAgenda_list'),
-    path('concluded-agenda/<slug:title_slug>',
-         views.concludedAgenda_list_detail, name='concludedAgenda_list_detail'),
-    path('concluded-agenda/comment/add/<int:pk>',
-         views.commentCoAgenda_add, name='commentCoAgenda_add'),
+    
+    path('agenda/to/', views.agendato_list, name='agendato_list'),
+    path('agenda/to/<uuid:uuid>/edit/',views.agendato_edit,name='agendato_edit'),
+    path('agenda/to/<uuid:uuid>/delete/',views.agendato_delete,name='agendato_delete'),
+    
+    path('agenda/delegation/', views.agenda_delegation_list, name='agenda_delegation_list'),
+    path('agenda/delegation/<uuid:uuid>/',views.agenda_delegation_detail,name='agenda_delegation_detail'),
+    
+    
+    path("notification/",views.notification_list,name="notification_list"),
+    path("notification/live/",views.notification_live,name="notification_live"),
+    path("notification/<uuid:uuid>/open/",views.notification_open,name="notification_open"),
+    path("notification/mark-all-read/",views.notification_mark_all_read,name="notification_mark_all_read"),
+   
+   
+    path('completed-agenda/', views.completedAgenda_list,name='completedAgenda_list'),
+    path('concluded-agenda/', views.concludedAgenda_list,  name='concludedAgenda_list'),
+    path('concluded-agenda/<slug:title_slug>', views.concludedAgenda_list_detail, name='concludedAgenda_list_detail'),
+    path('concluded-agenda/comment/add/<int:pk>', views.commentCoAgenda_add, name='commentCoAgenda_add'),
 
 
 

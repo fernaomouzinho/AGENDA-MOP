@@ -1,0 +1,1948 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.delegation-page {
+    padding-bottom: 30px;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.delegation-card {
+    background: #ffffff;
+
+    border: none;
+    border-radius: 14px;
+
+    overflow: visible;
+
+    box-shadow:
+        0 6px 20px
+        rgba(15, 76, 129, 0.10);
+}
+
+
+.delegation-card-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.delegation-header {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    padding: 14px 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.delegation-header h5 {
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summary-card {
+    background: #ffffff;
+
+    border: 1px solid #dbe6ef;
+    border-radius: 10px;
+
+    padding: 16px;
+
+    height: 100%;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+}
+
+
+.summary-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 15px
+        rgba(15, 76, 129, 0.10);
+}
+
+
+.summary-card.active-summary {
+    border-color: #0f4c81;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(15, 76, 129, .08);
+}
+
+
+.summary-label {
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    color: #6b7d8c;
+
+    margin-bottom: 8px;
+}
+
+
+.summary-number {
+    font-size: 27px;
+    font-weight: 700;
+
+    color: #17324d;
+}
+
+
+.summary-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    font-size: 18px;
+}
+
+
+.summary-total .summary-icon {
+    background: #eef5fa;
+    color: #0f4c81;
+}
+
+
+.summary-upcoming .summary-icon {
+    background: #fff2c6;
+    color: #946700;
+}
+
+
+.summary-running .summary-icon {
+    background: #e7f0ff;
+    color: #0d6efd;
+}
+
+
+.summary-concluded .summary-icon {
+    background: #e8f7ef;
+    color: #16844f;
+}
+
+
+/* =========================================================
+   NEXT DELEGATED MEETING
+========================================================= */
+
+.next-delegation-panel {
+    margin-top: 4px;
+    margin-bottom: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe6ef;
+    border-left: 4px solid #ffbd1a;
+
+    border-radius: 10px;
+
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    transition: all .2s ease;
+}
+
+
+.next-delegation-panel:hover {
+    box-shadow:
+        0 5px 16px
+        rgba(15, 76, 129, .10);
+}
+
+
+.next-delegation-icon {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: #fff4cf;
+    color: #9b7000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+
+.next-delegation-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.next-delegation-label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7b8d9d;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.next-delegation-title {
+    display: block;
+
+    color: #0f4c81;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+
+.next-delegation-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px 17px;
+
+    color: #63798a;
+
+    font-size: 12px;
+}
+
+
+.next-delegation-meta i {
+    color: #1976b9;
+
+    margin-right: 4px;
+}
+
+
+.next-delegation-route {
+    margin-top: 8px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.next-person-from {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 5px;
+
+    background: #eef5fa;
+    color: #0f4c81;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.next-person-to {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 5px;
+
+    background: #e8f7ef;
+    color: #16844f;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.next-delegation-arrow {
+    color: #8ba0b1;
+
+    font-size: 12px;
+}
+
+
+.next-delegation-action {
+    margin-left: auto;
+}
+
+
+.next-delegation-action .btn {
+    white-space: nowrap;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+
+.filter-status {
+    background: #ffffff;
+
+    border: 1px solid #d3e0ea;
+
+    color: #52687a;
+
+    border-radius: 20px;
+
+    padding: 6px 15px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all .2s;
+}
+
+
+.filter-status:hover {
+    border-color: #0f4c81;
+
+    color: #0f4c81;
+}
+
+
+.filter-status.active {
+    background: #0f4c81;
+
+    border-color: #0f4c81;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-container {
+    border: 1px solid #dbe6ef;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    padding: 15px;
+
+    overflow: hidden;
+}
+
+
+.delegation-table {
+    margin-bottom: 0;
+
+    font-size: 13px;
+}
+
+
+.delegation-table thead {
+    background: #edf3f7;
+}
+
+
+.delegation-table thead th {
+    color: #003b5c;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    vertical-align: middle;
+
+    padding: 10px 8px;
+
+    white-space: nowrap;
+}
+
+
+.delegation-table tbody td {
+    vertical-align: middle;
+
+    color: #263f55;
+
+    padding: 10px 8px;
+}
+
+
+.delegation-table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+.number-circle {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 28px;
+    height: 28px;
+
+    border-radius: 20px;
+
+    background: #eef5fa;
+    color: #0f4c81;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   AGENDA LINK
+========================================================= */
+
+.agenda-link {
+    color: #0f4c81;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.agenda-link:hover {
+    color: #1976b9;
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   PARTICIPANTS
+========================================================= */
+
+.participant-from {
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #eef5fa;
+    color: #0f4c81;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.participant-to {
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #e8f7ef;
+    color: #16844f;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+    display: inline-block;
+
+    min-width: 90px;
+
+    text-align: center;
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.status-upcoming {
+    background: #ffbd1a;
+    color: #17324d;
+}
+
+
+.status-running {
+    background: #0d6efd;
+    color: #ffffff;
+}
+
+
+.status-concluded {
+    background: #198754;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   CALENDAR SECTION
+========================================================= */
+
+.calendar-section {
+    margin-top: 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe6ef;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+
+.calendar-title {
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    padding: 14px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.calendar-title h5 {
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.calendar-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   CALENDAR LEGEND
+========================================================= */
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #e7edf2;
+}
+
+
+.legend-item {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #52687a;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+
+    border-radius: 3px;
+}
+
+
+.legend-upcoming {
+    background: #ffbd1a;
+}
+
+
+.legend-running {
+    background: #0d6efd;
+}
+
+
+.legend-concluded {
+    background: #198754;
+}
+
+
+/* =========================================================
+   FULLCALENDAR
+========================================================= */
+
+#delegationCalendar {
+    width: 100%;
+
+    /*
+     * Makes it obvious that the calendar
+     * has an area even before events load.
+     */
+    min-height: 620px;
+}
+
+
+.fc {
+    font-size: 13px;
+}
+
+
+.fc .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #17324d;
+}
+
+
+.fc .fc-button-primary {
+    background: #0f4c81 !important;
+
+    border-color: #0f4c81 !important;
+
+    font-size: 12px !important;
+
+    box-shadow: none !important;
+}
+
+
+.fc .fc-button-primary:hover {
+    background: #0b3b66 !important;
+
+    border-color: #0b3b66 !important;
+}
+
+
+.fc .fc-button-active {
+    background: #1976b9 !important;
+}
+
+
+.fc .fc-col-header-cell {
+    background: #edf3f7;
+
+    padding: 8px 0;
+}
+
+
+.fc .fc-col-header-cell-cushion {
+    color: #003b5c;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.fc .fc-daygrid-day-number {
+    color: #17324d;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.fc .fc-day-today {
+    background:
+        rgba(
+            15,
+            76,
+            129,
+            .06
+        ) !important;
+}
+
+
+.fc-event {
+    border: none !important;
+
+    border-radius: 5px !important;
+
+    padding: 3px 5px !important;
+
+    cursor: pointer;
+
+    font-size: 11px !important;
+
+    font-weight: 600;
+}
+
+
+.fc-event.calendar-upcoming {
+    background: #ffbd1a !important;
+
+    color: #17324d !important;
+}
+
+
+.fc-event.calendar-running {
+    background: #0d6efd !important;
+
+    color: #ffffff !important;
+}
+
+
+.fc-event.calendar-concluded {
+    background: #198754 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
+
+.calendar-tooltip {
+    position: fixed;
+
+    z-index: 999999;
+
+    width: 280px;
+
+    background: #ffffff;
+
+    border: 1px solid #dbe6ef;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, .15);
+
+    padding: 13px;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+
+.tooltip-title {
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #0f4c81;
+
+    margin-bottom: 8px;
+}
+
+
+.tooltip-row {
+    color: #52687a;
+
+    font-size: 11px;
+
+    margin-bottom: 5px;
+}
+
+
+.tooltip-row strong {
+    color: #17324d;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 767px) {
+
+    .delegation-card-body {
+        padding: 14px;
+    }
+
+
+    .summary-card {
+        margin-bottom: 10px;
+    }
+
+
+    .next-delegation-panel {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+
+    .next-delegation-content {
+        flex:
+            1 1
+            calc(100% - 70px);
+    }
+
+
+    .next-delegation-action {
+        width: 100%;
+
+        margin-left: 0;
+    }
+
+
+    .next-delegation-action .btn {
+        width: 100%;
+    }
+
+
+    .calendar-body {
+        padding: 12px;
+    }
+
+
+    .fc .fc-toolbar {
+        display: block;
+
+        text-align: center;
+    }
+
+
+    .fc .fc-toolbar-chunk {
+        margin-bottom: 8px;
+    }
+
+
+    .calendar-tooltip {
+        display: none !important;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="container-fluid delegation-page">
+
+
+    <!-- =====================================================
+         MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div
+                class="
+                    alert
+                    alert-dismissible
+                    fade
+                    show
+
+                    {% if message.tags == 'success' %}
+                        alert-success
+                    {% elif message.tags == 'error' %}
+                        alert-danger
+                    {% elif message.tags == 'warning' %}
+                        alert-warning
+                    {% else %}
+                        alert-info
+                    {% endif %}
+                "
+            >
+
+                {{ message }}
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="alert"
+                >
+                    <span>&times;</span>
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         MAIN CARD
+    ====================================================== -->
+
+    <div class="card delegation-card">
+
+        <div class="delegation-card-body">
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <div class="delegation-header">
+
+                <h5>
+
+                    <i class="fa fa-exchange mr-2"></i>
+
+                    Lista Delegasaun Ajenda
+
+                </h5>
+
+
+                <span class="badge badge-light">
+
+                    {{ total_count }}
+
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 SUMMARY
+            ================================================== -->
+
+            <div class="row">
+
+
+                <!-- TOTAL -->
+
+                <div class="col-lg-3 col-md-6 mb-3">
+
+                    <div
+                        class="
+                            summary-card
+                            summary-total
+                            active-summary
+                        "
+                        data-filter="All"
+                    >
+
+                        <div
+                            class="
+                                d-flex
+                                justify-content-between
+                                align-items-center
+                            "
+                        >
+
+                            <div>
+
+                                <div class="summary-label">
+                                    Total Delegasaun
+                                </div>
+
+                                <div class="summary-number">
+                                    {{ total_count }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="summary-icon">
+
+                                <i class="fa fa-list"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- UPCOMING -->
+
+                <div class="col-lg-3 col-md-6 mb-3">
+
+                    <div
+                        class="
+                            summary-card
+                            summary-upcoming
+                        "
+                        data-filter="Upcoming"
+                    >
+
+                        <div
+                            class="
+                                d-flex
+                                justify-content-between
+                                align-items-center
+                            "
+                        >
+
+                            <div>
+
+                                <div class="summary-label">
+                                    Tuir Mai
+                                </div>
+
+                                <div class="summary-number">
+                                    {{ upcoming_count }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="summary-icon">
+
+                                <i class="fa fa-clock-o"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RUNNING -->
+
+                <div class="col-lg-3 col-md-6 mb-3">
+
+                    <div
+                        class="
+                            summary-card
+                            summary-running
+                        "
+                        data-filter="Running"
+                    >
+
+                        <div
+                            class="
+                                d-flex
+                                justify-content-between
+                                align-items-center
+                            "
+                        >
+
+                            <div>
+
+                                <div class="summary-label">
+                                    Lao Hela
+                                </div>
+
+                                <div class="summary-number">
+                                    {{ running_count }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="summary-icon">
+
+                                <i class="fa fa-play-circle"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONCLUDED -->
+
+                <div class="col-lg-3 col-md-6 mb-3">
+
+                    <div
+                        class="
+                            summary-card
+                            summary-concluded
+                        "
+                        data-filter="Concluded"
+                    >
+
+                        <div
+                            class="
+                                d-flex
+                                justify-content-between
+                                align-items-center
+                            "
+                        >
+
+                            <div>
+
+                                <div class="summary-label">
+                                    Konkluidu
+                                </div>
+
+                                <div class="summary-number">
+                                    {{ concluded_count }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="summary-icon">
+
+                                <i class="fa fa-check-circle"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 NEXT DELEGATED MEETING
+            ================================================== -->
+
+            {% if next_delegation %}
+
+                <div class="next-delegation-panel">
+
+
+                    <div class="next-delegation-icon">
+
+                        <i class="fa fa-bell-o"></i>
+
+                    </div>
+
+
+                    <div class="next-delegation-content">
+
+                        <span class="next-delegation-label">
+
+                            PRÓXIMU ENKONTRU DELEGADU
+
+                        </span>
+
+
+                        <span class="next-delegation-title">
+
+                            {{ next_delegation.agenda.title }}
+
+                        </span>
+
+
+                        <div class="next-delegation-meta">
+
+                            <span>
+
+                                <i class="fa fa-calendar"></i>
+
+                                {{ next_delegation.agenda.start_time|date:"d/m/Y" }}
+
+                            </span>
+
+
+                            <span>
+
+                                <i class="fa fa-clock-o"></i>
+
+                                {{ next_delegation.agenda.start_time|date:"H:i" }}
+
+                                -
+
+                                {{ next_delegation.agenda.end_time|date:"H:i" }}
+
+                            </span>
+
+
+                            {% if next_delegation.agenda.location %}
+
+                                <span>
+
+                                    <i class="fa fa-map-marker"></i>
+
+                                    {{ next_delegation.agenda.location }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                            {% if next_delegation.agenda.institution %}
+
+                                <span>
+
+                                    <i class="fa fa-building"></i>
+
+                                    {{ next_delegation.agenda.institution }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="next-delegation-route">
+
+                            <span class="next-person-from">
+
+                                {{ next_delegation.delegated_from.name }}
+
+                            </span>
+
+
+                            <span class="next-delegation-arrow">
+
+                                <i class="fa fa-long-arrow-right"></i>
+
+                            </span>
+
+
+                            <span class="next-person-to">
+
+                                {{ next_delegation.delegated_to.name }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="next-delegation-action">
+
+                        <a
+                            href="{% url 'agenda_delegation_detail' uuid=next_delegation.uuid %}"
+                            class="btn btn-warning"
+                        >
+
+                            <i class="fa fa-eye mr-1"></i>
+
+                            Haree Detallu
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 FILTER
+            ================================================== -->
+
+            <div class="filter-section">
+
+                <button
+                    type="button"
+                    class="filter-status active"
+                    data-status="All"
+                >
+                    Total
+                </button>
+
+
+                <button
+                    type="button"
+                    class="filter-status"
+                    data-status="Upcoming"
+                >
+                    Tuir Mai
+                </button>
+
+
+                <button
+                    type="button"
+                    class="filter-status"
+                    data-status="Running"
+                >
+                    Lao Hela
+                </button>
+
+
+                <button
+                    type="button"
+                    class="filter-status"
+                    data-status="Concluded"
+                >
+                    Konkluidu
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="table-container">
+
+                <div class="table-responsive">
+
+                    <table
+                        class="
+                            table
+                            table-bordered
+                            table-sm
+                            delegation-table
+                        "
+                        id="delegationTable"
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center">
+                                    NU.
+                                </th>
+
+                                <th>
+                                    AJENDA
+                                </th>
+
+                                <th>
+                                    DELEGA HUSI
+                                </th>
+
+                                <th>
+                                    DELEGA BA
+                                </th>
+
+                                <th>
+                                    DATA ENKONTRU
+                                </th>
+
+                                <th>
+                                    DATA DELEGASAUN
+                                </th>
+
+                                <th class="text-center">
+                                    STATUS
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="delegationTableBody">
+
+                            {% for obj in delegation_list %}
+
+                                <tr
+                                    data-meeting-status="{{ obj.meeting_status }}"
+                                >
+
+                                    <td class="text-center">
+
+                                        <span class="number-circle">
+
+                                            {{ forloop.counter }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'agenda_delegation_detail' uuid=obj.uuid %}"
+                                            class="agenda-link"
+                                        >
+
+                                            {{ obj.agenda.title }}
+
+                                        </a>
+
+
+                                        {% if obj.agenda.location %}
+
+                                            <br>
+
+                                            <small class="text-muted">
+
+                                                <i class="fa fa-map-marker"></i>
+
+                                                {{ obj.agenda.location }}
+
+                                            </small>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="participant-from">
+
+                                            {{ obj.delegated_from.name }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="participant-to">
+
+                                            {{ obj.delegated_to.name }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <i
+                                            class="
+                                                fa
+                                                fa-calendar
+                                                text-primary
+                                                mr-1
+                                            "
+                                        ></i>
+
+                                        {{ obj.agenda.start_time|date:"d/m/Y" }}
+
+                                        <br>
+
+                                        <small class="text-muted">
+
+                                            <i class="fa fa-clock-o"></i>
+
+                                            {{ obj.agenda.start_time|date:"H:i" }}
+
+                                            -
+
+                                            {{ obj.agenda.end_time|date:"H:i" }}
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ obj.delegated_at|date:"d/m/Y" }}
+
+                                        <br>
+
+                                        <small class="text-muted">
+
+                                            {{ obj.delegated_at|date:"H:i:s" }}
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <td class="text-center">
+
+                                        {% if obj.meeting_status == "Upcoming" %}
+
+                                            <span
+                                                class="
+                                                    status-badge
+                                                    status-upcoming
+                                                "
+                                            >
+                                                TUIR MAI
+                                            </span>
+
+                                        {% elif obj.meeting_status == "Running" %}
+
+                                            <span
+                                                class="
+                                                    status-badge
+                                                    status-running
+                                                "
+                                            >
+                                                LAO HELA
+                                            </span>
+
+                                        {% else %}
+
+                                            <span
+                                                class="
+                                                    status-badge
+                                                    status-concluded
+                                                "
+                                            >
+                                                KONKLUIDU
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+
+                            {% empty %}
+
+                                <tr>
+
+                                    <td
+                                        colspan="7"
+                                        class="
+                                            text-center
+                                            text-muted
+                                            py-4
+                                        "
+                                    >
+
+                                        <i class="fa fa-info-circle mr-1"></i>
+
+                                        Seidauk iha Delegasaun Ajenda.
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CALENDAR
+            ================================================== -->
+
+            <div class="calendar-section">
+
+                <div class="calendar-title">
+
+                    <h5>
+
+                        <i class="fa fa-calendar mr-2"></i>
+
+                        Kalendáriu Delegasaun Ajenda
+
+                    </h5>
+
+                </div>
+
+
+                <div class="calendar-body">
+
+
+                    <!-- LEGEND -->
+
+                    <div class="calendar-legend">
+
+                        <div class="legend-item">
+
+                            <span
+                                class="
+                                    legend-dot
+                                    legend-upcoming
+                                "
+                            ></span>
+
+                            Tuir Mai
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span
+                                class="
+                                    legend-dot
+                                    legend-running
+                                "
+                            ></span>
+
+                            Lao Hela
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span
+                                class="
+                                    legend-dot
+                                    legend-concluded
+                                "
+                            ></span>
+
+                            Konkluidu
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FULLCALENDAR TARGET -->
+
+                    <div id="delegationCalendar"></div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOOLTIP
+========================================================= -->
+
+<div
+    id="calendarTooltip"
+    class="calendar-tooltip"
+>
+
+    <div
+        id="tooltipTitle"
+        class="tooltip-title"
+    ></div>
+
+    <div
+        id="tooltipContent"
+    ></div>
+
+</div>
+
+
+<!-- =========================================================
+     DJANGO CALENDAR JSON
+========================================================= -->
+
+{{ calendar_events|json_script:"calendar-events-data" }}
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+{% block scripts %}
+
+<script
+    src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"
+></script>
+
+<script>
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const calendarElement =
+            document.getElementById(
+                "delegationCalendar"
+            );
+
+        const dataElement =
+            document.getElementById(
+                "calendar-events-data"
+            );
+
+
+        console.log(
+            "1. Calendar element:",
+            calendarElement
+        );
+
+        console.log(
+            "2. JSON element:",
+            dataElement
+        );
+
+        console.log(
+            "3. FullCalendar type:",
+            typeof FullCalendar
+        );
+
+
+        // =====================================================
+        // CHECK CALENDAR DIV
+        // =====================================================
+
+        if (!calendarElement) {
+
+            console.error(
+                "ERROR: delegationCalendar div not found."
+            );
+
+            return;
+        }
+
+
+        // =====================================================
+        // CHECK FULLCALENDAR LIBRARY
+        // =====================================================
+
+        if (
+            typeof FullCalendar
+            ===
+            "undefined"
+        ) {
+
+            console.error(
+                "ERROR: FullCalendar JS did not load."
+            );
+
+
+            calendarElement.innerHTML = `
+
+                <div
+                    class="
+                        alert
+                        alert-danger
+                        text-center
+                    "
+                >
+                    FullCalendar JS la karrega.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // =====================================================
+        // READ DJANGO EVENTS
+        // =====================================================
+
+        let events = [];
+
+
+        if (dataElement) {
+
+            try {
+
+                events =
+                    JSON.parse(
+                        dataElement.textContent
+                    );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "ERROR parsing calendar_events:",
+                    error
+                );
+
+            }
+        }
+
+
+        console.log(
+            "4. Django events:",
+            events
+        );
+
+
+        // =====================================================
+        // TEST EVENT
+        //
+        // Important:
+        // even when Django returns no events,
+        // calendar must still render.
+        // =====================================================
+
+        if (
+            !Array.isArray(events)
+        ) {
+
+            events = [];
+        }
+
+
+        // =====================================================
+        // CREATE CALENDAR
+        // =====================================================
+
+        try {
+
+            const calendar =
+                new FullCalendar.Calendar(
+                    calendarElement,
+                    {
+
+                        initialView:
+                            "dayGridMonth",
+
+                        height:
+                            650,
+
+                        headerToolbar: {
+
+                            left:
+                                "prev,next today",
+
+                            center:
+                                "title",
+
+                            right:
+                                "dayGridMonth,timeGridWeek,listMonth"
+                        },
+
+                        buttonText: {
+
+                            today:
+                                "Ohin",
+
+                            month:
+                                "Fulan",
+
+                            week:
+                                "Semana",
+
+                            list:
+                                "Lista"
+                        },
+
+                        events:
+                            events
+                    }
+                );
+
+
+            calendar.render();
+
+
+            console.log(
+                "5. CALENDAR RENDER SUCCESS"
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "ERROR creating FullCalendar:",
+                error
+            );
+
+
+            calendarElement.innerHTML = `
+
+                <div
+                    class="
+                        alert
+                        alert-danger
+                    "
+                >
+
+                    Calendar error.
+                    Favor haree Browser Console.
+
+                </div>
+            `;
+        }
+
+    }
+);
+</script>
+
+{% endblock %}

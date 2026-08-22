@@ -1,77 +1,561 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
+    render,
+)
+
+from django.urls import reverse
 from django.contrib import messages
-from .models import CatAgenda, Agenda,AgendaRecipient, RequestAgenda, HistAgenda, Informative, CommentInformative
-from .form import CategoryAgendaForm, AgendaForm, AgendaRecipientForm,  PostponedAgendaForm, CommentAgendaForm, RequestedAgendaForm, InformativeForm, CommentInformativeForm
-from django.contrib.auth.models import User
-from agendaapps.authentication.models import User
-from datetime import datetime
-from django.shortcuts import get_object_or_404, redirect, render
 from django.db import transaction
-import os
-from agendaapps.authentication.decorators import allowed_users
-from agenda.utils import get_roles
 from django.db.models import Q
+from django.http import JsonResponse
 from django.utils import timezone
-current_datetime = timezone.now()
+
+from datetime import datetime
+import os
 
 
-# Create your views here.
-# ======================================== Category Agenda Add ================================================================
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
-def categoryagenda_list(request):
+from .models import (
+    TypeAgenda,
+    CatAgenda,
+    Agenda,
+    AgendaTo,
+    AgendaDelegation,
+    AgendaRecipient,
+    RequestAgenda,
+    HistAgenda,
+    Informative,
+    CommentInformative,
+    Notification,
+    NotificationRead,
+)
+
+
+from .form import (
+    TypeAgendaForm,
+    CategoryAgendaForm,
+    AgendaForm,
+    AgendaToForm,
+    AgendaDelegationForm,
+    AgendaRecipientForm,
+    PostponedAgendaForm,
+    CommentAgendaForm,
+    RequestedAgendaForm,
+    InformativeForm,
+    CommentInformativeForm,
+)
+
+
+from agendaapps.authentication.decorators import (
+    allowed_users,
+)
+
+from agenda.utils import (
+    get_roles,
+)
+
+
+from .services import (
+    notify_new_agenda,
+    notify_agenda_updated,
+    notify_delegation,
+    get_notifications_for_roles,
+)
+
+# ============================================================
+# TYPE AGENDA LIST / ADD
+# ============================================================
+
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin',
+        'ajenda_user'
+    ]
+)
+def typeagenda_list(request):
     roles = get_roles(request)
-    catagendalist = CatAgenda.objects.all()
-    if request.method == "POST":
-        categoryagendaform = CategoryAgendaForm(request.POST)
-        if categoryagendaform.is_valid():
-            categoryagendaform.save()
+    typeagendalist = TypeAgenda.objects.all().order_by(
+        'name_type')
 
-            messages.success(request, ("New data is added"))
-        return redirect('categoryagenda_list')
+    if request.method == "POST":
+
+        typeagendaform = TypeAgendaForm(
+            request.POST
+        )
+
+        if typeagendaform.is_valid():
+
+            name_type = (
+                typeagendaform.cleaned_data
+                .get('name_type', '')
+                .strip()
+            )
+
+            # ---------------------------------------------
+            # CHECK DUPLICATE
+            # ---------------------------------------------
+            duplicate = TypeAgenda.objects.filter(
+                name_type__iexact=name_type
+            ).exists()
+
+            if duplicate:
+
+                messages.warning(
+                    request,
+                    f'Tipu Ajenda "{name_type}" '
+                    f'iha ona iha sistema.'
+                )
+
+            else:
+
+                obj = typeagendaform.save(
+                    commit=False
+                )
+
+                obj.name_type = name_type
+                obj.save()
+
+                messages.success(
+                    request,
+                    f'Tipu Ajenda "{name_type}" '
+                    f'aumenta ho susesu.'
+                )
+
+                return redirect(
+                    'typeagenda_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                'Dadus la validu. Favor verifica fila fali.'
+            )
 
     else:
+
+        typeagendaform = TypeAgendaForm()
+
+    context = {
+        'typeagendaform': typeagendaform,
+        'typeagendalist': typeagendalist,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/typeagenda_list.html',
+        context
+    )
+
+
+
+# ============================================================
+# TYPE AGENDA EDIT
+# ============================================================
+
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin',
+        'ajenda_user'
+    ]
+)
+def typeagenda_edit(request, uuid):
+
+    roles = get_roles(request)
+
+    single_typeagenda = get_object_or_404(
+        TypeAgenda,
+        uuid=uuid
+    )
+
+    typeagendalist = TypeAgenda.objects.all().order_by(
+        'name_type'
+    )
+
+    if request.method == "POST":
+
+        typeagendaform = TypeAgendaForm(
+            request.POST,
+            instance=single_typeagenda
+        )
+
+        if typeagendaform.is_valid():
+
+            name_type = (
+                typeagendaform.cleaned_data
+                .get('name_type', '')
+                .strip()
+            )
+
+            duplicate = (
+                TypeAgenda.objects
+                .filter(
+                    name_type__iexact=name_type
+                )
+                .exclude(
+                    uuid=single_typeagenda.uuid
+                )
+                .exists()
+            )
+
+            if duplicate:
+
+                messages.warning(
+                    request,
+                    f'Tipu Ajenda "{name_type}" '
+                    f'iha ona iha sistema.'
+                )
+
+            else:
+
+                obj = typeagendaform.save(
+                    commit=False
+                )
+
+                obj.name_type = name_type
+
+                # save() automatically updates slug
+                obj.save()
+
+                messages.success(
+                    request,
+                    f'Tipu Ajenda "{name_type}" '
+                    f'atualiza ho susesu.'
+                )
+
+                return redirect(
+                    'typeagenda_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                'Dadus la validu. Favor verifica fila fali.'
+            )
+
+    else:
+
+        typeagendaform = TypeAgendaForm(
+            instance=single_typeagenda
+        )
+
+    context = {
+        'single_typeagenda': single_typeagenda,
+        'typeagendaform': typeagendaform,
+        'typeagendalist': typeagendalist,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/typeagenda_edit.html',
+        context
+    )
+    
+    
+# ============================================================
+# TYPE AGENDA DELETE
+# ============================================================
+
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin'
+    ]
+)
+def typeagenda_delete(request, uuid):
+
+    roles = get_roles(request)
+
+    single_typeagenda = get_object_or_404(
+        TypeAgenda,
+        uuid=uuid
+    )
+
+    # related_name="agenda" in Agenda.meeting_type
+    usage_count = single_typeagenda.agenda.count()
+
+    if request.method == "POST":
+
+        if usage_count > 0:
+
+            messages.error(
+                request,
+                f'Tipu Ajenda "{single_typeagenda.name_type}" '
+                f'la bele hamos tanba uza hela iha '
+                f'{usage_count} Ajenda.'
+            )
+
+            return redirect(
+                'typeagenda_list'
+            )
+
+        name_type = single_typeagenda.name_type
+
+        single_typeagenda.delete()
+
+        messages.success(
+            request,
+            f'Tipu Ajenda "{name_type}" '
+            f'hamos ho susesu.'
+        )
+
+        return redirect(
+            'typeagenda_list'
+        )
+
+    context = {
+        'single_typeagenda': single_typeagenda,
+        'usage_count': usage_count,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/typeagenda_delete.html',
+        context
+    )
+    
+    
+# Create your views here.
+# ======================================== Category Agenda Add ================================================================
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin',
+        'ajenda_user'
+    ]
+)
+def categoryagenda_list(request):
+
+    roles = get_roles(request)
+
+    catagendalist = CatAgenda.objects.all().order_by(
+        'name_category'
+    )
+
+    if request.method == "POST":
+
+        categoryagendaform = CategoryAgendaForm(
+            request.POST
+        )
+
+        if categoryagendaform.is_valid():
+
+            name_category = (
+                categoryagendaform.cleaned_data
+                .get('name_category', '')
+                .strip()
+            )
+
+            # ==========================================
+            # CHECK DUPLICATE
+            # ==========================================
+            duplicate = CatAgenda.objects.filter(
+                name_category__iexact=name_category
+            ).exists()
+
+            if duplicate:
+
+                messages.warning(
+                    request,
+                    f'Kategoria Ajenda "{name_category}" '
+                    f'iha ona iha sistema.'
+                )
+
+            else:
+
+                categoryagendaform.save()
+
+                messages.success(
+                    request,
+                    f'Kategoria Ajenda "{name_category}" '
+                    f'rai ho susesu.'
+                )
+
+                return redirect(
+                    'categoryagenda_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                "Dadus la validu. Favor verifica fila fali."
+            )
+
+    else:
+
         categoryagendaform = CategoryAgendaForm()
-        context = {
-            'categoryagendaform': categoryagendaform,
-            'catagendalist': catagendalist,
-            'roles':roles
-        }
-    return render(request, 'event/category_agenda_list.html', context)
+
+
+    context = {
+        'categoryagendaform': categoryagendaform,
+        'catagendalist': catagendalist,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/category_agenda_list.html',
+        context
+    )
 
 # ============================================= Category Agenda Edit ================================================================
 
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
-def categoryagenda_edit(request, pk):
-    catagendalist = CatAgenda.objects.all()
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin',
+        'ajenda_user'
+    ]
+)
+def categoryagenda_edit(request, uuid):
+
+    roles = get_roles(request)
+
+    single_categoryagenda = get_object_or_404(
+        CatAgenda,
+        uuid=uuid
+    )
+
+    catagendalist = CatAgenda.objects.all().order_by(
+        'name_category'
+    )
 
     if request.method == "POST":
-        single_categoryagenda = CatAgenda.objects.get(pk=pk)
+
         categoryagendaform = CategoryAgendaForm(
-            request.POST, request.FILES, instance=single_categoryagenda)
+            request.POST,
+            request.FILES,
+            instance=single_categoryagenda
+        )
+
         if categoryagendaform.is_valid():
-            categoryagendaform.save()
-        messages.success(request, ("Data is updated"))
-        return redirect('categoryagenda_list')
+
+            name_category = (
+                categoryagendaform.cleaned_data
+                .get('name_category', '')
+                .strip()
+            )
+
+            # ==========================================
+            # CHECK DUPLICATE
+            # Exclude current category
+            # ==========================================
+            duplicate = (
+                CatAgenda.objects
+                .filter(
+                    name_category__iexact=name_category
+                )
+                .exclude(
+                    pk=single_categoryagenda.pk
+                )
+                .exists()
+            )
+
+            if duplicate:
+
+                messages.warning(
+                    request,
+                    f'Kategoria Ajenda "{name_category}" '
+                    f'iha ona iha sistema.'
+                )
+
+            else:
+
+                categoryagendaform.save()
+
+                messages.success(
+                    request,
+                    f'Kategoria Ajenda "{name_category}" '
+                    f'atualiza ho susesu.'
+                )
+
+                return redirect(
+                    'categoryagenda_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                "Dadus la validu. Favor verifica fila fali."
+            )
+
     else:
-     
-        single_categoryagenda = CatAgenda.objects.get(pk=pk)
-        categoryagendaform = CategoryAgendaForm(instance=single_categoryagenda)
 
-        context = {
-            'single_categoryagenda': single_categoryagenda,
-            'catagendalist': catagendalist,
-            'categoryagendaform': categoryagendaform,
-        }
-        return render(request, 'event/category_agenda_edit.html', context)
+        categoryagendaform = CategoryAgendaForm(
+            instance=single_categoryagenda
+        )
 
-# ============================================= Category Agenda Delete ================================================================
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin'])
-def categoryagenda_delete(request, pk):
-    single_categoryagenda = CatAgenda.objects.get(id=pk)
-    single_categoryagenda.delete()
-    messages.success(request, ("Delete successfully"))
-    return redirect('categoryagenda_list')
+
+    context = {
+        'single_categoryagenda': single_categoryagenda,
+        'catagendalist': catagendalist,
+        'categoryagendaform': categoryagendaform,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/category_agenda_edit.html',
+        context
+    )
+
+
+@allowed_users(allowed_roles=['sii_admin', 'ajenda_admin'])
+def categoryagenda_delete(request, uuid):
+
+    single_categoryagenda = get_object_or_404(
+        CatAgenda,
+        uuid=uuid
+    )
+
+    # Check whether this category is already used by Agenda
+    agenda_count = single_categoryagenda.agenda.count()
+
+    if request.method == "POST":
+
+        # Do not delete category if Agenda is using it
+        if agenda_count > 0:
+
+            messages.error(
+                request,
+                "Kategoria Ajenda ida-ne'e la bele hamos "
+                "tanba iha Ajenda ne'ebé uza hela kategoria ida-ne'e."
+            )
+
+            return redirect('categoryagenda_list')
+
+        # Save name before deleting
+        category_name = single_categoryagenda.name_category
+
+        # Delete
+        single_categoryagenda.delete()
+
+        messages.success(
+            request,
+            f'Kategoria Ajenda "{category_name}" hamos ho susesu.'
+        )
+
+        return redirect('categoryagenda_list')
+
+
+    context = {
+        'single_categoryagenda': single_categoryagenda,
+        'agenda_count': agenda_count,
+    }
+
+    return render(
+        request,
+        'event/category_agenda_delete.html',
+        context
+    )
 
 # ======================================== List All Agenda ================================================================
 @allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
@@ -83,9 +567,20 @@ def agenda_list(request):
     return render(request, 'event/agenda_list.html', context)
 
 # ============================================= Agenda Add ================================================================
-
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
+@allowed_users(
+    allowed_roles=[
+        "sii_admin",
+        "ajenda_admin",
+        "ajenda_user",
+    ]
+)
 def agenda_add(request):
+
+    # ==========================================
+    # CURRENT DATETIME
+    # ==========================================
+    current_datetime = timezone.now()
+
 
     if request.method == "POST":
 
@@ -94,51 +589,120 @@ def agenda_add(request):
             request.FILES
         )
 
+
         if form.is_valid():
 
             agenda = form.save(
                 commit=False
             )
 
+
+           # ==========================================
+            # SSO USER WHO CREATED THE AGENDA
             # ==========================================
-            # Set Agenda status
+
+            central_user_id = (
+                getattr(
+                    request,
+                    "portal_user_id",
+                    None
+                )
+                or
+                request.session.get(
+                    "agenda_user_id"
+                )
+            )
+
+            central_username = (
+                getattr(
+                    request,
+                    "portal_user",
+                    None
+                )
+                or
+                request.session.get(
+                    "agenda_user"
+                )
+            )
+
+            agenda.central_user_id = (
+                str(central_user_id)
+                if central_user_id
+                else ""
+            )
+
+            agenda.central_username = (
+                central_username
+                or ""
+            )
+
+
+            # ==========================================
+            # SET AGENDA STATUS
             # ==========================================
 
-            if agenda.start_time >= current_datetime:
-
-                agenda.status = "Pending"
-
-            elif (
-                agenda.start_time <= current_datetime
-                and
-                agenda.end_time >= current_datetime
+            if (
+                agenda.start_time
+                >=
+                current_datetime
             ):
 
-                agenda.status = "Read"
+                agenda.status = (
+                    "Pending"
+                )
 
-            elif agenda.end_time < current_datetime:
 
-                agenda.status = "Read"
+            elif (
+                agenda.start_time
+                <=
+                current_datetime
+                and
+                agenda.end_time
+                >=
+                current_datetime
+            ):
+
+                agenda.status = (
+                    "Read"
+                )
+
+
+            elif (
+                agenda.end_time
+                <
+                current_datetime
+            ):
+
+                agenda.status = (
+                    "Read"
+                )
+
 
             # ==========================================
-            # Save Agenda first
+            # SAVE AGENDA
             # ==========================================
 
             agenda.save()
 
+
             # ==========================================
-            # IMPORTANT:
-            # Save selected Director / Minister
-            # from ManyToMany "recipients"
+            # SAVE MANY-TO-MANY RECIPIENTS
             # ==========================================
 
             form.save_m2m()
+            
+            notify_new_agenda(
+                request,
+                agenda
+            )
+
 
             # ==========================================
-            # Create Agenda History
+            # CREATE AGENDA HISTORY
             # ==========================================
 
             ha = HistAgenda(
+
                 id=agenda.id,
 
                 title=agenda.title,
@@ -153,75 +717,150 @@ def agenda_add(request):
                     agenda.institution.name_institution
                 ),
 
-                start_time=agenda.start_time,
+                start_time=(
+                    agenda.start_time
+                ),
 
-                start_time_new=agenda.start_time,
+                start_time_new=(
+                    agenda.start_time
+                ),
 
-                end_time=agenda.end_time,
+                end_time=(
+                    agenda.end_time
+                ),
 
-                end_time_new=agenda.end_time,
+                end_time_new=(
+                    agenda.end_time
+                ),
 
-                location=agenda.location,
+                location=(
+                    agenda.location
+                ),
 
-                location_new=agenda.location,
+                location_new=(
+                    agenda.location
+                ),
 
                 meeting_type=(
                     agenda.meeting_type.name_type
                 ),
 
-                observation=agenda.observation,
+                observation=(
+                    agenda.observation
+                ),
 
-                is_cancel=agenda.is_cancel,
+                is_cancel=(
+                    agenda.is_cancel
+                ),
 
-                is_active=agenda.is_active,
+                is_active=(
+                    agenda.is_active
+                ),
 
-                status=agenda.status,
+                status=(
+                    agenda.status
+                ),
 
-                created_at=agenda.created_at,
+                created_at=(
+                    agenda.created_at
+                ),
 
-                updated_at=agenda.updated_at,
+                updated_at=(
+                    agenda.updated_at
+                ),
             )
+
 
             ha.save()
 
+
+            # ==========================================
+            # SUCCESS MESSAGE
+            # ==========================================
+
             messages.success(
                 request,
-                "New Data Added"
+                "Ajenda rejista ho susesu."
             )
 
+
             return redirect(
-                'agenda_list'
+                "agenda_list"
             )
+
 
         else:
 
-            # Useful during development
-            print("Error: AgendaForm is invalid")
-            
+            # ==========================================
+            # INVALID FORM
+            # ==========================================
+
+            print(
+                "Error: AgendaForm is invalid"
+            )
+
+            print(
+                form.errors
+            )
+
+
+            messages.error(
+                request,
+                (
+                    "Ajenda la konsege rejista. "
+                    "Favor verifica dadus."
+                )
+            )
+
 
     else:
 
         form = AgendaForm()
 
+
+    # ==============================================
+    # CONTEXT
+    # ==============================================
+
     context = {
-        'agendaform': form,
+
+        "agendaform":
+            form,
     }
+
 
     return render(
         request,
-        'event/agenda_add.html',
+        "event/agenda_add.html",
         context
     )
-# ============================================= Agenda Edit ================================================================
-
-
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
+@allowed_users(
+    allowed_roles=[
+        "sii_admin",
+        "ajenda_admin",
+        "ajenda_user",
+    ]
+)
 def agenda_edit(request, uuid):
+
+    # =====================================================
+    # GET AGENDA
+    # =====================================================
 
     single_agenda = get_object_or_404(
         Agenda,
         uuid=uuid
     )
+
+
+    current_datetime = (
+        timezone.now()
+    )
+
+
+    # =====================================================
+    # POST
+    # =====================================================
 
     if request.method == "POST":
 
@@ -231,18 +870,145 @@ def agenda_edit(request, uuid):
             instance=single_agenda
         )
 
+
         if agendaform.is_valid():
 
-            agendaform.save()
+            # =============================================
+            # DO NOT SAVE DIRECTLY YET
+            # =============================================
+
+            agenda = agendaform.save(
+                commit=False
+            )
+
+
+            # =============================================
+            # IMPORTANT
+            #
+            # central_user_id
+            # central_username
+            #
+            # remain the ORIGINAL creator.
+            #
+            # We do not overwrite them during edit.
+            # =============================================
+
+
+            # =============================================
+            # UPDATE STATUS
+            # =============================================
+
+            if (
+                agenda.start_time
+                >
+                current_datetime
+            ):
+
+                agenda.status = (
+                    "Pending"
+                )
+
+
+            elif (
+                agenda.start_time
+                <=
+                current_datetime
+                and
+                agenda.end_time
+                >=
+                current_datetime
+            ):
+
+                agenda.status = (
+                    "Read"
+                )
+
+
+            elif (
+                agenda.end_time
+                <
+                current_datetime
+            ):
+
+                agenda.status = (
+                    "Read"
+                )
+
+
+            # =============================================
+            # SAVE AGENDA
+            # =============================================
+
+            agenda.save()
+
+
+            # =============================================
+            # SAVE MANY TO MANY
+            #
+            # recipients
+            # =============================================
+
+            agendaform.save_m2m()
+
+
+            # =============================================
+            # CREATE UPDATE NOTIFICATION
+            #
+            # If agenda is delegated:
+            #     -> ajenda_vmn
+            #
+            # If not delegated:
+            #     -> ajenda_user
+            # =============================================
+
+            notify_agenda_updated(
+                request,
+                agenda
+            )
+
+
+            # =============================================
+            # SUCCESS
+            # =============================================
 
             messages.success(
                 request,
                 "Ajenda atualiza ho susesu."
             )
 
+
             return redirect(
                 "agenda_list"
             )
+
+
+        # =================================================
+        # INVALID FORM
+        # =================================================
+
+        else:
+
+            print(
+                "AGENDA EDIT FORM ERROR:"
+            )
+
+            print(
+                agendaform.errors
+            )
+
+
+            messages.error(
+                request,
+                (
+                    "Ajenda la konsege atualiza. "
+                    "Favor verifica dadus no koko fali."
+                )
+            )
+
+
+    # =====================================================
+    # GET
+    # =====================================================
 
     else:
 
@@ -250,17 +1016,26 @@ def agenda_edit(request, uuid):
             instance=single_agenda
         )
 
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
     context = {
-        "single_agenda": single_agenda,
-        "agendaform": agendaform,
+
+        "single_agenda":
+            single_agenda,
+
+        "agendaform":
+            agendaform,
     }
+
 
     return render(
         request,
         "event/agenda_edit.html",
         context
     )
-
 # ============================================= Agenda Delete ================================================================
 
 
@@ -296,6 +1071,482 @@ def agenda_delete(request, uuid):
         "event/agenda_delete.html",
         context
     )
+
+
+# ============================================================
+# AGENDA TO LIST / ADD
+# ============================================================
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin',
+        'ajenda_user'
+    ]
+)
+def agendato_list(request):
+
+    roles = get_roles(request)
+
+    agendatolist = AgendaTo.objects.all().order_by('name')
+
+    if request.method == "POST":
+
+        agendatoform = AgendaToForm(
+            request.POST
+        )
+
+        if agendatoform.is_valid():
+
+            name = (
+                agendatoform.cleaned_data
+                .get('name', '')
+                .strip()
+            )
+
+           
+            # =============================================
+            # DUPLICATE NAME
+            # =============================================
+            name_duplicate = AgendaTo.objects.filter(
+                name__iexact=name
+            ).exists()
+
+            if name_duplicate:
+
+                messages.warning(
+                    request,
+                    f'Ajenda Ba "{name}" iha ona iha sistema.'
+                )
+
+            else:
+
+                obj = agendatoform.save(
+                    commit=False
+                )
+
+                obj.name = name
+
+                obj.save()
+
+                messages.success(
+                    request,
+                    f'Ajenda Ba "{name}" aumenta ho susesu.'
+                )
+
+                return redirect(
+                    'agendato_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                "Dadus la validu. Favor verifica fila fali."
+            )
+
+    else:
+
+        agendatoform = AgendaToForm()
+
+
+    context = {
+        'agendatoform': agendatoform,
+        'agendatolist': agendatolist,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/agendato_list.html',
+        context
+    )
+    
+    
+    # ============================================================
+# AGENDA TO EDIT
+# ============================================================
+
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
+def agendato_edit(request, uuid):
+    roles = get_roles(request)
+    single_agendato = get_object_or_404(AgendaTo,uuid=uuid)
+    agendatolist = AgendaTo.objects.all().order_by('name')
+    if request.method == "POST":
+        agendatoform = AgendaToForm(request.POST,instance=single_agendato)
+        if agendatoform.is_valid():
+            name = (agendatoform.cleaned_data.get('name', '').strip())
+            
+            # =============================================
+            # CHECK DUPLICATE NAME
+            # =============================================
+            name_duplicate = (
+                AgendaTo.objects
+                .filter(
+                    name__iexact=name
+                )
+                .exclude(
+                    pk=single_agendato.pk
+                )
+                .exists()
+            )
+
+            if name_duplicate:
+
+                messages.warning(
+                    request,
+                    f'Ajenda Ba "{name}" iha ona iha sistema.'
+                )
+
+            else:
+
+                obj = agendatoform.save(
+                    commit=False
+                )
+
+            
+                obj.name = name
+
+                obj.save()
+
+                messages.success(
+                    request,
+                    f'Ajenda Ba "{name}" atualiza ho susesu.'
+                )
+
+                return redirect(
+                    'agendato_list'
+                )
+
+        else:
+
+            messages.error(
+                request,
+                "Dadus la validu. Favor verifica fila fali."
+            )
+
+    else:
+
+        agendatoform = AgendaToForm(
+            instance=single_agendato
+        )
+
+
+    context = {
+        'single_agendato': single_agendato,
+        'agendatoform': agendatoform,
+        'agendatolist': agendatolist,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/agendato_edit.html',
+        context
+    )
+    
+# ============================================================
+# AGENDA TO DELETE
+# ============================================================
+@allowed_users(
+    allowed_roles=[
+        'sii_admin',
+        'ajenda_admin'
+    ]
+)
+def agendato_delete(request, uuid):
+
+    roles = get_roles(request)
+
+    single_agendato = get_object_or_404(
+        AgendaTo,
+        uuid=uuid
+    )
+
+    # Check whether this AgendaTo is already used
+    delegation_from_count = (
+        single_agendato
+        .delegations_from
+        .count()
+    )
+
+    delegation_to_count = (
+        single_agendato
+        .delegations_to
+        .count()
+    )
+
+    usage_count = (
+        delegation_from_count
+        + delegation_to_count
+    )
+
+    if request.method == "POST":
+
+        # ==========================================
+        # PROTECT USED DATA
+        # ==========================================
+        if usage_count > 0:
+
+            messages.error(
+                request,
+                f'Ajenda Ba "{single_agendato.name}" '
+                f'la bele hamos tanba uza hela iha '
+                f'{usage_count} delegasaun.'
+            )
+
+            return redirect(
+                'agendato_list'
+            )
+
+        name = single_agendato.name
+
+        single_agendato.delete()
+
+        messages.success(
+            request,
+            f'Ajenda Ba "{name}" hamos ho susesu.'
+        )
+
+        return redirect(
+            'agendato_list'
+        )
+
+
+    context = {
+        'single_agendato': single_agendato,
+        'delegation_from_count': delegation_from_count,
+        'delegation_to_count': delegation_to_count,
+        'usage_count': usage_count,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/agendato_delete.html',
+        context
+    )
+
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user','ajenda_vmn'])
+def agenda_delegation_list(request):
+
+    roles = get_roles(request)
+    
+
+    now = timezone.now()
+    delegation_list = list(
+        AgendaDelegation.objects
+        .select_related(
+            'agenda',
+            'agenda__catagenda',
+            'agenda__meeting_type',
+            'agenda__institution',
+            'delegated_from',
+            'delegated_to'
+        )
+        .order_by('-agenda__start_time')
+    )
+
+
+    # =====================================================
+    # COUNTERS
+    # =====================================================
+    total_count = 0
+    upcoming_count = 0
+    running_count = 0
+    concluded_count = 0
+
+
+    # =====================================================
+    # NEXT DELEGATED MEETING
+    # =====================================================
+    next_delegation = None
+
+
+    # =====================================================
+    # CALENDAR EVENTS
+    # =====================================================
+    calendar_events = []
+
+
+    # =====================================================
+    # PROCESS DELEGATION
+    # =====================================================
+    for obj in delegation_list:
+
+        total_count += 1
+
+        agenda = obj.agenda
+
+
+        # =================================================
+        # UPCOMING
+        # =================================================
+        if now < agenda.start_time:
+
+            obj.meeting_status = 'Upcoming'
+            obj.meeting_status_label = 'TUIR MAI'
+
+            upcoming_count += 1
+
+
+            # Find nearest upcoming delegated meeting
+            if (
+                next_delegation is None
+                or
+                agenda.start_time
+                <
+                next_delegation.agenda.start_time
+            ):
+
+                next_delegation = obj
+
+
+        # =================================================
+        # RUNNING
+        # =================================================
+        elif (
+            agenda.start_time
+            <=
+            now
+            <=
+            agenda.end_time
+        ):
+
+            obj.meeting_status = 'Running'
+            obj.meeting_status_label = 'LAO HELA'
+
+            running_count += 1
+
+
+        # =================================================
+        # CONCLUDED
+        # =================================================
+        else:
+
+            obj.meeting_status = 'Concluded'
+            obj.meeting_status_label = 'KONKLUIDU'
+
+            concluded_count += 1
+
+
+        # =================================================
+        # CALENDAR
+        # =================================================
+        calendar_events.append({
+
+            'id':
+                str(obj.uuid),
+
+            'title':
+                agenda.title,
+
+            'start':
+                agenda.start_time.isoformat(),
+
+            'end':
+                agenda.end_time.isoformat(),
+
+            'url':
+                reverse(
+                    'agenda_delegation_detail',
+                    kwargs={
+                        'uuid': obj.uuid
+                    }
+                ),
+
+            'status':
+                obj.meeting_status,
+
+            'status_label':
+                obj.meeting_status_label,
+
+            'delegated_from':
+                obj.delegated_from.name,
+
+            'delegated_to':
+                obj.delegated_to.name,
+
+            'location':
+                agenda.location or '',
+
+            'institution':
+                (
+                    str(agenda.institution)
+                    if agenda.institution
+                    else ''
+                ),
+
+            'note':
+                obj.note or '',
+        })
+
+
+    context = {
+
+        'delegation_list':
+            delegation_list,
+
+        'total_count':
+            total_count,
+
+        'upcoming_count':
+            upcoming_count,
+
+        'running_count':
+            running_count,
+
+        'concluded_count':
+            concluded_count,
+
+
+        # NEXT MEETING
+        'next_delegation':
+            next_delegation,
+
+
+        # CALENDAR
+        'calendar_events':
+            calendar_events,
+
+        'roles':
+            roles,
+    }
+
+
+    return render(
+        request,
+        'event/agenda_delegation_list.html',
+        context
+    )
+    
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user','ajenda_vmn'])
+def agenda_delegation_detail(request, uuid):
+
+    roles = get_roles(request)
+
+    delegation = get_object_or_404(
+        AgendaDelegation.objects.select_related(
+            'agenda',
+            'delegated_from',
+            'delegated_to',
+            'agenda__catagenda',
+            'agenda__meeting_type',
+            'agenda__institution'
+        ),
+        uuid=uuid
+    )
+
+    context = {
+        'delegation': delegation,
+        'roles': roles,
+    }
+
+    return render(
+        request,
+        'event/agenda_delegation_detail.html',
+        context
+    )
+
 
 
 # ================================================= Completed Agenda ================================================================
@@ -393,15 +1644,382 @@ def upcomingAgenda_list(request):
     return render(request, 'event/upcoming_agenda.html', context)
 
 
-@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
-def upcomingAgenda_list_detail(request, title_slug):
-    single_agenda = Agenda.objects.get(title_slug=title_slug)
-    all_agenda = Agenda.objects.all()
+
+@allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user','ajenda_vmn'])
+def upcomingAgenda_list_detail(request,title_slug):
+
+    # ================================================================
+    # GET AGENDA
+    # ================================================================
+    roles = get_roles(request)
+
+    single_agenda = get_object_or_404(
+        Agenda,
+        title_slug=title_slug
+    )
+
+    # ================================================================
+    # ALL AGENDA
+    # ================================================================
+
+    all_agenda = (
+        Agenda.objects
+        .all()
+    )
+
+
+    # ================================================================
+    # CURRENT ACTIVE DELEGATION
+    # ================================================================
+
+    active_delegation = (
+        AgendaDelegation.objects
+        .filter(
+            agenda=single_agenda,
+            is_active=True
+        )
+        .select_related(
+            "delegated_from",
+            "delegated_to"
+        )
+        .order_by(
+            "-delegated_at"
+        )
+        .first()
+    )
+    
+     # =====================================================
+    # CAN DELEGATE?
+    #
+    # TRUE only when:
+    # 1. Agenda has no active delegation
+    # 2. Current user is NOT Vice Minister
+    # =====================================================
+    can_delegate = (
+        active_delegation is None
+        and
+        "ajenda_vmn" not in roles
+    )
+
+
+    # ================================================================
+    # DELEGATION HISTORY
+    # ================================================================
+
+    delegation_history = (
+        AgendaDelegation.objects
+        .filter(
+            agenda=single_agenda
+        )
+        .select_related(
+            "delegated_from",
+            "delegated_to"
+        )
+        .order_by(
+            "-delegated_at"
+        )
+    )
+
+
+    # ================================================================
+    # POST
+    # ================================================================
+
+    if request.method == "POST":
+        
+         # ========================================================
+    # ROLE SECURITY
+    # ========================================================
+
+        if "ajenda_vmn" in roles:
+
+            messages.error(
+                request,
+                "Vice Ministro la iha permisaun atu halo delegasaun."
+            )
+
+            return redirect(
+                "upcomingAgenda_list_detail",
+                title_slug=single_agenda.title_slug
+            )
+
+        # ------------------------------------------------------------
+        # FIRST CHECK:
+        # IF ACTIVE DELEGATION ALREADY EXISTS, REJECT
+        # ------------------------------------------------------------
+
+        if (
+            AgendaDelegation.objects
+            .filter(
+                agenda=single_agenda,
+                is_active=True
+            )
+            .exists()
+        ):
+
+            messages.warning(
+                request,
+                (
+                    "Ajenda ida-ne'e delega ona. "
+                    "La bele aumenta delegasaun foun."
+                )
+            )
+
+            return redirect(
+                "upcomingAgenda_list_detail",
+                title_slug=single_agenda.title_slug
+            )
+
+
+        # ------------------------------------------------------------
+        # FORM
+        # ------------------------------------------------------------
+
+        delegation_form = (
+            AgendaDelegationForm(
+                request.POST
+            )
+        )
+
+
+        # ------------------------------------------------------------
+        # VALID FORM
+        # ------------------------------------------------------------
+
+        if delegation_form.is_valid():
+
+            delegated_to = (
+                delegation_form
+                .cleaned_data[
+                    "delegated_to"
+                ]
+            )
+
+            note = (
+                delegation_form
+                .cleaned_data
+                .get(
+                    "note"
+                )
+            )
+
+
+            # ========================================================
+            # TRANSACTION
+            # ========================================================
+
+            with transaction.atomic():
+
+                # ----------------------------------------------------
+                # LOCK AGENDA ROW
+                #
+                # This helps prevent two simultaneous requests from
+                # creating two delegations for the same agenda.
+                # ----------------------------------------------------
+
+                locked_agenda = (
+                    Agenda.objects
+                    .select_for_update()
+                    .get(
+                        pk=single_agenda.pk
+                    )
+                )
+
+
+                # ----------------------------------------------------
+                # SECOND CHECK INSIDE TRANSACTION
+                # ----------------------------------------------------
+
+                active_exists = (
+                    AgendaDelegation.objects
+                    .filter(
+                        agenda=locked_agenda,
+                        is_active=True
+                    )
+                    .exists()
+                )
+
+
+                if active_exists:
+
+                    messages.warning(
+                        request,
+                        (
+                            "Ajenda ida-ne'e delega ona. "
+                            "Delegasaun foun la bele regista."
+                        )
+                    )
+
+                    return redirect(
+                        "upcomingAgenda_list_detail",
+                        title_slug=(
+                            single_agenda.title_slug
+                        )
+                    )
+
+
+                # ----------------------------------------------------
+                # MINISTER
+                # ----------------------------------------------------
+
+                minister = get_object_or_404(
+                    AgendaTo,
+                    code="MN",
+                    is_active=True
+                )
+
+
+                # ----------------------------------------------------
+                # CREATE DELEGATION
+                # ----------------------------------------------------
+
+                delegation = ( AgendaDelegation.objects.create(
+
+                    agenda=
+                        locked_agenda,
+
+                    delegated_from=
+                        minister,
+
+                    delegated_to=
+                        delegated_to,
+
+                    delegated_at=
+                        timezone.now(),
+
+                    note=
+                        note,
+
+                    central_user_id=str(
+                        getattr(
+                            request,
+                            "portal_user_id",
+                            None
+                        )
+                        or
+                        request.session.get(
+                            "agenda_user_id",
+                            ""
+                        )
+                    ),
+
+                    central_username=(
+                        getattr(
+                            request,
+                            "portal_user",
+                            None
+                        )
+                        or
+                        request.session.get(
+                            "agenda_user",
+                            ""
+                        )
+                    ),
+
+                    is_active=
+                        True
+                )
+                )
+                notify_delegation(
+                    request,
+                    delegation
+                )
+
+
+            # ========================================================
+            # SUCCESS
+            # ========================================================
+
+            messages.success(
+                request,
+                (
+                    "Ajenda delega ho susesu. "
+                    "Ajenda ida-ne'e agora iha "
+                    "delegasaun ativu."
+                )
+            )
+
+
+            return redirect(
+                "agenda_delegation_list"
+            )
+
+
+        # ------------------------------------------------------------
+        # INVALID FORM
+        # ------------------------------------------------------------
+
+        else:
+
+            messages.error(
+                request,
+                (
+                    "Delegasaun la konsege regista. "
+                    "Favor verifica dadus no koko fali."
+                )
+            )
+
+
+    # ================================================================
+    # GET
+    # ================================================================
+
+    else:
+
+        # ------------------------------------------------------------
+        # FORM ONLY NEEDED WHEN THERE IS NO ACTIVE DELEGATION
+        # ------------------------------------------------------------
+
+        if can_delegate:
+
+            delegation_form = (
+                AgendaDelegationForm()
+            )
+
+        else:
+
+            delegation_form = None
+
+
+    # ================================================================
+    # CONTEXT
+    # ================================================================
 
     context = {
-        'single_agenda': single_agenda, 'all_agenda': all_agenda,
+
+        "single_agenda":
+            single_agenda,
+
+        "all_agenda":
+            all_agenda,
+
+        "delegation_form":
+            delegation_form,
+
+        "active_delegation":
+            active_delegation,
+
+        "delegation_history":
+            delegation_history,
+
+        # Useful explicit flag
+         "can_delegate":
+            can_delegate,
+
+        "roles":
+            roles,
     }
-    return render(request, 'event/upcoming_agenda_detail.html', context)
+
+
+    # ================================================================
+    # RENDER
+    # ================================================================
+
+    return render(
+        request,
+        "event/upcoming_agenda_detail.html",
+        context
+    )
 
 
 @allowed_users(allowed_roles=['sii_admin','ajenda_admin','ajenda_user'])
@@ -1277,5 +2895,422 @@ def recipient_delete(request, uuid):
     return render(
         request,
         "event/recipient/delete.html",
+        context
+    )
+    
+    
+# ============================================================
+# GET CURRENT NOTIFICATION USER DATA
+# ============================================================
+
+def _get_notification_user(request):
+
+    user_id = (
+        getattr(
+            request,
+            "portal_user_id",
+            None
+        )
+        or
+        request.session.get(
+            "agenda_user_id"
+        )
+    )
+
+    username = (
+        getattr(
+            request,
+            "portal_user",
+            None
+        )
+        or
+        request.session.get(
+            "agenda_user"
+        )
+        or
+        ""
+    )
+
+    roles = (
+        getattr(
+            request,
+            "portal_roles",
+            None
+        )
+        or
+        request.session.get(
+            "agenda_roles",
+            []
+        )
+        or
+        []
+    )
+
+    return (
+        user_id,
+        username,
+        roles,
+    )
+
+
+# ============================================================
+# LIVE AJAX NOTIFICATIONS
+# ============================================================
+
+def notification_live(request):
+
+    (
+        user_id,
+        username,
+        roles
+    ) = _get_notification_user(
+        request
+    )
+
+
+    if (
+        not user_id
+        or
+        not roles
+    ):
+
+        return JsonResponse({
+
+            "authenticated":
+                False,
+
+            "unread_count":
+                0,
+
+            "notifications":
+                [],
+        })
+
+
+    user_id = str(
+        user_id
+    )
+
+
+    notifications_queryset = (
+        get_notifications_for_roles(
+            roles
+        )
+    )
+
+
+    read_ids = set(
+
+        NotificationRead.objects
+        .filter(
+            central_user_id=user_id
+        )
+        .values_list(
+            "notification_id",
+            flat=True
+        )
+    )
+
+
+    unread_count = (
+        notifications_queryset
+        .exclude(
+            id__in=read_ids
+        )
+        .count()
+    )
+
+
+    notification_data = []
+
+
+    for obj in notifications_queryset[:10]:
+
+        notification_data.append({
+
+            "uuid":
+                str(obj.uuid),
+
+            "title":
+                obj.title,
+
+            "message":
+                obj.message,
+
+            "type":
+                obj.notification_type,
+
+            "created_at":
+                obj.created_at.strftime(
+                    "%d/%m/%Y %H:%M"
+                ),
+
+            "is_read":
+                obj.id in read_ids,
+
+            "open_url":
+                reverse(
+                    "notification_open",
+                    kwargs={
+                        "uuid":
+                            obj.uuid
+                    }
+                ),
+        })
+
+
+    return JsonResponse({
+
+        "authenticated":
+            True,
+
+        "unread_count":
+            unread_count,
+
+        "notifications":
+            notification_data,
+    })
+
+
+# ============================================================
+# OPEN + MARK READ
+# ============================================================
+
+def notification_open(
+    request,
+    uuid
+):
+
+    (
+        user_id,
+        username,
+        roles
+    ) = _get_notification_user(
+        request
+    )
+
+
+    if (
+        not user_id
+        or
+        not roles
+    ):
+
+        return redirect(
+            "home"
+        )
+
+
+    allowed_notifications = (
+        get_notifications_for_roles(
+            roles
+        )
+    )
+
+
+    notification = get_object_or_404(
+        allowed_notifications,
+        uuid=uuid
+    )
+
+
+    NotificationRead.objects.get_or_create(
+
+        notification=
+            notification,
+
+        central_user_id=
+            str(user_id),
+
+        defaults={
+
+            "central_username":
+                username,
+
+            "read_at":
+                timezone.now(),
+        }
+    )
+
+
+    if notification.url:
+
+        return redirect(
+            notification.url
+        )
+
+
+    return redirect(
+        "home"
+    )
+
+
+# ============================================================
+# MARK ALL READ
+# ============================================================
+
+def notification_mark_all_read(
+    request
+):
+
+    (
+        user_id,
+        username,
+        roles
+    ) = _get_notification_user(
+        request
+    )
+
+
+    if (
+        not user_id
+        or
+        not roles
+    ):
+
+        return redirect(
+            "home"
+        )
+
+
+    user_id = str(
+        user_id
+    )
+
+
+    notifications = (
+        get_notifications_for_roles(
+            roles
+        )
+    )
+
+
+    existing_read_ids = set(
+
+        NotificationRead.objects
+        .filter(
+            central_user_id=user_id
+        )
+        .values_list(
+            "notification_id",
+            flat=True
+        )
+    )
+
+
+    new_reads = []
+
+
+    for notification in notifications:
+
+        if (
+            notification.id
+            not in existing_read_ids
+        ):
+
+            new_reads.append(
+
+                NotificationRead(
+
+                    notification=
+                        notification,
+
+                    central_user_id=
+                        user_id,
+
+                    central_username=
+                        username,
+
+                    read_at=
+                        timezone.now(),
+                )
+            )
+
+
+    if new_reads:
+
+        NotificationRead.objects.bulk_create(
+            new_reads,
+            ignore_conflicts=True
+        )
+
+
+    return redirect(
+        request.META.get(
+            "HTTP_REFERER",
+            "/"
+        )
+    )
+
+
+# ============================================================
+# FULL NOTIFICATION LIST
+# ============================================================
+
+def notification_list(
+    request
+):
+
+    (
+        user_id,
+        username,
+        roles
+    ) = _get_notification_user(
+        request
+    )
+
+
+    if not user_id:
+
+        return redirect(
+            "home"
+        )
+
+
+    user_id = str(
+        user_id
+    )
+
+
+    notifications = list(
+
+        get_notifications_for_roles(
+            roles
+        )
+    )
+
+
+    read_ids = set(
+
+        NotificationRead.objects
+        .filter(
+            central_user_id=user_id
+        )
+        .values_list(
+            "notification_id",
+            flat=True
+        )
+    )
+
+
+    for obj in notifications:
+
+        obj.user_has_read = (
+            obj.id
+            in
+            read_ids
+        )
+
+
+    context = {
+
+        "notification_list":
+            notifications,
+    }
+
+
+    return render(
+        request,
+        "event/notification_list.html",
         context
     )

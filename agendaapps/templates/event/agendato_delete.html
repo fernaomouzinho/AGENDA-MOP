@@ -1,0 +1,338 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .delete-page {
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .delete-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.12);
+    }
+
+    .delete-header {
+        background: linear-gradient(
+            135deg,
+            #b52a37,
+            #dc3545
+        );
+
+        color: #ffffff;
+        padding: 15px 20px;
+    }
+
+    .delete-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .delete-body {
+        background: #f6f9fc;
+        padding: 25px;
+    }
+
+    .delete-content {
+        background: #ffffff;
+        border: 1px solid #ead5d7;
+        border-radius: 10px;
+        padding: 30px 25px;
+        text-align: center;
+    }
+
+    .delete-icon {
+        width: 70px;
+        height: 70px;
+
+        margin: 0 auto 18px auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #fff0f1;
+        color: #dc3545;
+
+        border-radius: 50%;
+
+        font-size: 30px;
+    }
+
+    .delete-title {
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .delete-question {
+        color: #6b7d8c;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .agendato-name {
+        background: #fff3f4;
+        border: 1px solid #f1c5c9;
+        border-radius: 8px;
+
+        padding: 13px 15px;
+
+        color: #a71d2a;
+        font-size: 16px;
+        font-weight: 700;
+
+        margin-bottom: 18px;
+    }
+
+    .agendato-code {
+        display: block;
+
+        color: #7a8996;
+        font-size: 11px;
+        font-weight: 500;
+
+        margin-top: 4px;
+    }
+
+    .usage-warning {
+        background: #fff8e1;
+        border: 1px solid #ffe08a;
+        border-radius: 8px;
+
+        color: #856404;
+
+        padding: 13px 15px;
+
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
+    .delete-info {
+        color: #7a8996;
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    .delete-actions {
+        border-top: 1px solid #e8edf2;
+
+        padding-top: 20px;
+
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .delete-actions .btn {
+        min-width: 110px;
+        border-radius: 6px;
+        font-size: 13px;
+        padding: 7px 15px;
+    }
+
+    @media (max-width: 576px) {
+
+        .delete-body {
+            padding: 15px;
+        }
+
+        .delete-content {
+            padding: 22px 15px;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+        }
+
+        .delete-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="container-fluid delete-page">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5 col-md-7 col-sm-10">
+
+            <div class="card delete-card">
+
+
+                <!-- HEADER -->
+                <div class="delete-header">
+
+                    <h5>
+
+                        <i class="fa fa-trash mr-2"></i>
+
+                        Hamos Ajenda Ba
+
+                    </h5>
+
+                </div>
+
+
+                <!-- BODY -->
+                <div class="delete-body">
+
+                    <div class="delete-content">
+
+
+                        <!-- ICON -->
+                        <div class="delete-icon">
+
+                            <i class="fa fa-trash"></i>
+
+                        </div>
+
+
+                        <!-- TITLE -->
+                        <div class="delete-title">
+
+                            Konfirmasaun Hamos Dadus
+
+                        </div>
+
+
+                        <!-- QUESTION -->
+                        <div class="delete-question">
+
+                            Ita hakarak duni hamos
+                            Ajenda Ba ida-ne'e?
+
+                        </div>
+
+
+                        <!-- DATA -->
+                        <div class="agendato-name">
+
+                            <i class="fa fa-user mr-1"></i>
+
+                            {{ single_agendato.name }}
+
+                            <span class="agendato-code">
+
+                                {{ single_agendato.code }}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- USED DATA -->
+                        {% if usage_count > 0 %}
+
+                            <div class="usage-warning">
+
+                                <i class="fa fa-exclamation-triangle mr-1"></i>
+
+                                Dadus ida-ne'e uza hela iha
+
+                                <strong>
+                                    {{ usage_count }}
+                                </strong>
+
+                                Delegasaun Ajenda.
+
+                                <br><br>
+
+                                Delega Husi:
+                                <strong>
+                                    {{ delegation_from_count }}
+                                </strong>
+
+                                <br>
+
+                                Delega Ba:
+                                <strong>
+                                    {{ delegation_to_count }}
+                                </strong>
+
+                                <br><br>
+
+                                Tanba ne'e, dadus ida-ne'e
+                                la bele hamos.
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="delete-info">
+
+                                <i class="fa fa-info-circle mr-1"></i>
+
+                                Depois de hamos,
+                                dadus ida-ne'e la bele fila fali.
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- FORM -->
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <div class="delete-actions">
+
+
+                                <!-- CANCEL -->
+                                <a
+                                    href="{% url 'agendato_list' %}"
+                                    class="btn btn-secondary"
+                                >
+
+                                    <i class="fa fa-arrow-left mr-1"></i>
+
+                                    Kansela
+
+                                </a>
+
+
+                                <!-- DELETE -->
+                                {% if usage_count == 0 %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                    >
+
+                                        <i class="fa fa-trash mr-1"></i>
+
+                                        Hamos
+
+                                    </button>
+
+                                {% endif %}
+
+
+                            </div>
+
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

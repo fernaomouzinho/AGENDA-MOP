@@ -1,0 +1,3098 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- =========================================================
+     DATATABLE
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css"
+>
+
+<link
+    rel="stylesheet"
+    href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"
+>
+
+
+<!-- =========================================================
+     FULLCALENDAR
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css"
+>
+
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.agenda-dashboard {
+    background: #f6f9fc;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.dashboard-card {
+    border: none;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   MAIN HEADER
+========================================================= */
+
+.dashboard-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color: #ffffff;
+
+    padding: 13px 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.dashboard-header h5 {
+
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 600;
+}
+
+.dashboard-header-badge {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .16
+        );
+
+    border-radius: 20px;
+
+    padding: 4px 10px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    min-height: 90px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dbe6ef;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+        all .2s ease;
+}
+
+.summary-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            15,
+            76,
+            129,
+            .12
+        );
+}
+
+.summary-card.active-summary {
+
+    border-color:
+        #0f4c81;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(
+            15,
+            76,
+            129,
+            .08
+        );
+}
+
+.summary-icon {
+
+    width: 72px;
+
+    min-width: 72px;
+
+    height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: 30px;
+}
+
+.icon-total {
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+}
+
+.icon-concluded {
+
+    background:
+        linear-gradient(
+            135deg,
+            #14844f,
+            #20a967
+        );
+}
+
+.icon-running {
+
+    background:
+        linear-gradient(
+            135deg,
+            #138496,
+            #17a2b8
+        );
+}
+
+.icon-upcoming {
+
+    background:
+        linear-gradient(
+            135deg,
+            #d39e00,
+            #ffc107
+        );
+}
+
+.summary-content {
+
+    padding:
+        10px 14px;
+}
+
+.summary-content h6 {
+
+    margin:
+        0 0 5px 0;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    color:
+        #586b7c;
+}
+
+.summary-content h3 {
+
+    margin: 0;
+
+    color:
+        #17324d;
+
+    font-size:
+        26px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   NEXT PERSON MEETING
+========================================================= */
+
+.next-section-title {
+
+    margin-top: 5px;
+
+    margin-bottom: 10px;
+
+    color: #637889;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+.next-person-agenda {
+
+    height: 100%;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #dbe6ef;
+
+    border-radius:
+        11px;
+
+    padding:
+        16px;
+
+    transition:
+        all .2s ease;
+}
+
+
+.next-person-agenda:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 16px
+        rgba(
+            15,
+            76,
+            129,
+            .10
+        );
+}
+
+
+.minister-next {
+
+    border-left:
+        4px solid
+        #0f4c81;
+}
+
+
+.vice-next {
+
+    border-left:
+        4px solid
+        #198754;
+}
+
+
+.next-person-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+
+    padding-bottom: 10px;
+
+    border-bottom:
+        1px solid
+        #edf1f5;
+}
+
+
+.next-person-header small {
+
+    display: block;
+
+    color:
+        #8393a1;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+}
+
+
+.next-person-header h6 {
+
+    margin:
+        1px 0 0 0;
+
+    color:
+        #17324d;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+}
+
+
+.next-person-icon {
+
+    width: 39px;
+
+    min-width: 39px;
+
+    height: 39px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        #eef5fa;
+
+    color:
+        #0f4c81;
+
+    border-radius:
+        8px;
+
+    font-size:
+        17px;
+}
+
+
+.next-person-icon.vice-icon {
+
+    background:
+        #e8f7ef;
+
+    color:
+        #198754;
+}
+
+
+.next-person-title {
+
+    color:
+        #0f4c81;
+
+    font-size:
+        15px;
+
+    font-weight:
+        700;
+
+    margin-bottom:
+        10px;
+}
+
+
+.next-person-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap:
+        7px 15px;
+
+    color:
+        #667b8c;
+
+    font-size:
+        11px;
+}
+
+
+.next-person-meta i {
+
+    color:
+        #1976b9;
+
+    margin-right:
+        3px;
+}
+
+
+.next-person-institution {
+
+    margin-top:
+        8px;
+
+    color:
+        #667b8c;
+
+    font-size:
+        11px;
+}
+
+
+.delegation-route {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top:
+        11px;
+}
+
+
+.delegation-from {
+
+    padding:
+        4px 8px;
+
+    background:
+        #eef5fa;
+
+    color:
+        #0f4c81;
+
+    border-radius:
+        5px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+
+.delegation-to {
+
+    padding:
+        4px 8px;
+
+    background:
+        #e8f7ef;
+
+    color:
+        #16844f;
+
+    border-radius:
+        5px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+
+.delegation-route > i {
+
+    color:
+        #8194a4;
+}
+
+
+.next-delegation-note {
+
+    margin-top:
+        9px;
+
+    padding:
+        7px 9px;
+
+    background:
+        #f8fafc;
+
+    border-radius:
+        6px;
+
+    color:
+        #718393;
+
+    font-size:
+        10px;
+}
+
+
+.next-person-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top:
+        14px;
+}
+
+
+.attendance-badge {
+
+    display:
+        inline-block;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        5px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+
+.minister-badge {
+
+    background:
+        #eef5fa;
+
+    color:
+        #0f4c81;
+}
+
+
+.vice-badge {
+
+    background:
+        #e8f7ef;
+
+    color:
+        #16844f;
+}
+
+
+.next-empty {
+
+    padding:
+        18px 5px;
+
+    color:
+        #8193a2;
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.agenda-table-header {
+
+    margin-top: 22px;
+
+    margin-bottom: 15px;
+
+    padding:
+        12px 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color:
+        #ffffff;
+
+    border-radius:
+        8px;
+}
+
+.agenda-table-header h6 {
+
+    margin: 0;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.agenda-control-bar {
+
+    margin-bottom:
+        15px;
+
+    padding:
+        12px 14px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #dbe6ef;
+
+    border-radius:
+        9px;
+}
+
+
+.agenda-status-filters {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+.agenda-filter {
+
+    border:
+        1px solid
+        #d3e0ea;
+
+    background:
+        #ffffff;
+
+    color:
+        #52687a;
+
+    padding:
+        6px 12px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    transition:
+        all .2s;
+}
+
+
+.agenda-filter span {
+
+    display:
+        inline-block;
+
+    margin-left:
+        5px;
+
+    padding:
+        1px 6px;
+
+    background:
+        #eef3f7;
+
+    border-radius:
+        10px;
+
+    font-size:
+        10px;
+}
+
+
+.agenda-filter.active {
+
+    background:
+        #0f4c81;
+
+    border-color:
+        #0f4c81;
+
+    color:
+        #ffffff;
+}
+
+
+.agenda-filter.active span {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.agenda-table {
+
+    width:
+        100% !important;
+}
+
+
+.agenda-table thead th {
+
+    background:
+        #eaf2f8;
+
+    color:
+        #17324d;
+
+    font-weight:
+        600;
+
+    vertical-align:
+        middle;
+
+    white-space:
+        nowrap;
+
+    text-align:
+        center;
+}
+
+
+.agenda-table tbody td {
+
+    vertical-align:
+        middle;
+
+    font-size:
+        13px;
+}
+
+
+.agenda-title {
+
+    color:
+        #0f4c81;
+
+    font-weight:
+        600;
+}
+
+
+.agenda-delegated {
+
+    display: flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        4px;
+}
+
+
+.delegated-badge {
+
+    padding:
+        5px 8px;
+
+    background:
+        #e8f7ef;
+
+    color:
+        #16844f;
+
+    border-radius:
+        5px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+
+.delegated-person {
+
+    color:
+        #17324d;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+}
+
+
+.delegated-note {
+
+    max-width:
+        180px;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        #7a8d9d;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-upcoming,
+.status-running,
+.status-concluded {
+
+    display:
+        inline-block;
+
+    min-width:
+        88px;
+
+    padding:
+        6px 9px;
+
+    border-radius:
+        5px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
+}
+
+
+.status-upcoming {
+
+    background:
+        #ffc107;
+
+    color:
+        #343a40;
+}
+
+
+.status-running {
+
+    background:
+        #198754;
+
+    color:
+        #ffffff;
+}
+
+
+.status-concluded {
+
+    background:
+        #0f4c81;
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+.meeting-countdown {
+
+    font-size:
+        12px;
+
+    color:
+        #17324d;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+.agenda-calendar-section {
+
+    margin-top:
+        28px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #dbe6ef;
+
+    border-radius:
+        12px;
+
+    overflow:
+        hidden;
+}
+
+
+.agenda-calendar-header {
+
+    padding:
+        13px 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b9
+        );
+
+    color:
+        #ffffff;
+}
+
+
+.agenda-calendar-header h6 {
+
+    margin:
+        0;
+}
+
+
+.agenda-calendar-body {
+
+    padding:
+        20px;
+}
+
+
+.calendar-legend {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        18px;
+
+    margin-bottom:
+        18px;
+}
+
+
+.calendar-dot {
+
+    display:
+        inline-block;
+
+    width:
+        11px;
+
+    height:
+        11px;
+
+    border-radius:
+        3px;
+
+    margin-right:
+        5px;
+}
+
+
+.calendar-dot-upcoming {
+
+    background:
+        #ffc107;
+}
+
+
+.calendar-dot-running {
+
+    background:
+        #198754;
+}
+
+
+.calendar-dot-concluded {
+
+    background:
+        #0f4c81;
+}
+
+
+.fc-event.calendar-upcoming {
+
+    background:
+        #ffc107 !important;
+
+    color:
+        #343a40 !important;
+}
+
+
+.fc-event.calendar-running {
+
+    background:
+        #198754 !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+.fc-event.calendar-concluded {
+
+    background:
+        #0f4c81 !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
+
+.agenda-calendar-tooltip {
+
+    position:
+        fixed;
+
+    display:
+        none;
+
+    z-index:
+        99999;
+
+    width:
+        310px;
+
+    padding:
+        14px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #dbe6ef;
+
+    border-radius:
+        8px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(
+            0,
+            0,
+            0,
+            .15
+        );
+
+    pointer-events:
+        none;
+}
+
+
+.calendar-tooltip-title {
+
+    margin-bottom:
+        8px;
+
+    color:
+        #0f4c81;
+
+    font-weight:
+        700;
+}
+
+
+.calendar-tooltip-row {
+
+    margin-bottom:
+        5px;
+
+    font-size:
+        11px;
+}
+
+
+.calendar-tooltip-delegation {
+
+    margin-top:
+        8px;
+
+    padding:
+        8px;
+
+    background:
+        #e8f7ef;
+
+    border-radius:
+        6px;
+
+    font-size:
+        11px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:767px) {
+
+    .agenda-dashboard {
+
+        padding:
+            12px;
+    }
+
+    .next-person-footer {
+
+        display:
+            block;
+    }
+
+    .next-person-footer .btn {
+
+        width:
+            100%;
+
+        margin-top:
+            8px;
+    }
+
+    .agenda-calendar-tooltip {
+
+        display:
+            none !important;
+    }
+
+}
+
+</style>
+
+
+<div class="container-fluid">
+
+<div class="card dashboard-card">
+
+<div class="card-body agenda-dashboard">
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="dashboard-header">
+
+    <h5>
+
+        <i class="fa fa-calendar mr-1"></i>
+
+        AJENDA
+
+    </h5>
+
+    <span class="dashboard-header-badge">
+
+        {{ agenda_dashboard_count }} Ajenda
+
+    </span>
+
+</div>
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+<div class="row">
+
+    <div class="col-lg-3 col-md-6 mb-3">
+
+        <div
+            class="summary-card summary-filter active-summary"
+            data-status="All"
+        >
+
+            <div class="summary-icon icon-total">
+                <i class="fa fa-calendar"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <h6>TOTAL AJENDA</h6>
+
+                <h3>
+                    {{ agenda_dashboard_count }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 col-md-6 mb-3">
+
+        <div
+            class="summary-card summary-filter"
+            data-status="Concluded"
+        >
+
+            <div class="summary-icon icon-concluded">
+                <i class="fa fa-check-circle"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <h6>KONKLUIDU</h6>
+
+                <h3>
+                    {{ concluded_agenda_count }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 col-md-6 mb-3">
+
+        <div
+            class="summary-card summary-filter"
+            data-status="Running"
+        >
+
+            <div class="summary-icon icon-running">
+                <i class="fa fa-spinner"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <h6>LAO HELA</h6>
+
+                <h3>
+                    {{ running_agenda_count }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-3 col-md-6 mb-3">
+
+        <div
+            class="summary-card summary-filter"
+            data-status="Upcoming"
+        >
+
+            <div class="summary-icon icon-upcoming">
+                <i class="fa fa-clock-o"></i>
+            </div>
+
+            <div class="summary-content">
+
+                <h6>TUIR MAI</h6>
+
+                <h3>
+                    {{ upcoming_agenda_count }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     NEXT MINISTER + VICE MINISTER
+========================================================= -->
+
+<div class="next-section-title">
+
+    <i class="fa fa-bell-o mr-1"></i>
+
+    Próximu Enkontru
+
+</div>
+
+
+<div class="row">
+
+
+<!-- =====================================================
+     MINISTER
+===================================================== -->
+
+<div class="col-lg-6 mb-3">
+
+<div class="next-person-agenda minister-next">
+
+    <div class="next-person-header">
+
+        <div class="next-person-icon">
+            <i class="fa fa-user"></i>
+        </div>
+
+        <div>
+
+            <small>
+                PRÓXIMU ENKONTRU
+            </small>
+
+            <h6>
+                MINISTRO
+            </h6>
+
+        </div>
+
+    </div>
+
+
+    {% if next_minister_agenda %}
+
+        <div class="next-person-title">
+
+            {{ next_minister_agenda.title }}
+
+        </div>
+
+
+        <div class="next-person-meta">
+
+            <span>
+
+                <i class="fa fa-calendar"></i>
+
+                {{ next_minister_agenda.start_time|date:"d/m/Y" }}
+
+            </span>
+
+
+            <span>
+
+                <i class="fa fa-clock-o"></i>
+
+                {{ next_minister_agenda.start_time|date:"H:i" }}
+
+                -
+
+                {{ next_minister_agenda.end_time|date:"H:i" }}
+
+            </span>
+
+
+            {% if next_minister_agenda.location %}
+
+            <span>
+
+                <i class="fa fa-map-marker"></i>
+
+                {{ next_minister_agenda.location }}
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if next_minister_agenda.institution %}
+
+        <div class="next-person-institution">
+
+            <i class="fa fa-building mr-1"></i>
+
+            {{ next_minister_agenda.institution }}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="next-person-footer">
+
+            <span class="attendance-badge minister-badge">
+
+                <i class="fa fa-user mr-1"></i>
+
+                Ministro Partisipa
+
+            </span>
+
+
+            <a
+                href="{% url 'upcomingAgenda_list_detail' title_slug=next_minister_agenda.title_slug %}"
+                class="btn btn-sm btn-outline-primary"
+            >
+
+                <i class="fa fa-eye mr-1"></i>
+
+                Haree Detallu
+
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="next-empty">
+
+            <i class="fa fa-calendar-o mr-1"></i>
+
+            La iha enkontru Ministro tuir mai.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     VICE MINISTER
+===================================================== -->
+
+<div class="col-lg-6 mb-3">
+
+<div class="next-person-agenda vice-next">
+
+    <div class="next-person-header">
+
+        <div class="next-person-icon vice-icon">
+            <i class="fa fa-user"></i>
+        </div>
+
+        <div>
+
+            <small>
+                PRÓXIMU ENKONTRU
+            </small>
+
+            <h6>
+                VICE MINISTRO
+            </h6>
+
+        </div>
+
+    </div>
+
+
+    {% if next_vice_agenda %}
+
+        <div class="next-person-title">
+
+            {{ next_vice_agenda.title }}
+
+        </div>
+
+
+        <div class="next-person-meta">
+
+            <span>
+
+                <i class="fa fa-calendar"></i>
+
+                {{ next_vice_agenda.start_time|date:"d/m/Y" }}
+
+            </span>
+
+
+            <span>
+
+                <i class="fa fa-clock-o"></i>
+
+                {{ next_vice_agenda.start_time|date:"H:i" }}
+
+                -
+
+                {{ next_vice_agenda.end_time|date:"H:i" }}
+
+            </span>
+
+
+            {% if next_vice_agenda.location %}
+
+            <span>
+
+                <i class="fa fa-map-marker"></i>
+
+                {{ next_vice_agenda.location }}
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if next_vice_agenda.institution %}
+
+        <div class="next-person-institution">
+
+            <i class="fa fa-building mr-1"></i>
+
+            {{ next_vice_agenda.institution }}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="delegation-route">
+
+            <span class="delegation-from">
+
+                {{ next_vice_agenda.active_delegation.delegated_from.name }}
+
+            </span>
+
+            <i class="fa fa-long-arrow-right"></i>
+
+            <span class="delegation-to">
+
+                {{ next_vice_agenda.active_delegation.delegated_to.name }}
+
+            </span>
+
+        </div>
+
+
+        {% if next_vice_agenda.active_delegation.note %}
+
+        <div class="next-delegation-note">
+
+            <i class="fa fa-sticky-note-o mr-1"></i>
+
+            {{ next_vice_agenda.active_delegation.note }}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="next-person-footer">
+
+            <span class="attendance-badge vice-badge">
+
+                <i class="fa fa-share mr-1"></i>
+
+                Delega ba Vice Ministro
+
+            </span>
+
+
+            <a
+                href="{% url 'upcomingAgenda_list_detail' title_slug=next_vice_agenda.title_slug %}"
+                class="btn btn-sm btn-outline-success"
+            >
+
+                <i class="fa fa-eye mr-1"></i>
+
+                Haree Detallu
+
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="next-empty">
+
+            <i class="fa fa-calendar-o mr-1"></i>
+
+            La iha enkontru delegadu ba Vice Ministro tuir mai.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     TABLE HEADER
+========================================================= -->
+
+<div class="agenda-table-header">
+
+    <h6>
+
+        <i class="fa fa-list mr-1"></i>
+
+        LISTA AJENDA
+
+    </h6>
+
+</div>
+
+
+<!-- =========================================================
+     FILTER
+========================================================= -->
+
+<div class="agenda-control-bar">
+
+<div class="agenda-status-filters">
+
+
+    <button
+        class="agenda-filter active"
+        data-status="All"
+        type="button"
+    >
+        Total
+
+        <span>
+            {{ agenda_dashboard_count }}
+        </span>
+    </button>
+
+
+    <button
+        class="agenda-filter"
+        data-status="Upcoming"
+        type="button"
+    >
+        Tuir Mai
+
+        <span>
+            {{ upcoming_agenda_count }}
+        </span>
+    </button>
+
+
+    <button
+        class="agenda-filter"
+        data-status="Running"
+        type="button"
+    >
+        Lao Hela
+
+        <span>
+            {{ running_agenda_count }}
+        </span>
+    </button>
+
+
+    <button
+        class="agenda-filter"
+        data-status="Concluded"
+        type="button"
+    >
+        Konkluidu
+
+        <span>
+            {{ concluded_agenda_count }}
+        </span>
+    </button>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     TABLE
+========================================================= -->
+
+<div class="table-responsive">
+
+<table
+    id="example"
+    class="table table-bordered table-sm table-hover agenda-table"
+>
+
+<thead>
+
+<tr>
+
+    <th>NU.</th>
+
+    <th>AJENDA</th>
+
+    <th>KAT. AJENDA</th>
+
+    <th>KRIA AJENDA</th>
+
+    <th>ORAS HAHU</th>
+
+    <th>ORAS REMATA</th>
+
+    <th>FATIN</th>
+
+    <th>TEMPU ATU ENKONTRU</th>
+
+    <th>DELEGASAUN</th>
+
+    <th>STATUS</th>
+
+    <th>#</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+{% for obj in agenda_dashboard_list %}
+
+<tr
+    data-status="{{ obj.meeting_status }}"
+>
+
+    <td class="text-center">
+
+        {{ forloop.counter }}
+
+    </td>
+
+
+    <!-- TITLE -->
+
+    <td>
+
+        {% if obj.meeting_status == "Upcoming" %}
+
+        <a
+            href="{% url 'upcomingAgenda_list_detail' title_slug=obj.title_slug %}"
+            class="agenda-title"
+        >
+            {{ obj.title }}
+        </a>
+
+        {% elif obj.meeting_status == "Running" %}
+
+        <a
+            href="{% url 'runningAgenda_list_detail' title_slug=obj.title_slug %}"
+            class="agenda-title"
+        >
+            {{ obj.title }}
+        </a>
+
+        {% else %}
+
+        <a
+            href="{% url 'concludedAgenda_list_detail' title_slug=obj.title_slug %}"
+            class="agenda-title"
+        >
+            {{ obj.title }}
+        </a>
+
+        {% endif %}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {{ obj.catagenda }}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {{ obj.institution }}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {{ obj.start_time|date:"d/m/Y H:i" }}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {{ obj.end_time|date:"d/m/Y H:i" }}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {% if obj.location %}
+
+            <i class="fa fa-map-marker text-danger"></i>
+
+            {{ obj.location }}
+
+        {% else %}
+
+            -
+
+        {% endif %}
+
+    </td>
+
+
+    <!-- COUNTDOWN -->
+
+    <td class="text-center">
+
+        {% if obj.meeting_status == "Upcoming" or obj.meeting_status == "Running" %}
+
+            <span
+                class="meeting-countdown"
+                data-start="{{ obj.start_time|date:'c' }}"
+                data-end="{{ obj.end_time|date:'c' }}"
+            >
+
+                {{ obj.tempu_atu_enkontru }}
+
+            </span>
+
+        {% else %}
+
+            <span class="text-muted">
+
+                Remata ona
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+
+    <!-- DELEGATION -->
+
+    <td class="text-center">
+
+        {% if obj.active_delegation %}
+
+        <div class="agenda-delegated">
+
+            <span class="delegated-badge">
+
+                <i class="fa fa-share"></i>
+
+                DELEGA ONA
+
+            </span>
+
+
+            <span class="delegated-person">
+
+                {{ obj.active_delegation.delegated_to.name }}
+
+            </span>
+
+
+            {% if obj.active_delegation.note %}
+
+            <span
+                class="delegated-note"
+                title="{{ obj.active_delegation.note }}"
+            >
+
+                <i class="fa fa-sticky-note-o"></i>
+
+                {{ obj.active_delegation.note|truncatechars:35 }}
+
+            </span>
+
+            {% endif %}
+
+        </div>
+
+
+        {% else %}
+
+            <span class="attendance-badge minister-badge">
+
+                Ministro
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+
+    <!-- STATUS -->
+
+    <td class="text-center">
+
+        {% if obj.meeting_status == "Upcoming" %}
+
+            <span class="status-upcoming">
+
+                TUIR MAI
+
+            </span>
+
+        {% elif obj.meeting_status == "Running" %}
+
+            <span class="status-running">
+
+                LAO HELA
+
+            </span>
+
+        {% else %}
+
+            <span class="status-concluded">
+
+                KONKLUIDU
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+
+    <td class="text-center">
+
+        {% if obj.meeting_status == "Upcoming" %}
+
+            <i class="fa fa-clock-o"></i>
+
+        {% elif obj.meeting_status == "Running" %}
+
+            <i class="fa fa-spinner fa-spin"></i>
+
+        {% else %}
+
+            <i class="fa fa-check-circle"></i>
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+
+{% empty %}
+
+<tr>
+
+    <td
+        colspan="11"
+        class="text-center text-muted py-4"
+    >
+
+        La iha dadus Ajenda.
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<!-- =========================================================
+     CALENDAR
+========================================================= -->
+
+<div class="agenda-calendar-section">
+
+<div class="agenda-calendar-header">
+
+    <h6>
+
+        <i class="fa fa-calendar mr-1"></i>
+
+        KALENDÁRIU AJENDA
+
+    </h6>
+
+</div>
+
+
+<div class="agenda-calendar-body">
+
+
+<div class="calendar-legend">
+
+    <div>
+
+        <span class="calendar-dot calendar-dot-upcoming"></span>
+
+        Tuir Mai
+
+    </div>
+
+    <div>
+
+        <span class="calendar-dot calendar-dot-running"></span>
+
+        Lao Hela
+
+    </div>
+
+    <div>
+
+        <span class="calendar-dot calendar-dot-concluded"></span>
+
+        Konkluidu
+
+    </div>
+
+</div>
+
+
+<div id="agendaCalendar"></div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+{{ calendar_events|json_script:"agenda-calendar-data" }}
+
+
+<div
+    id="agendaCalendarTooltip"
+    class="agenda-calendar-tooltip"
+>
+
+    <div
+        id="agendaCalendarTooltipTitle"
+        class="calendar-tooltip-title"
+    ></div>
+
+    <div
+        id="agendaCalendarTooltipContent"
+    ></div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        let selectedAgendaStatus =
+            "All";
+
+        let dataTable =
+            null;
+
+        let calendar =
+            null;
+
+
+        /* =================================================
+           DATATABLE FILTER
+        ================================================== */
+
+        if (
+            window.jQuery
+            &&
+            $.fn
+            &&
+            $.fn.dataTable
+        ) {
+
+            $.fn.dataTable.ext.search.push(
+
+                function(
+                    settings,
+                    data,
+                    dataIndex
+                ) {
+
+                    if (
+                        settings.nTable.id
+                        !==
+                        "example"
+                    ) {
+
+                        return true;
+
+                    }
+
+
+                    if (
+                        selectedAgendaStatus
+                        ===
+                        "All"
+                    ) {
+
+                        return true;
+
+                    }
+
+
+                    const row =
+                        settings
+                        .aoData[
+                            dataIndex
+                        ]
+                        .nTr;
+
+
+                    return (
+                        row.getAttribute(
+                            "data-status"
+                        )
+                        ===
+                        selectedAgendaStatus
+                    );
+
+                }
+
+            );
+
+        }
+
+
+        /* =================================================
+           DATATABLE
+        ================================================== */
+
+        if (
+            window.jQuery
+            &&
+            $.fn.DataTable
+        ) {
+
+            dataTable =
+                $("#example")
+                .DataTable({
+
+                    responsive:
+                        true,
+
+                    pageLength:
+                        10,
+
+                    order:
+                        [],
+
+                    columnDefs: [
+
+                        {
+                            targets: [
+                                10
+                            ],
+
+                            orderable:
+                                false
+                        }
+
+                    ],
+
+                    language: {
+
+                        search:
+                            "Buka:",
+
+                        lengthMenu:
+                            "Hatudu _MENU_ dadus",
+
+                        info:
+                            "Hatudu _START_ to'o _END_ husi _TOTAL_ dadus",
+
+                        zeroRecords:
+                            "Dadus la hetan",
+
+                        emptyTable:
+                            "La iha dadus",
+
+                        paginate: {
+
+                            next:
+                                "Tuir Mai",
+
+                            previous:
+                                "Fila"
+
+                        }
+
+                    }
+
+                });
+
+        }
+
+
+        /* =================================================
+           COUNTDOWN
+        ================================================== */
+
+        function pad(number) {
+
+            return String(number)
+                .padStart(
+                    2,
+                    "0"
+                );
+        }
+
+
+        function updateCountdown() {
+
+            const now =
+                new Date();
+
+
+            document
+            .querySelectorAll(
+                ".meeting-countdown"
+            )
+            .forEach(
+
+                function(element) {
+
+                    const start =
+                        new Date(
+                            element.dataset.start
+                        );
+
+
+                    const end =
+                        new Date(
+                            element.dataset.end
+                        );
+
+
+                    if (now < start) {
+
+                        const diff =
+                            start - now;
+
+
+                        const seconds =
+                            Math.floor(
+                                diff / 1000
+                            );
+
+
+                        const days =
+                            Math.floor(
+                                seconds / 86400
+                            );
+
+
+                        const hours =
+                            Math.floor(
+                                (
+                                    seconds % 86400
+                                )
+                                /
+                                3600
+                            );
+
+
+                        const minutes =
+                            Math.floor(
+                                (
+                                    seconds % 3600
+                                )
+                                /
+                                60
+                            );
+
+
+                        const sec =
+                            seconds % 60;
+
+
+                        if (days > 0) {
+
+                            element.innerHTML =
+
+                                "Hela Loron "
+                                +
+                                "<strong>"
+                                +
+                                days
+                                +
+                                "</strong>"
+                                +
+                                ", Oras "
+                                +
+                                "<strong>"
+                                +
+                                pad(hours)
+                                +
+                                ":"
+                                +
+                                pad(minutes)
+                                +
+                                ":"
+                                +
+                                pad(sec)
+                                +
+                                "</strong>";
+
+                        }
+
+                        else {
+
+                            element.innerHTML =
+
+                                "Hela Oras "
+                                +
+                                "<strong>"
+                                +
+                                pad(hours)
+                                +
+                                ":"
+                                +
+                                pad(minutes)
+                                +
+                                ":"
+                                +
+                                pad(sec)
+                                +
+                                "</strong>";
+
+                        }
+
+                    }
+
+                    else if (
+                        now >= start
+                        &&
+                        now <= end
+                    ) {
+
+                        const diff =
+                            end - now;
+
+
+                        const seconds =
+                            Math.floor(
+                                diff / 1000
+                            );
+
+
+                        const hours =
+                            Math.floor(
+                                seconds / 3600
+                            );
+
+
+                        const minutes =
+                            Math.floor(
+                                (
+                                    seconds % 3600
+                                )
+                                /
+                                60
+                            );
+
+
+                        const sec =
+                            seconds % 60;
+
+
+                        element.innerHTML =
+
+                            "Remata iha Oras "
+                            +
+                            "<strong>"
+                            +
+                            pad(hours)
+                            +
+                            ":"
+                            +
+                            pad(minutes)
+                            +
+                            ":"
+                            +
+                            pad(sec)
+                            +
+                            "</strong>";
+
+                    }
+
+                    else {
+
+                        element.innerHTML =
+                            "Remata ona";
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        updateCountdown();
+
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+
+        /* =================================================
+           CALENDAR
+        ================================================== */
+
+        const calendarElement =
+            document.getElementById(
+                "agendaCalendar"
+            );
+
+
+        const dataElement =
+            document.getElementById(
+                "agenda-calendar-data"
+            );
+
+
+        if (
+            calendarElement
+            &&
+            dataElement
+        ) {
+
+            const rawEvents =
+                JSON.parse(
+                    dataElement.textContent
+                );
+
+
+            const events =
+                rawEvents.map(
+
+                    function(item) {
+
+                        let cssClass =
+                            "calendar-concluded";
+
+
+                        if (
+                            item.status
+                            ===
+                            "Upcoming"
+                        ) {
+
+                            cssClass =
+                                "calendar-upcoming";
+
+                        }
+
+                        else if (
+                            item.status
+                            ===
+                            "Running"
+                        ) {
+
+                            cssClass =
+                                "calendar-running";
+
+                        }
+
+
+                        return {
+
+                            id:
+                                item.id,
+
+                            title:
+                                item.title,
+
+                            start:
+                                item.start,
+
+                            end:
+                                item.end,
+
+                            url:
+                                item.url,
+
+                            classNames: [
+                                cssClass
+                            ],
+
+                            extendedProps: {
+
+                                status:
+                                    item.status,
+
+                                statusLabel:
+                                    item.status_label,
+
+                                category:
+                                    item.category,
+
+                                meetingType:
+                                    item.meeting_type,
+
+                                institution:
+                                    item.institution,
+
+                                location:
+                                    item.location,
+
+                                isDelegated:
+                                    item.is_delegated,
+
+                                delegatedFrom:
+                                    item.delegated_from,
+
+                                delegatedTo:
+                                    item.delegated_to,
+
+                                delegationNote:
+                                    item.delegation_note
+
+                            }
+
+                        };
+
+                    }
+
+                );
+
+
+            calendar =
+                new FullCalendar.Calendar(
+                    calendarElement,
+                    {
+
+                        initialView:
+                            "dayGridMonth",
+
+                        firstDay:
+                            1,
+
+                        height:
+                            "auto",
+
+                        navLinks:
+                            true,
+
+                        dayMaxEvents:
+                            3,
+
+                        headerToolbar: {
+
+                            left:
+                                "prev,next today",
+
+                            center:
+                                "title",
+
+                            right:
+                                "dayGridMonth,timeGridWeek,listMonth"
+
+                        },
+
+                        buttonText: {
+
+                            today:
+                                "Ohin",
+
+                            month:
+                                "Fulan",
+
+                            week:
+                                "Semana",
+
+                            list:
+                                "Lista"
+
+                        },
+
+                        events:
+                            events,
+
+
+                        eventClick:
+                            function(info) {
+
+                                info.jsEvent
+                                    .preventDefault();
+
+                                if (
+                                    info.event.url
+                                ) {
+
+                                    window.location.href =
+                                        info.event.url;
+
+                                }
+
+                            },
+
+
+                        eventMouseEnter:
+                            function(info) {
+
+                                const tooltip =
+                                    document.getElementById(
+                                        "agendaCalendarTooltip"
+                                    );
+
+
+                                const title =
+                                    document.getElementById(
+                                        "agendaCalendarTooltipTitle"
+                                    );
+
+
+                                const content =
+                                    document.getElementById(
+                                        "agendaCalendarTooltipContent"
+                                    );
+
+
+                                const props =
+                                    info.event.extendedProps;
+
+
+                                title.textContent =
+                                    info.event.title;
+
+
+                                let html = `
+
+                                    <div class="calendar-tooltip-row">
+                                        <strong>Status:</strong>
+                                        ${escapeText(props.statusLabel)}
+                                    </div>
+
+                                    <div class="calendar-tooltip-row">
+                                        <strong>Kategoria:</strong>
+                                        ${escapeText(props.category || "-")}
+                                    </div>
+
+                                    <div class="calendar-tooltip-row">
+                                        <strong>Instituisaun:</strong>
+                                        ${escapeText(props.institution || "-")}
+                                    </div>
+
+                                    <div class="calendar-tooltip-row">
+                                        <strong>Fatin:</strong>
+                                        ${escapeText(props.location || "-")}
+                                    </div>
+                                `;
+
+
+                                if (
+                                    props.isDelegated
+                                ) {
+
+                                    html += `
+
+                                        <div class="calendar-tooltip-delegation">
+
+                                            <strong>
+                                                <i class="fa fa-share"></i>
+                                                DELEGA ONA
+                                            </strong>
+
+                                            <br>
+
+                                            ${escapeText(
+                                                props.delegatedFrom
+                                            )}
+
+                                            →
+
+                                            <strong>
+                                                ${escapeText(
+                                                    props.delegatedTo
+                                                )}
+                                            </strong>
+                                    `;
+
+
+                                    if (
+                                        props.delegationNote
+                                    ) {
+
+                                        html += `
+
+                                            <br>
+
+                                            Nota:
+                                            ${escapeText(
+                                                props.delegationNote
+                                            )}
+                                        `;
+                                    }
+
+
+                                    html +=
+                                        "</div>";
+                                }
+
+
+                                content.innerHTML =
+                                    html;
+
+
+                                tooltip.style.display =
+                                    "block";
+
+
+                                moveTooltip(
+                                    info.jsEvent
+                                );
+
+                            },
+
+
+                        eventMouseLeave:
+                            function() {
+
+                                document
+                                .getElementById(
+                                    "agendaCalendarTooltip"
+                                )
+                                .style.display =
+                                    "none";
+
+                            }
+
+                    }
+                );
+
+
+            calendar.render();
+
+        }
+
+
+        /* =================================================
+           ESCAPE
+        ================================================== */
+
+        function escapeText(value) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.textContent =
+                value || "";
+
+            return div.innerHTML;
+
+        }
+
+
+        /* =================================================
+           TOOLTIP POSITION
+        ================================================== */
+
+        function moveTooltip(event) {
+
+            const tooltip =
+                document.getElementById(
+                    "agendaCalendarTooltip"
+                );
+
+
+            let x =
+                event.clientX + 15;
+
+
+            let y =
+                event.clientY + 15;
+
+
+            if (
+                x + 320
+                >
+                window.innerWidth
+            ) {
+
+                x =
+                    event.clientX
+                    -
+                    320;
+
+            }
+
+
+            tooltip.style.left =
+                x + "px";
+
+
+            tooltip.style.top =
+                y + "px";
+
+        }
+
+
+        /* =================================================
+           FILTER
+        ================================================== */
+
+        const filterButtons =
+            document.querySelectorAll(
+                ".agenda-filter"
+            );
+
+
+        const summaryCards =
+            document.querySelectorAll(
+                ".summary-filter"
+            );
+
+
+        function applyFilter(status) {
+
+            selectedAgendaStatus =
+                status;
+
+
+            filterButtons.forEach(
+                function(button) {
+
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.status
+                        ===
+                        status
+                    );
+
+                }
+            );
+
+
+            summaryCards.forEach(
+                function(card) {
+
+                    card.classList.toggle(
+                        "active-summary",
+                        card.dataset.status
+                        ===
+                        status
+                    );
+
+                }
+            );
+
+
+            if (dataTable) {
+
+                dataTable.draw();
+
+            }
+
+
+            if (calendar) {
+
+                calendar
+                .getEvents()
+                .forEach(
+
+                    function(event) {
+
+                        const visible =
+                            (
+                                status
+                                ===
+                                "All"
+                            )
+                            ||
+                            (
+                                event
+                                .extendedProps
+                                .status
+                                ===
+                                status
+                            );
+
+
+                        event.setProp(
+                            "display",
+                            visible
+                            ?
+                            "auto"
+                            :
+                            "none"
+                        );
+
+                    }
+
+                );
+
+            }
+
+        }
+
+
+        filterButtons.forEach(
+            function(button) {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        applyFilter(
+                            this.dataset.status
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        summaryCards.forEach(
+            function(card) {
+
+                card.addEventListener(
+                    "click",
+                    function() {
+
+                        applyFilter(
+                            this.dataset.status
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        applyFilter(
+            "All"
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

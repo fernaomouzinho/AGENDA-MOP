@@ -2,93 +2,362 @@
 
 <div class="topbar">
 
+    <!-- =====================================================
+         LEFT
+    ====================================================== -->
+
     <div class="topbar-left">
 
-        <span class="menu-toggle" onclick="toggleSidebar()">
+        <span
+            class="menu-toggle"
+            onclick="toggleSidebar()"
+        >
             <i class="fa fa-bars"></i>
         </span>
 
-        <img src="{% static 'main/images/favicon.png' %}" alt="logo">
+        <img
+            src="{% static 'main/images/favicon.png' %}"
+            alt="MOP Logo"
+        >
 
         <div>
-            <p class="brand-title">MOP AGENDA</p>
-            <p class="brand-sub">Sistema Rejistrasaun Ajenda</p>
+
+            <p class="brand-title">
+                MOP AGENDA
+            </p>
+
+            <p class="brand-sub">
+                Sistema Rejistrasaun Ajenda
+            </p>
+
         </div>
 
     </div>
 
 
-   <!-- RIGHT -->
-<div class="topbar-right d-flex align-items-center ">
+    <!-- =====================================================
+         RIGHT
+    ====================================================== -->
 
-        <!-- NOTIFICATION -->
-        <div class="notification-box gap-2" style="display:flex; align-items:center; overflow:visible;margin-right:20px;">
+    <div
+        class="
+            topbar-right
+            d-flex
+            align-items-center
+        "
+    >
 
-            <a href="{% url 'agenda_notification_read' %}" title="Notifikasaun Ajenda" style="
-                    position:relative;
-                    display:inline-flex;
-                    float:right;
-                    width:10px;
-                    height:10px;
-                    text-decoration:none;
-                    overflow:visible;">
+        <!-- =================================================
+             NOTIFICATION
+        ================================================== -->
 
-                <!-- BELL -->
-                <i class="fa fa-bell" style=" font-size:23px; color:#ffffff;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    width:50%;
-                    height:50%;">
-                </i>
+        <div
+            class="notification-box"
+            id="notificationBox"
+        >
 
-                {% if notification_count > 0 %}
+            <!-- =============================================
+                 BELL
+            ============================================== -->
 
-                    <!-- RED NOTIFICATION CIRCLE -->
-                    <span style="
-                        position:absolute;
-                        top:-14px;
-                        right:-10px;
+            <button
+                type="button"
+                id="notificationBell"
+                class="notification-bell"
+                title="Notifikasaun"
+                aria-label="Notifikasaun"
+                aria-expanded="false"
+            >
 
-                        width:18px;
-                        height:18px;
+                <i class="fa fa-bell"></i>
 
-                        background-color:#dc3545;
-                        color:#ffffff;
+                <span
+                    id="notificationCount"
+                    class="notification-count"
+                    {% if unread_notification_count == 0 %}
+                        style="display:none;"
+                    {% endif %}
+                >
 
-                        border-radius:50%;
+                    {% if unread_notification_count > 99 %}
+                        99+
+                    {% else %}
+                        {{ unread_notification_count }}
+                    {% endif %}
 
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
+                </span>
 
-                        font-size:11px;
-                        font-weight:700;
-                        line-height:1;
+            </button>
 
-                        border:2px solid #ffffff;
 
-                        box-sizing:border-box;
-                        z-index:9999;
-                    ">
-                        {{ notification_count }}
-                    </span>
+            <!-- =================================================
+                 NOTIFICATION DROPDOWN
+            ================================================== -->
 
-                {% endif %}
+            <div
+                id="notificationDropdown"
+                class="notification-dropdown"
+            >
 
-            </a>
+                <!-- =============================================
+                     DROPDOWN HEADER
+                ============================================== -->
+
+                <div class="notification-dropdown-header">
+
+                    <div>
+
+                        <div class="notification-header-title">
+
+                            <i class="fa fa-bell"></i>
+
+                            Notifikasaun
+
+                        </div>
+
+                        <div class="notification-header-subtitle">
+
+                            {% if "ajenda_vmn" in roles %}
+
+                                Vice Ministro
+
+                            {% elif "ajenda_user" in roles %}
+
+                                Ministro
+
+                            {% else %}
+
+                                MOP Agenda
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-header-actions">
+
+                        <span
+                            id="notificationHeaderCount"
+                            class="notification-header-count"
+                            {% if unread_notification_count == 0 %}
+                                style="display:none;"
+                            {% endif %}
+                        >
+
+                            {{ unread_notification_count }}
+                            Foun
+
+                        </span>
+
+
+                        <a
+                            href="{% url 'notification_mark_all_read' %}"
+                            id="notificationMarkAll"
+                            class="notification-read-all"
+                            title="Marka hotu hanesan le'e ona"
+                        >
+
+                            <i class="fa fa-check"></i>
+
+                            Le'e Hotu
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     DROPDOWN BODY
+                ============================================== -->
+
+                <div
+                    id="notificationDropdownBody"
+                    class="notification-dropdown-body"
+                >
+
+                    {% for notification in header_notifications %}
+
+                        <a
+                            href="{% url 'notification_open' uuid=notification.uuid %}"
+                            class="
+                                notification-item
+
+                                {% if not notification.user_has_read %}
+                                    notification-unread
+                                {% endif %}
+                            "
+                        >
+
+                            <!-- ===============================
+                                 ICON BALL
+                            ================================ -->
+
+                            <div
+                                class="
+                                    notification-icon-ball
+
+                                    {% if notification.notification_type == 'AGENDA_NEW' %}
+                                        notification-ball-new
+
+                                    {% elif notification.notification_type == 'AGENDA_UPDATE' %}
+                                        notification-ball-update
+
+                                    {% elif notification.notification_type == 'DELEGATION' %}
+                                        notification-ball-delegation
+
+                                    {% elif notification.notification_type == 'REMINDER' %}
+                                        notification-ball-reminder
+                                    {% endif %}
+                                "
+                            >
+
+                                {% if notification.notification_type == "AGENDA_NEW" %}
+
+                                    <i class="fa fa-calendar-plus-o"></i>
+
+                                {% elif notification.notification_type == "AGENDA_UPDATE" %}
+
+                                    <i class="fa fa-pencil"></i>
+
+                                {% elif notification.notification_type == "DELEGATION" %}
+
+                                    <i class="fa fa-share"></i>
+
+                                {% elif notification.notification_type == "REMINDER" %}
+
+                                    <i class="fa fa-clock-o"></i>
+
+                                {% else %}
+
+                                    <i class="fa fa-bell"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- ===============================
+                                 CONTENT
+                            ================================ -->
+
+                            <div class="notification-item-content">
+
+                                <div class="notification-item-title">
+
+                                    {{ notification.title }}
+
+                                    {% if not notification.user_has_read %}
+
+                                        <span
+                                            class="notification-new-dot"
+                                        ></span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="notification-item-message">
+
+                                    {{ notification.message|truncatechars:110 }}
+
+                                </div>
+
+
+                                <div class="notification-item-time">
+
+                                    <i class="fa fa-clock-o"></i>
+
+                                    {{ notification.created_at|timesince }}
+
+                                    liuba
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    {% empty %}
+
+                        <div class="notification-empty">
+
+                            <div class="notification-empty-icon">
+
+                                <i class="fa fa-bell-o"></i>
+
+                            </div>
+
+                            <strong>
+                                La iha notifikasaun
+                            </strong>
+
+                            <small>
+                                Notifikasaun foun sei mosu iha ne'e.
+                            </small>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- =============================================
+                     DROPDOWN FOOTER
+                ============================================== -->
+
+                <div class="notification-dropdown-footer">
+
+                    <a
+                        href="{% url 'notification_list' %}"
+                    >
+
+                        <i class="fa fa-list"></i>
+
+                        Haree Notifikasaun Hotu
+
+                        <i class="fa fa-angle-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
 
-        <!-- USER -->
-        <div class="user-box">
-            <i class="fa fa-user-circle" style="font-size:18px;"></i>
-           <span style="font-size:16px;" >{{ user.username }}</span> 
-        </div>
+        <!-- =================================================
+             ROLE
+        ================================================== -->
 
-  
+        {% if "ajenda_vmn" in roles %}
 
-</div>
+            <div class="header-role role-vmn">
+
+                <i class="fa fa-user"></i>
+
+                Vice Ministro
+
+            </div>
+
+        {% elif "ajenda_user" in roles %}
+
+            <div class="header-role role-minister">
+
+                <i class="fa fa-user"></i>
+
+                Ministro
+
+            </div>
+
+        {% endif %}
+
+    </div>
 
 </div>

@@ -1,0 +1,408 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    .category-page {
+        padding-bottom: 25px;
+    }
+
+    .category-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
+        height: 100%;
+    }
+
+    .category-card-body {
+        padding: 20px;
+    }
+
+    .category-header {
+        background: linear-gradient(135deg, #0f4c81, #1976b9);
+        color: #ffffff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .category-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .category-header i {
+        margin-right: 7px;
+    }
+
+    .form-container {
+        background: #f6f9fc;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 18px;
+    }
+
+    .form-container label {
+        color: #5e7184;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+        border: 1px solid #cedbe6;
+        border-radius: 6px;
+        font-size: 13px;
+    }
+
+    .form-action {
+        margin-top: 18px;
+        padding-top: 15px;
+        border-top: 1px solid #dbe6ef;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .btn-save {
+        background: #0f4c81;
+        border-color: #0f4c81;
+        color: #ffffff;
+        border-radius: 6px;
+        font-size: 13px;
+        padding: 7px 20px;
+    }
+
+    .btn-save:hover {
+        background: #0b3b66;
+        border-color: #0b3b66;
+        color: #ffffff;
+    }
+
+    .table-container {
+        background: #ffffff;
+        border: 1px solid #dbe6ef;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .category-table {
+        margin-bottom: 0;
+        font-size: 13px;
+    }
+
+    .category-table thead {
+        background: #f1f6fa;
+    }
+
+    .category-table thead th {
+        color: #52687a;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        vertical-align: middle;
+        padding: 10px 8px;
+    }
+
+    .category-table tbody td {
+        vertical-align: middle;
+        color: #263f55;
+        padding: 9px 8px;
+    }
+
+    .category-table tbody tr:hover {
+        background: #f8fbfd;
+    }
+
+    .number-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 28px;
+        height: 28px;
+        padding: 0 7px;
+        background: #eef5fa;
+        color: #0f4c81;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .btn-action {
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 5px 9px;
+    }
+
+    @media (max-width: 767px) {
+        .category-card {
+            margin-bottom: 20px;
+        }
+
+        .category-card-body {
+            padding: 15px;
+        }
+    }
+</style>
+
+<div class="container-fluid category-page">
+
+    {% if messages %}
+        <div class="row">
+            <div class="col-12">
+
+                {% for message in messages %}
+
+                    <div
+                        class="
+                            alert
+                            alert-dismissible
+                            fade
+                            show
+
+                            {% if message.tags == 'success' %}
+                                alert-success
+                            {% elif message.tags == 'warning' %}
+                                alert-warning
+                            {% elif message.tags == 'error' %}
+                                alert-danger
+                            {% else %}
+                                alert-info
+                            {% endif %}
+                        "
+                    >
+
+                        {% if message.tags == 'success' %}
+                            <i class="fa fa-check-circle mr-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fa fa-exclamation-triangle mr-2"></i>
+                        {% elif message.tags == 'error' %}
+                            <i class="fa fa-times-circle mr-2"></i>
+                        {% endif %}
+
+                        {{ message }}
+
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="alert"
+                        >
+                            <span>&times;</span>
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+
+        <!-- LEFT - EDIT FORM -->
+        <div class="col-lg-4 col-md-5 mb-4">
+
+            <div class="card category-card">
+
+                <div class="category-card-body">
+
+                    <div class="category-header">
+
+                        <h5>
+                            <i class="fa fa-edit"></i>
+                            Hadia Tipu Ajenda
+                        </h5>
+
+                    </div>
+
+
+                    <div class="form-container">
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            {{ typeagendaform|crispy }}
+
+                            {{ typeagendaform.media|safe }}
+
+
+                            <div class="form-action">
+
+                                <a
+                                    href="{% url 'typeagenda_list' %}"
+                                    class="btn btn-secondary"
+                                >
+                                    <i class="fa fa-arrow-left mr-1"></i>
+                                    Kansela
+                                </a>
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-save"
+                                >
+                                    <i class="fa fa-save mr-1"></i>
+                                    Rai
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT - LIST -->
+        <div class="col-lg-8 col-md-7 mb-4">
+
+            <div class="card category-card">
+
+                <div class="category-card-body">
+
+                    <div class="category-header">
+
+                        <h5>
+                            <i class="fa fa-list"></i>
+                            Lista Tipu Ajenda
+                        </h5>
+
+                        <span class="badge badge-light">
+                            {{ typeagendalist|length }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="table-container">
+
+                        <div class="table-responsive">
+
+                            <table
+                                class="table table-bordered table-sm category-table"
+                                id="example"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th
+                                            width="60"
+                                            class="text-center"
+                                        >
+                                            NU.
+                                        </th>
+
+                                        <th>
+                                            TIPU AJENDA
+                                        </th>
+
+                                        <th
+                                            width="190"
+                                            class="text-center"
+                                        >
+                                            ASAUN
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for obj in typeagendalist %}
+
+                                        <tr>
+
+                                            <td class="text-center">
+
+                                                <span class="number-circle">
+                                                    {{ forloop.counter }}
+                                                </span>
+
+                                            </td>
+
+
+                                            <td>
+                                                {{ obj.name_type }}
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                <a
+                                                    href="{% url 'typeagenda_edit' uuid=obj.uuid %}"
+                                                    class="btn btn-sm btn-warning btn-action"
+                                                >
+                                                    <i class="fa fa-edit"></i>
+                                                    Hadia
+                                                </a>
+
+
+                                                <a
+                                                    href="{% url 'typeagenda_delete' uuid=obj.uuid %}"
+                                                    class="btn btn-sm btn-danger btn-action"
+                                                >
+                                                    <i class="fa fa-trash"></i>
+                                                    Hamos
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% empty %}
+
+                                        <tr>
+
+                                            <td
+                                                colspan="3"
+                                                class="text-center text-muted py-4"
+                                            >
+                                                <i class="fa fa-info-circle mr-1"></i>
+                                                Seidauk iha Tipu Ajenda.
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
